@@ -17,12 +17,12 @@ export default defineConfig({
   ssr: {
     noExternal: ['@apollo/client'],
   },
-  // server: {
-  //   proxy: {
-  //     '/api': {
-  //       target: 'http://localhost:3500/',
-  //       changeOrigin: true,
-  //     },
-  //   },
-  // },
+  server: {
+    //   proxy: {
+    //     '/api': {
+    //       target: 'http://localhost:3500/',
+    //       changeOrigin: true,
+    //     },
+    //   },
+  },
 });
