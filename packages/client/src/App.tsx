@@ -4,6 +4,7 @@ import './index.css';
 import commonStyles from './common.module.css';
 
 import Post, { PostData } from './components/Post';
+import PageHeader from './components/page-header';
 
 const getPosts = gql`
   query Posts {
@@ -44,8 +45,8 @@ function App({ env }: { env: 'client' | 'server' }) {
   }
 
   return (
-    <div className={commonStyles.page}>
-      <h1 className={commonStyles.pageTitle}>tsvetta archive</h1>
+    <div className={commonStyles.pageContainer}>
+      <PageHeader title={'tsvetta archive'} />
       <div className='page-content'>
         <main className='main'>
           <article className='article'>

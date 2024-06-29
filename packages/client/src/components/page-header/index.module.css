@@ -1,0 +1,27 @@
+@import url('../../common-style-vars.css');
+
+.pageHeader {
+    display: flex;
+    max-width: var(--max-width);
+    margin: 0 var(--default-gap) 10px;
+    justify-content: space-between;
+}
+
+
+.pageTitle {
+    display: block;
+    font-size: 40px;
+    margin: var(--default-gap) calc(40px - var(--default-gap));
+}
+
+.pageMenu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.pageNav {
+    list-style: none;
+    display: flex;
+    gap: var(--default-gap);
+}
