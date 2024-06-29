@@ -1,9 +1,9 @@
-import { Key, MouseEventHandler } from 'react';
+import { Key } from 'react';
 import commonStyles from '../../common.module.css';
 import styles from './index.module.css';
 import Photo from '../Photo';
-import Tag, { TagData } from '../Tag';
-import { MutationResult, gql, useMutation } from '@apollo/client';
+import Tags, { TagData } from '../Tags';
+import { gql, useMutation } from '@apollo/client';
 
 enum Privacy {
   'ALL',
@@ -65,16 +65,10 @@ function Post({ data }: PostProps) {
       </header>
       {hasPhotos &&
         data.photos.map((photo: PhotoData) => (
-          <Photo key={photo._id} date={data.date} {...photo} />
+          <Photo key={`photo_${photo._id}`} date={data.date} {...photo} />
         ))}
 
-      {hasTags && (
-        <ul className={commonStyles.tags}>
-          {data.tags.map((tag: TagData) => (
-            <Tag key={tag._id} {...tag} />
-          ))}
-        </ul>
-      )}
+      {hasTags && <Tags tags={data.tags} />}
     </section>
   );
 }

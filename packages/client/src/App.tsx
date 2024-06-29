@@ -26,11 +26,8 @@ const getPosts = gql`
   }
 `;
 
-function App({ env }: { env: 'client' | 'server' }) {
+const App = () => {
   const { loading, error, data } = useQuery(getPosts);
-
-  // const [cookies, setCookie] = useCookies(['name']);
-  // console.log('cookiescookiescookies', env, cookies);
 
   if (error) {
     return error;
@@ -59,6 +56,6 @@ function App({ env }: { env: 'client' | 'server' }) {
       </div>
     </div>
   );
-}
+};
 
 export default App;

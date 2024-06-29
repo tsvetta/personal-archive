@@ -1,6 +1,8 @@
+import { Key } from 'react';
 import commonStyles from '../../common.module.css';
 
 export type PhotoData = {
+  _id: Required<Key>;
   src: Required<string>;
   date: Required<Date>;
   description?: [string];
@@ -9,7 +11,7 @@ export type PhotoData = {
   width?: number;
 };
 
-function Photo({ src, description, date, title, alt, width }: PhotoData) {
+const Photo = ({ src, description, date, title, alt, width }: PhotoData) => {
   const localDate = new Date(date).toLocaleDateString();
   const titleText = title || localDate;
   const altText = alt || localDate;
@@ -28,6 +30,6 @@ function Photo({ src, description, date, title, alt, width }: PhotoData) {
       <figcaption>{description}</figcaption>
     </figure>
   );
-}
+};
 
 export default Photo;
