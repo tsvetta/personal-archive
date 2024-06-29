@@ -4,7 +4,7 @@ import './index.css';
 import commonStyles from './common.module.css';
 
 import Post, { PostData } from './components/Post';
-import PageHeader from './components/page-header';
+import PageHeader from './components/PageHeader';
 
 const getPosts = gql`
   query Posts {
