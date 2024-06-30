@@ -25,3 +25,8 @@
     display: flex;
     gap: var(--default-gap);
 }
+
+.titleLink {
+    text-decoration: none;
+    color: black;
+}

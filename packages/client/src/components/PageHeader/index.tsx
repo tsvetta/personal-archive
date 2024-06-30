@@ -8,7 +8,11 @@ type PageHeaderProps = {
 function PageHeader({ title }: PageHeaderProps) {
   return (
     <div className={styles.pageHeader}>
-      <h1 className={styles.pageTitle}>{title}</h1>
+      <h1 className={styles.pageTitle}>
+        <Link to='/' className={styles.titleLink}>
+          {title}
+        </Link>
+      </h1>
       <nav className={styles.pageMenu}>
         <ul className={styles.pageNav}>
           <li className={styles.navItem}>
