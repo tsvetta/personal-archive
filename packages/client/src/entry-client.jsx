@@ -20,7 +20,9 @@ ReactDOM.hydrateRoot(
   <React.StrictMode>
     <CookiesProvider>
       <ApolloProvider client={apolloClient}>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </ApolloProvider>
     </CookiesProvider>
   </React.StrictMode>
