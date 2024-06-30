@@ -4,8 +4,9 @@ import { Routes, Route } from 'react-router-dom';
 import './index.css';
 import commonStyles from './common.module.css';
 
-import Post, { PostData } from './components/Post';
 import PageHeader from './components/PageHeader';
+import MainPage from './routes/main';
+import LoginPage from './routes/login';
 
 const getPosts = gql`
   query Posts {
@@ -44,21 +45,15 @@ const App = () => {
 
   return (
     <div className={commonStyles.pageContainer}>
-      {/* <Routes>
-        <Route path="/" element={<div>home</div>} />
-        <Route path="/login" element={<div>login</div>} />
-        <Route path="/create-post" element={<div>create post</div>} />
-        <Route path="*" element={<div>not found</div>} />
-      </Routes> */}
       <PageHeader title={'tsvetta archive'} />
       <div className='page-content'>
         <main className='main'>
-          <article className='article'>
-            <h2 className={commonStyles.articleTitle}>2007</h2>
-            {data.posts.map((post: PostData) => {
-              return <Post key={post._id} data={post} />;
-            })}
-          </article>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/create-post" element={<div>create post</div>} />
+            <Route path="*" element={<div>not found</div>} />
+          </Routes>
         </main>
       </div>
     </div>
