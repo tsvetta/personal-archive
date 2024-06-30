@@ -45,6 +45,16 @@ export const schema = `#graphql
         title: String
     }
 
+    input LoginFormInput {
+        name: String!
+        password: String!
+    }
+
+    type FormResponse {
+        success: Boolean!
+        message: String!
+    }
+
     type Query {
         tag(id: ID!): Tag
         tags: [Tag]
@@ -58,5 +68,7 @@ export const schema = `#graphql
         addPost(data: PostInput!): Post
         updatePost(id: ID!, data: PostInput!): Post
         deletePost(id: ID!): [Post]
+
+        submitLoginForm(input: LoginFormInput!): FormResponse!
     }
 `;

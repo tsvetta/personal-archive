@@ -1,23 +1,95 @@
-import { FormEventHandler } from 'react';
-import Input from '../../components/Input';
+import { ChangeEventHandler, FormEventHandler, useState } from 'react';
+import { gql, useMutation } from '@apollo/client';
+
+import Input, { InputState } from '../../components/Input';
 import Button from '../../components/Button';
 
+const SUBMIT_LOGIN_FORM = gql`
+  mutation SubmitLoginForm($input: LoginFormInput!) {
+    submitLoginForm(input: $input) {
+      success
+      message
+    }
+  }
+`;
+
 const LoginPage = () => {
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    password: '',
+  });
+
+  type ValidationState = {
+    usernameInput: InputState;
+    passwordInput: InputState;
+  };
+
+  const [validation, validate] = useState<ValidationState>({
+    usernameInput: 'default',
+    passwordInput: 'default',
+  });
+
+  const [submitForm] = useMutation(SUBMIT_LOGIN_FORM);
+
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    console.log('submit', e);
+
+    validate({
+      usernameInput: 'success',
+      passwordInput: 'success',
+    });
+
+    try {
+      console.log(formData);
+      const { data } = await submitForm({
+        variables: {
+          input: { name: formData.name, password: formData.password },
+        },
+      });
+      console.log('try', data);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
   return (
     <form id='login-form' onSubmit={handleSubmit}>
-      <Input placeholder='login' name='login' autoComplete='login' />
-      <Input
-        placeholder='password'
-        type='password'
-        name='password'
-        autoComplete='current-password'
-      />
-      <Button type='submit'>Войти</Button>
+      <fieldset>
+        <legend>Login</legend>
+
+        <div>
+          <label htmlFor='username'>Name:</label>
+          <Input
+            placeholder='username'
+            name='username'
+            autoComplete='username'
+            onChange={handleChange}
+            state={validation.usernameInput}
+          />
+        </div>
+
+        <div>
+          <label htmlFor='password'>Password:</label>
+          <Input
+            placeholder='password'
+            type='password'
+            name='password'
+            autoComplete='current-password'
+            onChange={handleChange}
+            state={validation.passwordInput}
+          />
+        </div>
+        <Button type='submit'>Войти</Button>
+      </fieldset>
     </form>
   );
 };

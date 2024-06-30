@@ -98,6 +98,15 @@ export const resolvers = {
 
       return Post.find({});
     },
+
+    submitLoginForm: (_: any, args: { name: string; password: string }) => {
+      console.log('apollo Login Form data received:', args);
+
+      return {
+        success: true,
+        message: 'Form submitted successfully!',
+      };
+    },
   },
 
   Date: new GraphQLScalarType({

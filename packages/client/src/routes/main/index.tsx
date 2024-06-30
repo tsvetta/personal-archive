@@ -42,6 +42,7 @@ const MainPage = () => {
   return (
     <article className='article'>
       <h2 className={commonStyles.articleTitle}>2007</h2>
+
       {data.posts.map((post: PostData) => {
         return <Post key={post._id} data={post} />;
       })}

@@ -1,3 +1,12 @@
 .input {
     display: block;
+    border: 1px solid black;
+}
+
+.error {
+    border-color: tomato;
+}
+
+.success {
+    border-color: limegreen;
 }
