@@ -12,7 +12,7 @@ export type PhotoData = {
 };
 
 const Photo = ({ src, description, date, title, alt, width }: PhotoData) => {
-  const localDate = new Date(date).toLocaleDateString();
+  const localDate = new Date(date).toLocaleDateString('ru-RU');
   const titleText = title || localDate;
   const altText = alt || localDate;
 
