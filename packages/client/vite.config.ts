@@ -11,6 +11,11 @@ export default defineConfig({
     'process.env.CDN_URL': JSON.stringify(process.env.CDN_URL),
   },
   plugins: [react()],
+  // build: {
+  //   rollupOptions: {
+  //     input: './src/entry-client.jsx',
+  //   },
+  // },
   resolve: {
     preserveSymlinks: true, // for yarn workspaces
   },
@@ -18,11 +23,6 @@ export default defineConfig({
     noExternal: ['@apollo/client'],
   },
   server: {
-    //   proxy: {
-    //     '/api': {
-    //       target: 'http://localhost:3500/',
-    //       changeOrigin: true,
-    //     },
-    //   },
+    middlewareMode: true,
   },
 });

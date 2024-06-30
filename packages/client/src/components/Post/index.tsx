@@ -42,7 +42,6 @@ const deletePostMutation = gql`
 `;
 
 function Post({ data }: PostProps) {
-  console.log(data);
   const title = data.title || new Date(data.date).toDateString();
   const hasPhotos = data.photos && data.photos.length > 0;
   const hasTags = data.tags && data.tags.length > 0;

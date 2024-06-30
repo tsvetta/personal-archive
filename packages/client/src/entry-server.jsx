@@ -1,64 +1,54 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-
 import { CookiesProvider } from 'react-cookie';
+import { ApolloProvider } from '@apollo/client';
+import { renderToStringWithData } from '@apollo/client/react/ssr';
+import { StaticRouter } from 'react-router-dom/server';
 
-import {
-  // gql,
-  // ApolloClient,
-  // InMemoryCache,
-  ApolloProvider,
-  // createHttpLink,
-} from '@apollo/client';
-// import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
-
+import { createApolloClient } from './apollo-client';
 import App from './App';
-import { apolloClient } from '../apollo-client';
 
-// if (process.env.NODE_ENV === 'development') {
-//   loadDevMessages();
-//   loadErrorMessages();
-// }
+export async function render(url, ssrManifest, req, res) {
+  const context = {};
+  const apolloClient = createApolloClient(req);
 
-// client
-//   .query({
-//     query: gql`
-//       query Posts {
-//         posts {
-//           tags {
-//             name
-//           }
-//           photos {
-//             src
-//             description
-//           }
-//         }
-//       }
-//     `,
-//   })
-//   .then((result) => console.log(result.data));
-
-export const render = (req, res) => () => {
-  // const client = new ApolloClient({
-  //   ssrMode: typeof window === 'undefined',
-  //   link: createHttpLink({
-  //     uri: process.env.API_URL,
-  //     credentials: 'same-origin',
-  //     headers: {
-  //       cookie: req.header('Cookie'),
-  //     },
-  //   }),
-  //   cache: new InMemoryCache(),
-  // });
-
-  const html = ReactDOMServer.renderToString(
+  const AppWithRouter = (
     <React.StrictMode>
       <CookiesProvider cookies={req.universalCookies}>
-        <ApolloProvider client={apolloClient(req)}>
-          <App env='server' />
+        <ApolloProvider client={apolloClient}>
+          <StaticRouter location={url} context={context}>
+            <App env='server' />
+          </StaticRouter>
         </ApolloProvider>
       </CookiesProvider>
     </React.StrictMode>
   );
-  return { html };
+
+  try {
+    const content = await renderToStringWithData(AppWithRouter);
+    const initialState = apolloClient.extract();
+
+     // Используйте ssrManifest для получения правильных ссылок на ассеты
+     const scripts = [];
+     const styles = [];
+
+     if (ssrManifest) {
+       for (const entry of ssrManifest[url]) {
+         if (entry.endsWith('.js')) {
+           scripts.push(`<script type="module" src="${entry}"></script>`);
+         } else if (entry.endsWith('.css')) {
+           styles.push(`<link rel="stylesheet" href="${entry}">`);
+         }
+       }
+     }
+
+    return {
+      html: content,
+      head: '', // Вы можете добавить метатеги или другие элементы head здесь
+      initialState,
+    };
+  } catch (error) {
+    console.error('Error during SSR:', error);
+    throw error;
+  }
 };

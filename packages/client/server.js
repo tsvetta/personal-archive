@@ -1,9 +1,7 @@
 import fs from 'node:fs/promises';
 import express from 'express';
 import cookiesMiddleware from 'universal-cookie-express';
-// import { Router as router } from 'express';
 
-// Constants
 const isProduction = process.env.NODE_ENV === 'production';
 const port = process.env.PORT || 5173;
 const base = process.env.BASE || '/';
@@ -36,33 +34,34 @@ if (!isProduction) {
   app.use(base, sirv('./dist/client', { extensions: [] }));
 }
 
-// router.get('/')
-
 // Serve HTML
 app.use(cookiesMiddleware()).use('*', async (req, res) => {
   try {
     const url = req.originalUrl.replace(base, '');
-
     let template;
-    let render;
+    let renderFunction;
+
     if (!isProduction) {
       // Always read fresh template in development
       template = await fs.readFile('./index.html', 'utf-8');
       template = await vite.transformIndexHtml(url, template);
-      render = (await vite.ssrLoadModule('/src/entry-server.jsx')).render(
-        req,
-        res
-      );
+      renderFunction = (await vite.ssrLoadModule('/src/entry-server.jsx')).render;
     } else {
       template = templateHtml;
-      render = (await import('./dist/server/entry-server.js')).render(req, res);
+      renderFunction = render;
     }
 
-    const rendered = await render(url, ssrManifest);
+    const rendered = await renderFunction(url, ssrManifest, req, res);
 
     const html = template
       .replace(`<!--app-head-->`, rendered.head ?? '')
-      .replace(`<!--app-html-->`, rendered.html ?? '');
+      .replace(`<!--app-html-->`, rendered.html ?? '')
+      .replace(
+        '</head>',
+        `<script>window.__APOLLO_STATE__=${JSON.stringify(
+          rendered.initialState
+        ).replace(/</g, '\\u003c')}</script></head>`
+      );
 
     res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
   } catch (e) {
