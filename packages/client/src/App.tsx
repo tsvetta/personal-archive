@@ -1,4 +1,5 @@
 import { useQuery, gql } from '@apollo/client';
+import { Routes, Route } from 'react-router-dom';
 
 import './index.css';
 import commonStyles from './common.module.css';
@@ -43,6 +44,12 @@ const App = () => {
 
   return (
     <div className={commonStyles.pageContainer}>
+      {/* <Routes>
+        <Route path="/" element={<div>home</div>} />
+        <Route path="/login" element={<div>login</div>} />
+        <Route path="/create-post" element={<div>create post</div>} />
+        <Route path="*" element={<div>not found</div>} />
+      </Routes> */}
       <PageHeader title={'tsvetta archive'} />
       <div className='page-content'>
         <main className='main'>
@@ -56,6 +63,7 @@ const App = () => {
       </div>
     </div>
   );
+ 
 };
 
 export default App;

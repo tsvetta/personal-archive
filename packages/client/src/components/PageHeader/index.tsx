@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styles from './index.module.css';
 
 type PageHeaderProps = {
@@ -11,10 +12,10 @@ function PageHeader({ title }: PageHeaderProps) {
       <nav className={styles.pageMenu}>
         <ul className={styles.pageNav}>
           <li className={styles.navItem}>
-            <a href='/login'>Login</a>
+            <Link to='/login'>Login</Link>
           </li>
           <li className={styles.navItem}>
-            <a href='/create-post'>Create Post</a>
+            <Link to='/create-post'>Create Post</Link>
           </li>
         </ul>
       </nav>

@@ -1,4 +1,5 @@
 import { Key } from 'react';
+import { Link } from 'react-router-dom';
 import commonStyles from '../../common.module.css';
 
 export type TagData = {
@@ -15,7 +16,7 @@ function Tags({ tags }: TagsData) {
     <ul className={commonStyles.tags}>
       {tags.map((tag: TagData) => (
         <li key={`tag_${tag._id}`} className={commonStyles.tag}>
-          <a href={`/tags/${tag._id}`}>{tag.name}</a>
+          <Link to={`/tags/${tag._id}`}>{tag.name}</Link>
         </li>
       ))}
     </ul>
