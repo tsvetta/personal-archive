@@ -20,12 +20,12 @@ const LoginPage = () => {
   });
 
   type ValidationState = {
-    usernameInput: InputState;
+    nameInput: InputState;
     passwordInput: InputState;
   };
 
   const [validation, validate] = useState<ValidationState>({
-    usernameInput: 'default',
+    nameInput: 'default',
     passwordInput: 'default',
   });
 
@@ -44,7 +44,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     validate({
-      usernameInput: 'success',
+      nameInput: 'success',
       passwordInput: 'success',
     });
 
@@ -67,13 +67,13 @@ const LoginPage = () => {
         <legend>Login</legend>
 
         <div>
-          <label htmlFor='username'>Name:</label>
+          <label htmlFor='name'>Name:</label>
           <Input
-            placeholder='username'
-            name='username'
-            autoComplete='username'
+            placeholder='name'
+            name='name'
+            autoComplete='name'
             onChange={handleChange}
-            state={validation.usernameInput}
+            state={validation.nameInput}
           />
         </div>
 
