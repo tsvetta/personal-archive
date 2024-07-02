@@ -26,7 +26,7 @@ const PostSchema = new Schema({
   photos: [PhotoSchema],
   tags: [{ type: ObjectId, ref: 'Tag' }],
   text: {
-    type: [String],
+    type: String,
   },
   privacy: {
     type: String,

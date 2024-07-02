@@ -23,7 +23,7 @@ type PostInput = {
   title: String;
   photos: [Photo];
   tags: [String];
-  text: [String];
+  text: String;
   privacy: Required<Privacy>;
 };
 
@@ -80,6 +80,9 @@ export const resolvers = {
 
     addPost: async (_: any, args: { data: PostInput }) => {
       const newPost = new Post(args.data);
+
+      console.log('addPost', newPost);
+      return;
 
       await newPost.save();
 

@@ -32,7 +32,7 @@ export const schema = `#graphql
         photos: [Photo]
         tags: [Tag]
         privacy: Privacy!
-        text: [String]
+        text: String
         title: String
     }
 
@@ -41,7 +41,7 @@ export const schema = `#graphql
         photos: [PhotoInput]
         tags: [String]
         privacy: Privacy!
-        text: [String]
+        text: String
         title: String
     }
 

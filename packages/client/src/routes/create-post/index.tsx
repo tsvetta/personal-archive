@@ -10,8 +10,8 @@ import { cx } from '../../utils/cx';
 const SUBMIT_CREATE_POST_FORM = gql`
   mutation SubmitCreatePostForm($data: PostInput!) {
     addPost(data: $data) {
-      success
-      message
+      _id
+      date
     }
   }
 `;
@@ -55,8 +55,6 @@ const CreatePostPage = () => {
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { name, value } = e.target;
 
-    console.log(name, value);
-
     setFormData({
       ...formData,
       [name]: value,
@@ -75,14 +73,14 @@ const CreatePostPage = () => {
       text: 'success',
     });
 
-    console.log(formData);
-    return;
+    console.log('handleSubmit', formData);
+
     try {
       const { data } = await submitForm({
         variables: {
-          input: {
-            name: formData.title,
-            password: formData.date,
+          data: {
+            title: formData.title,
+            date: formData.date,
             photos: formData.photos,
             tags: formData.tags,
             privacy: formData.privacy,
