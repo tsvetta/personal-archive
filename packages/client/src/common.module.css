@@ -1,5 +1,15 @@
 @import url('./common-style-vars.css');
 
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+legend {
+    font-size: 18px;
+    padding: 0 5px;
+}
+
 .pageContainer {
     display: flex;
     flex-direction: column;

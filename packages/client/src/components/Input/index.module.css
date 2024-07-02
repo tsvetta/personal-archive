@@ -1,6 +1,9 @@
 .input {
     display: block;
     border: 1px solid black;
+    padding: 5px 7px;
+    font-size: var(--font-size);
+    min-width: 300px;
 }
 
 .error {

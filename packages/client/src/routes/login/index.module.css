@@ -1,0 +1,14 @@
+@import url('../../common-style-vars.css');
+
+.form {
+    max-width: var(--max-width);
+    margin-left: var(--default-gap);
+}
+
+.fieldset {
+    padding: 8px var(--default-gap) var(--default-gap);
+}
+
+.field {
+    margin-bottom: var(--default-gap);
+}

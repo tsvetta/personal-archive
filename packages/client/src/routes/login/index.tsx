@@ -4,6 +4,8 @@ import { gql, useMutation } from '@apollo/client';
 import Input, { InputState } from '../../components/Input';
 import Button from '../../components/Button';
 
+import styles from './index.module.css';
+
 const SUBMIT_LOGIN_FORM = gql`
   mutation SubmitLoginForm($input: LoginFormInput!) {
     submitLoginForm(input: $input) {
@@ -62,11 +64,11 @@ const LoginPage = () => {
   };
 
   return (
-    <form id='login-form' onSubmit={handleSubmit}>
-      <fieldset>
+    <form id='login-form' onSubmit={handleSubmit} className={styles.form}>
+      <fieldset className={styles.fieldset}>
         <legend>Login</legend>
 
-        <div>
+        <div className={styles.field}>
           <label htmlFor='name'>Name:</label>
           <Input
             placeholder='name'
@@ -77,7 +79,7 @@ const LoginPage = () => {
           />
         </div>
 
-        <div>
+        <div className={styles.field}>
           <label htmlFor='password'>Password:</label>
           <Input
             placeholder='password'
