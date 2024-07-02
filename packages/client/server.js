@@ -38,7 +38,7 @@ if (!isProduction) {
 app.use(cookiesMiddleware()).use('*', async (req, res, next) => {
   if (!req.originalUrl.startsWith('/graphql')) {
     try {
-      const url = req.originalUrl.replace(base, '');
+      const url = req.originalUrl.replace(base, '/');
       let template;
       let renderFunction;
 
