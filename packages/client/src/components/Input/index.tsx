@@ -1,6 +1,8 @@
 import { ChangeEventHandler } from 'react';
 import styles from './index.module.css';
 
+import { cx } from '../../utils/cx';
+
 export type InputValidationState = 'default' | 'success' | 'error';
 
 type InputProps = {
@@ -20,13 +22,11 @@ const Input = (props: InputProps) => {
     styles.input,
     props.state === 'error' && styles.error,
     props.state === 'success' && styles.success,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  ];
 
   return (
     <input
-      className={inputStyles}
+      className={cx(inputStyles)}
       type={props.type}
       name={props.name}
       id={props.id}

@@ -5,6 +5,7 @@ import Input, { InputValidationState } from '../../components/Input';
 import Button from '../../components/Button';
 
 import formStyles from '../../components/Form/index.module.css';
+import { cx } from '../../utils/cx';
 
 const SUBMIT_CREATE_POST_FORM = gql`
   mutation SubmitCreatePostForm($data: PostInput!) {
@@ -32,7 +33,7 @@ const CreatePostPage = () => {
   const nowFormatted = `${y}-${m}-${d}`;
 
   const [formData, setFormData] = useState({
-    title: now.toLocaleDateString('ru-RU'),
+    title: undefined,
     date: nowFormatted,
     photos: [],
     tags: [],
@@ -74,8 +75,9 @@ const CreatePostPage = () => {
       text: 'success',
     });
 
+    console.log(formData);
+    return;
     try {
-      console.log(formData);
       const { data } = await submitForm({
         variables: {
           input: {
@@ -106,9 +108,8 @@ const CreatePostPage = () => {
         <div className={formStyles.field}>
           <label htmlFor='title'>Title:</label>
           <Input
-            placeholder='title'
+            placeholder={now.toLocaleDateString('ru-RU')} // по умолчанию заголовок - дата поста
             name='title'
-            autoComplete='title'
             onChange={handleChange}
             state={validation.title}
             value={formData.title}
@@ -118,10 +119,9 @@ const CreatePostPage = () => {
         <div className={formStyles.field}>
           <label htmlFor='date'>Date:</label>
           <Input
-            placeholder='date'
+            placeholder={now.toLocaleDateString('ru-RU')}
             type='date'
             name='date'
-            autoComplete='date'
             onChange={handleChange}
             state={validation.date}
             value={formData.date}
@@ -129,27 +129,39 @@ const CreatePostPage = () => {
         </div>
 
         {/* + */}
-        <div className={formStyles.field}>
-          <label htmlFor='photos'>Photos:</label>
-          <Input
-            placeholder='photos'
-            type='text'
-            name='photos'
-            autoComplete='photos'
-            onChange={handleChange}
-            state={validation.photos}
-            value={formData.photos[0]}
-          />
-        </div>
+        <fieldset
+          className={cx([formStyles.fieldset, formStyles.fieldsetInner])}
+        >
+          <legend>Photos:</legend>
+          <div className={formStyles.field}>
+            <Input
+              placeholder='Photo URL'
+              type='text'
+              name='photos'
+              onChange={handleChange}
+              state={validation.photos}
+              value={formData.photos[0]}
+            />
+          </div>
+          <div className={formStyles.field}>
+            <Input
+              placeholder='Photo URL'
+              type='text'
+              name='photos'
+              onChange={handleChange}
+              state={validation.photos}
+              value={formData.photos[0]}
+            />
+          </div>
+        </fieldset>
 
         {/* multi select */}
         <div className={formStyles.field}>
           <label htmlFor='tags'>Tags:</label>
           <Input
-            placeholder='tags'
+            placeholder='Tags'
             type='text'
             name='tags'
-            autoComplete='tags'
             onChange={handleChange}
             state={validation.tags}
             value={formData.tags[0]}
@@ -160,10 +172,9 @@ const CreatePostPage = () => {
         <div className={formStyles.field}>
           <label htmlFor='text'>Text:</label>
           <Input
-            placeholder='text'
+            placeholder='Text'
             type='text'
             name='text'
-            autoComplete='text'
             onChange={handleChange}
             state={validation.text}
             value={formData.text}
@@ -174,10 +185,9 @@ const CreatePostPage = () => {
         <div className={formStyles.field}>
           <label htmlFor='privacy'>Privacy:</label>
           <Input
-            placeholder='privacy'
+            placeholder='ALL'
             type='text'
             name='privacy'
-            autoComplete='privacy'
             onChange={handleChange}
             state={validation.privacy}
             value={formData.privacy}

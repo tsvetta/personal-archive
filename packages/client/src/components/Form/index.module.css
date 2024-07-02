@@ -5,10 +5,32 @@
     margin-left: var(--default-gap);
 }
 
+.field {
+    margin-bottom: var(--default-gap);
+}
+
 .fieldset {
     padding: 8px var(--default-gap) var(--default-gap);
 }
 
-.field {
-    margin-bottom: var(--default-gap);
+.fieldsetInner {
+    padding: 5px 0 0;
+    border: 0;
+
+    legend {
+        padding: 0;
+        font-size: var(--font-size);
+    }
+
+    .field {
+        margin-bottom: 5px;
+    }
+
+    & + .field {
+        margin-top: var(--default-gap);
+    }
+
+    & + .fieldsetInner {
+        margin-top: var(--default-gap);
+    }
 }

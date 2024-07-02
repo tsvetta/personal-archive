@@ -1,3 +1,3 @@
-export const cx = (classes: string[]) => {
-  return classes.join(' ');
+export const cx = (classes: any[]) => {
+  return classes.filter(Boolean).join(' ');
 };
