@@ -1,7 +1,7 @@
 import { ChangeEventHandler } from 'react';
 import styles from './index.module.css';
 
-export type InputState = 'default' | 'success' | 'error';
+export type InputValidationState = 'default' | 'success' | 'error';
 
 type InputProps = {
   placeholder?: string;
@@ -10,7 +10,9 @@ type InputProps = {
   id?: string;
   autoComplete?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
-  state: InputState;
+  state: InputValidationState;
+  value: string;
+  defaultValue?: string;
 };
 
 const Input = (props: InputProps) => {
@@ -31,6 +33,8 @@ const Input = (props: InputProps) => {
       placeholder={props.placeholder}
       autoComplete={props.autoComplete}
       onChange={props.onChange}
+      value={props.value}
+      defaultValue={props.defaultValue}
     />
   );
 };
@@ -44,4 +48,6 @@ Input.defaultProps = {
   id: undefined,
   onChange: () => {},
   state: 'default',
+  value: undefined,
+  defaultValue: undefined,
 };

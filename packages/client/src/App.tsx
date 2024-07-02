@@ -5,8 +5,10 @@ import './index.css';
 import commonStyles from './common.module.css';
 
 import PageHeader from './components/PageHeader';
+
 import MainPage from './routes/main';
 import LoginPage from './routes/login';
+import CreatePostPage from './routes/create-post';
 
 const getPosts = gql`
   query Posts {
@@ -51,8 +53,8 @@ const App = () => {
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/create-post" element={<div>create post</div>} />
-            <Route path="*" element={<div>not found</div>} />
+            <Route path="/create-post" element={<CreatePostPage />} />
+            <Route path="*" element={<div>404 Not Found</div>} />
           </Routes>
         </main>
       </div>

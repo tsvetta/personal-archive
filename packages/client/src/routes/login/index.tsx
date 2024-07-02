@@ -1,10 +1,10 @@
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
 
-import Input, { InputState } from '../../components/Input';
+import Input, { InputValidationState } from '../../components/Input';
 import Button from '../../components/Button';
 
-import styles from './index.module.css';
+import formStyles from '../../components/Form/index.module.css';
 
 const SUBMIT_LOGIN_FORM = gql`
   mutation SubmitLoginForm($input: LoginFormInput!) {
@@ -15,16 +15,16 @@ const SUBMIT_LOGIN_FORM = gql`
   }
 `;
 
+type ValidationState = {
+  nameInput: InputValidationState;
+  passwordInput: InputValidationState;
+};
+
 const LoginPage = () => {
   const [formData, setFormData] = useState({
     name: '',
     password: '',
   });
-
-  type ValidationState = {
-    nameInput: InputState;
-    passwordInput: InputState;
-  };
 
   const [validation, validate] = useState<ValidationState>({
     nameInput: 'default',
@@ -64,11 +64,11 @@ const LoginPage = () => {
   };
 
   return (
-    <form id='login-form' onSubmit={handleSubmit} className={styles.form}>
-      <fieldset className={styles.fieldset}>
+    <form id='login-form' onSubmit={handleSubmit} className={formStyles.form}>
+      <fieldset className={formStyles.fieldset}>
         <legend>Login</legend>
 
-        <div className={styles.field}>
+        <div className={formStyles.field}>
           <label htmlFor='name'>Name:</label>
           <Input
             placeholder='name'
@@ -79,7 +79,7 @@ const LoginPage = () => {
           />
         </div>
 
-        <div className={styles.field}>
+        <div className={formStyles.field}>
           <label htmlFor='password'>Password:</label>
           <Input
             placeholder='password'

@@ -10,7 +10,7 @@ type Photo = {
   description: [String];
 };
 
-enum Privacy {
+export enum Privacy {
   'ALL',
   'FAMILY',
   'FRIENDS',
