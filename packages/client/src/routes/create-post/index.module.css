@@ -10,7 +10,6 @@
 
 .deletePhotoButton {
     display: block;
-    background-color: tomato;
     margin-left: 5px;
     width: 30px;
     height: var(--input-height);

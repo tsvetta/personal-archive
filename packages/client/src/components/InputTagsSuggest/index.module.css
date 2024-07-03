@@ -21,6 +21,11 @@
     display: block;
 }
 
+.item {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
 .suggestionButton {
     display: block;
     width: 100%;
@@ -31,6 +36,17 @@
     background-color: white;
 
     &:hover {
+        background-color: royalblue;
+    }
+}
+
+.deleteTagButton {
+    display: flex;
+    height: 26px;
+    padding: 0px 9px;
+    align-items: center;
+
+    &:hover + .suggestionButton {
         background-color: royalblue;
     }
 }

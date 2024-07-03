@@ -1,10 +1,11 @@
-import { ChangeEventHandler, useRef, useState } from 'react';
+import { ChangeEventHandler, Key, useRef, useState } from 'react';
 import styles from './index.module.css';
 
 import { cx } from '../../utils/cx';
 import { TagData } from '../Tags';
 import Input from '../Input';
 import { useOutsideClick } from '../../utils/useClickOutside';
+import Button from '../Button';
 
 export enum InputValidationState {
   DEFAULT = 'DEFAULT',
@@ -19,6 +20,7 @@ type InputTagsSuggestProps = {
   data: TagData[];
   value: TagData[];
   onTagCreate: (name: string) => void;
+  onTagDelete: (id: Key) => void;
   onChange: (clickedTag: TagData) => void;
 };
 
@@ -43,6 +45,10 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
 
   const handleTagClick = (clickedTag: TagData) => () => {
     props.onChange(clickedTag);
+  };
+
+  const handleDeleteTag = (clickedTag: TagData) => () => {
+    props.onTagDelete(clickedTag._id);
   };
 
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -80,7 +86,16 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
       <ul className={suggestionClasses}>
         {suggestedData.map((suggestion) => {
           return (
-            <li key={suggestion._id}>
+            <li key={suggestion._id} className={styles.item}>
+              <Button
+                view='danger'
+                size='s'
+                type='button'
+                className={styles.deleteTagButton}
+                onClick={handleDeleteTag(suggestion)}
+              >
+                x
+              </Button>
               <button
                 type='button'
                 className={styles.suggestionButton}

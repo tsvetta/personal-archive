@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FormEventHandler, useState } from 'react';
+import { ChangeEventHandler, FormEventHandler, Key, useState } from 'react';
 import { gql, useMutation, useQuery } from '@apollo/client';
 
 import { cx } from '../../utils/cx';
@@ -25,6 +25,14 @@ const addTag = gql`
   mutation AddTag($name: String!) {
     addTag(name: $name) {
       _id
+      name
+    }
+  }
+`;
+
+const deleteTag = gql`
+  mutation DeleteTag($id: ID!) {
+    deleteTag(id: $id) {
       name
     }
   }
@@ -105,6 +113,7 @@ const CreatePostPage = () => {
 
   const [submitForm] = useMutation(SUBMIT_CREATE_POST_FORM);
   const [submitAddTag] = useMutation(addTag);
+  const [submitDeleteTag] = useMutation(deleteTag);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { name, value } = e.target;
@@ -141,16 +150,27 @@ const CreatePostPage = () => {
 
   const handleTagCreate = async (name: string) => {
     try {
-      const { data } = await submitAddTag({
+      await submitAddTag({
         variables: {
           name,
         },
         refetchQueries: ['Tags'],
       });
-
-      console.log('3', data);
     } catch (error) {
       console.error('Error saving tag:', error);
+    }
+  };
+
+  const handleTagDelete = async (id: Key) => {
+    try {
+      await submitDeleteTag({
+        variables: {
+          id,
+        },
+        refetchQueries: ['Tags'],
+      });
+    } catch (error) {
+      console.error('Error deleting tag:', error);
     }
   };
 
@@ -266,6 +286,7 @@ const CreatePostPage = () => {
             value={formData.tags}
             onChange={handleTagsChange}
             onTagCreate={handleTagCreate}
+            onTagDelete={handleTagDelete}
           />
         </div>
 

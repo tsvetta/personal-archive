@@ -21,6 +21,10 @@
     }
 }
 
-.mini {
+.size_s {
     padding: 0 5px;
+}
+
+.view_danger {
+    background-color: tomato;
 }

@@ -5,7 +5,8 @@ import { cx } from '../../utils/cx';
 
 type ButtonProps = {
   type: 'submit' | 'reset' | 'button' | undefined;
-  view?: 'mini';
+  size?: 's';
+  view?: 'danger';
   children?: ReactNode;
   className?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -15,7 +16,8 @@ const Button = (props: ButtonProps) => {
   const classes = cx([
     props.className,
     styles.button,
-    props.view === 'mini' && styles.mini,
+    props.size === 's' && styles.size_s,
+    props.view === 'danger' && styles.view_danger,
   ]);
 
   return (

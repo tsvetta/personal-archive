@@ -52,7 +52,8 @@ const FieldPhotos = (props: FieldPhotosProps) => {
               </div>
             </div>
             <Button
-              view='mini'
+              view='danger'
+              size='s'
               className={styles.deletePhotoButton}
               onClick={props.onDeletePhoto(photo.id)}
             >
@@ -63,7 +64,7 @@ const FieldPhotos = (props: FieldPhotosProps) => {
       })}
 
       <Button
-        view='mini'
+        size='s'
         className={styles.addPhotoButton}
         onClick={props.onAddPhoto}
       >
