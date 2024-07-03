@@ -3,7 +3,11 @@ import styles from './index.module.css';
 
 import { cx } from '../../utils/cx';
 
-export type InputValidationState = 'default' | 'success' | 'error';
+export enum InputValidationState {
+  DEFAULT = 'DEFAULT',
+  SUCCESS = 'SUCCESS',
+  ERROR = 'ERROR',
+}
 
 type InputProps = {
   placeholder?: string;
@@ -21,8 +25,8 @@ const Input = (props: InputProps) => {
   const isTextarea = props.type === 'textarea';
   const inputStyles = [
     styles.input,
-    props.state === 'error' && styles.error,
-    props.state === 'success' && styles.success,
+    props.state === InputValidationState.ERROR && styles.error,
+    props.state === InputValidationState.SUCCESS && styles.success,
     isTextarea && styles.textarea,
   ];
 

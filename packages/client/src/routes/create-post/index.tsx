@@ -19,10 +19,15 @@ const SUBMIT_CREATE_POST_FORM = gql`
   }
 `;
 
+export type PhotosValidation = {
+  id: string;
+  validationState: InputValidationState;
+};
+
 type ValidationState = {
   title: InputValidationState;
   date: InputValidationState;
-  photos: InputValidationState;
+  photos: PhotosValidation[];
   tags: InputValidationState;
   privacy: InputValidationState;
   text: InputValidationState;
@@ -68,12 +73,12 @@ const CreatePostPage = () => {
   });
 
   const [validation, validate] = useState<ValidationState>({
-    title: 'default',
-    date: 'default',
-    photos: 'default',
-    tags: 'default',
-    privacy: 'default',
-    text: 'default',
+    title: InputValidationState.DEFAULT,
+    date: InputValidationState.DEFAULT,
+    photos: [],
+    tags: InputValidationState.DEFAULT,
+    privacy: InputValidationState.DEFAULT,
+    text: InputValidationState.DEFAULT,
   });
 
   const [submitForm] = useMutation(SUBMIT_CREATE_POST_FORM);
@@ -131,13 +136,21 @@ const CreatePostPage = () => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
+    const validatePhotos = () => {
+      return formData.photos.map((photo) =>
+        Boolean(photo.src)
+          ? { id: photo.id, validationState: InputValidationState.SUCCESS }
+          : { id: photo.id, validationState: InputValidationState.ERROR }
+      );
+    };
+
     validate({
-      title: 'success',
-      date: 'success',
-      photos: 'success',
-      tags: 'success',
-      privacy: 'success',
-      text: 'success',
+      title: InputValidationState.SUCCESS,
+      date: InputValidationState.SUCCESS,
+      photos: validatePhotos(),
+      tags: InputValidationState.SUCCESS,
+      privacy: InputValidationState.SUCCESS,
+      text: InputValidationState.SUCCESS,
     });
 
     console.log('handleSubmit', formData);
@@ -198,6 +211,7 @@ const CreatePostPage = () => {
           onChange={handlePhotosChange}
           onAddPhoto={handleAddPhoto}
           onDeletePhoto={handleDeletePhoto}
+          validation={validation.photos}
         />
 
         {/* multi select */}

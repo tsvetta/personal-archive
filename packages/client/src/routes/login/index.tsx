@@ -27,8 +27,8 @@ const LoginPage = () => {
   });
 
   const [validation, validate] = useState<ValidationState>({
-    nameInput: 'default',
-    passwordInput: 'default',
+    nameInput: InputValidationState.DEFAULT,
+    passwordInput: InputValidationState.DEFAULT,
   });
 
   const [submitForm] = useMutation(SUBMIT_LOGIN_FORM);
@@ -46,8 +46,8 @@ const LoginPage = () => {
     e.preventDefault();
 
     validate({
-      nameInput: 'success',
-      passwordInput: 'success',
+      nameInput: InputValidationState.SUCCESS,
+      passwordInput: InputValidationState.SUCCESS,
     });
 
     try {
