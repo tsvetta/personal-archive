@@ -11,18 +11,35 @@ type InputProps = {
   name?: string;
   id?: string;
   autoComplete?: string;
-  onChange?: ChangeEventHandler<HTMLInputElement>;
+  onChange?: ChangeEventHandler;
   state: InputValidationState;
   value: string;
   defaultValue?: string;
 };
 
 const Input = (props: InputProps) => {
+  const isTextarea = props.type === 'textarea';
   const inputStyles = [
     styles.input,
     props.state === 'error' && styles.error,
     props.state === 'success' && styles.success,
+    isTextarea && styles.textarea,
   ];
+
+  if (isTextarea) {
+    return (
+      <textarea
+        className={cx(inputStyles)}
+        name={props.name}
+        id={props.id}
+        placeholder={props.placeholder}
+        autoComplete={props.autoComplete}
+        onChange={props.onChange}
+        value={props.value}
+        defaultValue={props.defaultValue}
+      />
+    );
+  }
 
   return (
     <input

@@ -5,7 +5,7 @@ export type PhotoData = {
   _id: Required<Key>;
   src: Required<string>;
   date: Required<Date>;
-  description?: [string];
+  description?: string;
   title?: string;
   alt?: string;
   width?: number;

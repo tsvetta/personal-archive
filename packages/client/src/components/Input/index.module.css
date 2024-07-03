@@ -1,9 +1,16 @@
+@import url('../../common-style-vars.css');
+
 .input {
     display: block;
     border: 1px solid black;
     padding: 5px 7px;
     font-size: var(--font-size);
-    min-width: 300px;
+    width: 100%;
+    height: var(--input-height);
+}
+
+.textarea {
+    min-height: 80px;
 }
 
 .error {

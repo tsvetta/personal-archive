@@ -1,5 +1,26 @@
 .button {
+    position: relative;
     display: block;
     padding: 5px 15px;
     font-size: var(--font-size);
+    border: none;
+    background-color: rgb(208 208 208);
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:hover::after {
+        content: '';
+        background-color: rgba(0, 0, 0, 0.3);
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+}
+
+.mini {
+    padding: 0 5px;
 }

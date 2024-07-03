@@ -18,12 +18,12 @@ export const schema = `#graphql
     type Photo {
         _id: ID!
         src: String!
-        description: [String]
+        description: String
     }
 
     input PhotoInput {
         src: String!
-        description: [String]
+        description: String
     }
 
     type Post {

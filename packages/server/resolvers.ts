@@ -7,7 +7,7 @@ type TagInput = {
 
 type Photo = {
   src: Required<String>;
-  description: [String];
+  description?: String;
 };
 
 export enum Privacy {
@@ -21,8 +21,8 @@ export enum Privacy {
 type PostInput = {
   date: Date;
   title: String;
-  photos: [Photo];
-  tags: [String];
+  photos: Photo[];
+  tags: String[];
   text: String;
   privacy: Required<Privacy>;
 };

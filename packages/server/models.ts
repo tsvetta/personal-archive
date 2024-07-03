@@ -13,7 +13,7 @@ export const Tag = mongoose.model('Tag', TagSchema);
 
 const PhotoSchema = new Schema({
   src: { type: String, required: true },
-  description: [String],
+  description: { type: String },
 });
 
 const PostSchema = new Schema({

@@ -1,11 +1,14 @@
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
 
+import { cx } from '../../utils/cx';
+
 import Input, { InputValidationState } from '../../components/Input';
 import Button from '../../components/Button';
+import FieldPhotos from './field-photos';
 
 import formStyles from '../../components/Form/index.module.css';
-import { cx } from '../../utils/cx';
+import styles from './index.module.css';
 
 const SUBMIT_CREATE_POST_FORM = gql`
   mutation SubmitCreatePostForm($data: PostInput!) {
@@ -25,6 +28,29 @@ type ValidationState = {
   text: InputValidationState;
 };
 
+export type Photo = {
+  id: string;
+  src: string;
+  description?: string;
+};
+
+export enum Privacy {
+  ALL = 'ALL',
+  FAMILY = 'FAMILY',
+  FRIENDS = 'FRIENDS',
+  CLOSE_FRIENDS = 'CLOSE_FRIENDS',
+  TSVETTA = 'TSVETTA',
+}
+
+type CreatePostFormData = {
+  title?: string;
+  date?: string;
+  photos: Photo[];
+  tags: string[]; // id
+  privacy: Privacy;
+  text?: string;
+};
+
 const CreatePostPage = () => {
   const now = new Date();
   const d = ('0' + now.getDate()).slice(-2);
@@ -32,12 +58,12 @@ const CreatePostPage = () => {
   const y = now.getFullYear();
   const nowFormatted = `${y}-${m}-${d}`;
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CreatePostFormData>({
     title: undefined,
     date: nowFormatted,
     photos: [],
     tags: [],
-    privacy: 'ALL',
+    privacy: Privacy.ALL,
     text: undefined,
   });
 
@@ -58,6 +84,47 @@ const CreatePostPage = () => {
     setFormData({
       ...formData,
       [name]: value,
+    });
+  };
+
+  const handlePhotosChange =
+    (changedId: string, type: 'src' | 'description') => (e: any) => {
+      const { value } = e.target;
+
+      const updatedPhotos = formData.photos.map((photo) => {
+        if (changedId === photo.id) {
+          return {
+            ...photo,
+            [type]: value,
+          };
+        }
+        return photo;
+      });
+
+      setFormData({
+        ...formData,
+        photos: updatedPhotos,
+      });
+    };
+
+  const handleAddPhoto = () => {
+    setFormData({
+      ...formData,
+      photos: [
+        ...formData.photos,
+        { id: Math.random().toString(), src: '', description: '' },
+      ],
+    });
+  };
+
+  const handleDeletePhoto = (deleteId: string) => () => {
+    const photosWithoutDeleted = formData.photos.filter(
+      (photo) => photo.id !== deleteId
+    );
+
+    setFormData({
+      ...formData,
+      photos: [...photosWithoutDeleted],
     });
   };
 
@@ -100,7 +167,7 @@ const CreatePostPage = () => {
       onSubmit={handleSubmit}
       className={formStyles.form}
     >
-      <fieldset className={formStyles.fieldset}>
+      <fieldset className={cx([formStyles.fieldset, styles.formInner])}>
         <legend>Create Post</legend>
 
         <div className={formStyles.field}>
@@ -126,32 +193,12 @@ const CreatePostPage = () => {
           />
         </div>
 
-        {/* + */}
-        <fieldset
-          className={cx([formStyles.fieldset, formStyles.fieldsetInner])}
-        >
-          <legend>Photos:</legend>
-          <div className={formStyles.field}>
-            <Input
-              placeholder='Photo URL'
-              type='text'
-              name='photos'
-              onChange={handleChange}
-              state={validation.photos}
-              value={formData.photos[0]}
-            />
-          </div>
-          <div className={formStyles.field}>
-            <Input
-              placeholder='Photo URL'
-              type='text'
-              name='photos'
-              onChange={handleChange}
-              state={validation.photos}
-              value={formData.photos[0]}
-            />
-          </div>
-        </fieldset>
+        <FieldPhotos
+          value={formData.photos}
+          onChange={handlePhotosChange}
+          onAddPhoto={handleAddPhoto}
+          onDeletePhoto={handleDeletePhoto}
+        />
 
         {/* multi select */}
         <div className={formStyles.field}>
@@ -171,7 +218,7 @@ const CreatePostPage = () => {
           <label htmlFor='text'>Text:</label>
           <Input
             placeholder='Text'
-            type='text'
+            type='textarea'
             name='text'
             onChange={handleChange}
             state={validation.text}

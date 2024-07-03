@@ -16,7 +16,7 @@ enum Privacy {
 export type PhotoData = {
   _id: Required<Key>;
   src: Required<string>;
-  description: [string];
+  description: string;
 };
 
 export type PostData = {

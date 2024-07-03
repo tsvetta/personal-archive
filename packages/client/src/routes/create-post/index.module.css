@@ -1,0 +1,29 @@
+@import url('../../common-style-vars.css');
+
+.formInner {
+    max-width: 500px;
+}
+
+.addPhotoButton {
+    display: block;
+}
+
+.deletePhotoButton {
+    display: block;
+    background-color: tomato;
+    margin-left: 5px;
+    width: 30px;
+    height: var(--input-height);
+}
+
+.field {
+    display: flex;
+
+    & + .field {
+        margin-top: 10px;
+    }
+}
+
+.fieldInner {
+    width: 100%;
+}
