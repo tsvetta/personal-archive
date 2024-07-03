@@ -1,0 +1,36 @@
+.wrapper {
+    position: relative;
+}
+
+.suggestions {
+    display: none;
+    list-style: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid black;
+    width: 100%;
+    top: calc(100% + 5px);
+    box-shadow: 0px 0px 1px 1px royalblue;
+
+    &:hover {
+        border-color: royalblue;
+    }
+}
+
+.open {
+    display: block;
+}
+
+.suggestionButton {
+    display: block;
+    width: 100%;
+    border: none;
+    text-align: left;
+    padding: 5px;
+    cursor: pointer;
+    background-color: white;
+
+    &:hover {
+        background-color: royalblue;
+    }
+}

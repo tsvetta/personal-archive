@@ -1,9 +1,10 @@
-import { ChangeEventHandler, useState } from 'react';
+import { ChangeEventHandler, useRef, useState } from 'react';
 import styles from './index.module.css';
 
 import { cx } from '../../utils/cx';
 import { TagData } from '../Tags';
 import Input from '../Input';
+import { useOutsideClick } from '../../utils/useClickOutside';
 
 export enum InputValidationState {
   DEFAULT = 'DEFAULT',
@@ -15,23 +16,83 @@ type InputTagsSuggestProps = {
   name?: string;
   placeholder?: string;
   state: InputValidationState;
-  data?: TagData[];
+  data: TagData[];
   value: TagData[];
-  onChange?: ChangeEventHandler;
+  onTagCreate: (name: string) => void;
+  onChange: (clickedTag: TagData) => void;
 };
 
 const InputTagsSuggest = (props: InputTagsSuggestProps) => {
   const [input, setInput] = useState('');
+  const [isSuggestOpened, toggleSuggest] = useState(false);
+  const suggestedData = props.data.filter((tag) =>
+    tag.name.includes(input.trim())
+  );
+
+  const handleClick = () => {
+    toggleSuggest(!isSuggestOpened);
+  };
+
+  const suggestionClasses = cx([
+    styles.suggestions,
+    isSuggestOpened && styles.open,
+  ]);
+
+  const suggestionRef = useRef(null);
+  useOutsideClick(suggestionRef, () => toggleSuggest(false));
+
+  const handleTagClick = (clickedTag: TagData) => () => {
+    props.onChange(clickedTag);
+  };
+
+  const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setInput(e.target.value);
+  };
+
+  const handleInputKeyDown = (e: any) => {
+    const approveKeyCode = 32; // space, enter
+    const cancelKeyCode = 27; // esc
+
+    if (approveKeyCode === e.keyCode) {
+      setInput('');
+
+      props.onTagCreate(input.trim());
+    }
+
+    if (cancelKeyCode === e.keyCode) {
+      setInput('');
+    }
+  };
 
   return (
-    <Input
-      type='search'
-      value={input}
-      name={props.name}
-      placeholder={props.placeholder}
-      state={props.state}
-      onChange={props.onChange}
-    />
+    <div className={styles.wrapper} ref={suggestionRef}>
+      <Input
+        type='search'
+        value={input}
+        name={props.name}
+        placeholder={props.placeholder}
+        state={props.state}
+        onChange={handleInputChange}
+        onClick={handleClick}
+        onKeyDown={handleInputKeyDown}
+      />
+
+      <ul className={suggestionClasses}>
+        {suggestedData.map((suggestion) => {
+          return (
+            <li key={suggestion._id}>
+              <button
+                type='button'
+                className={styles.suggestionButton}
+                onClick={handleTagClick(suggestion)}
+              >
+                {suggestion.name}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 };
 
@@ -43,5 +104,6 @@ InputTagsSuggest.defaultProps = {
   state: 'default',
   value: '',
   data: [],
+  onTagCreate: () => {},
   onChange: () => {},
 };

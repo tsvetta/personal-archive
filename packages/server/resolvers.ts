@@ -50,7 +50,7 @@ export const resolvers = {
     },
 
     tags: async () => {
-      return await Tag.find({}).exec();
+      return await Tag.find({}).sort({ name: 1 }).exec();
     },
 
     post: async (_: any, args: any) => {

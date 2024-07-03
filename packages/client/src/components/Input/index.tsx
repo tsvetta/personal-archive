@@ -1,4 +1,9 @@
-import { ChangeEventHandler, HTMLInputTypeAttribute } from 'react';
+import {
+  ChangeEventHandler,
+  HTMLInputTypeAttribute,
+  KeyboardEventHandler,
+  MouseEventHandler,
+} from 'react';
 import styles from './index.module.css';
 
 import { cx } from '../../utils/cx';
@@ -15,10 +20,13 @@ type InputProps = {
   name?: string;
   id?: string;
   autoComplete?: string;
-  onChange?: ChangeEventHandler;
   state: InputValidationState;
   value: string;
   defaultValue?: string;
+  onChange?: ChangeEventHandler;
+  onClick?: MouseEventHandler;
+  onKeyUp?: KeyboardEventHandler;
+  onKeyDown?: KeyboardEventHandler;
 };
 
 const Input = (props: InputProps) => {
@@ -30,34 +38,25 @@ const Input = (props: InputProps) => {
     isTextarea && styles.textarea,
   ];
 
+  const inputProps = {
+    className: cx(inputStyles),
+    name: props.name,
+    id: props.id,
+    placeholder: props.placeholder,
+    autoComplete: props.autoComplete,
+    value: props.value,
+    defaultValue: props.defaultValue,
+    onChange: props.onChange,
+    onClick: props.onClick,
+    onKeyUp: props.onKeyUp,
+    onKeyDown: props.onKeyDown,
+  };
+
   if (isTextarea) {
-    return (
-      <textarea
-        className={cx(inputStyles)}
-        name={props.name}
-        id={props.id}
-        placeholder={props.placeholder}
-        autoComplete={props.autoComplete}
-        onChange={props.onChange}
-        value={props.value}
-        defaultValue={props.defaultValue}
-      />
-    );
+    return <textarea {...inputProps} />;
   }
 
-  return (
-    <input
-      className={cx(inputStyles)}
-      type={props.type}
-      name={props.name}
-      id={props.id}
-      placeholder={props.placeholder}
-      autoComplete={props.autoComplete}
-      onChange={props.onChange}
-      value={props.value}
-      defaultValue={props.defaultValue}
-    />
-  );
+  return <input type={props.type} {...inputProps} />;
 };
 
 export default Input;
@@ -67,8 +66,11 @@ Input.defaultProps = {
   type: 'text',
   name: undefined,
   id: undefined,
-  onChange: () => {},
   state: 'default',
   value: undefined,
   defaultValue: undefined,
+  onChange: () => {},
+  onClick: () => {},
+  onKeyUp: () => {},
+  onKeyDown: () => {},
 };

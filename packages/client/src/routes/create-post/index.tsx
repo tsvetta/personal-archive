@@ -21,6 +21,15 @@ const getTags = gql`
   }
 `;
 
+const addTag = gql`
+  mutation AddTag($name: String!) {
+    addTag(name: $name) {
+      _id
+      name
+    }
+  }
+`;
+
 const SUBMIT_CREATE_POST_FORM = gql`
   mutation SubmitCreatePostForm($data: PostInput!) {
     addPost(data: $data) {
@@ -95,6 +104,7 @@ const CreatePostPage = () => {
   });
 
   const [submitForm] = useMutation(SUBMIT_CREATE_POST_FORM);
+  const [submitAddTag] = useMutation(addTag);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { name, value } = e.target;
@@ -125,8 +135,23 @@ const CreatePostPage = () => {
       });
     };
 
-  const handleTagsChange = () => {
-    console.log('TAGS CHANGE');
+  const handleTagsChange = (clickedTag: TagData) => {
+    console.log('TAGS CHANGE', clickedTag);
+  };
+
+  const handleTagCreate = async (name: string) => {
+    try {
+      const { data } = await submitAddTag({
+        variables: {
+          name,
+        },
+        refetchQueries: ['Tags'],
+      });
+
+      console.log('3', data);
+    } catch (error) {
+      console.error('Error saving tag:', error);
+    }
   };
 
   const handleAddPhoto = () => {
@@ -231,7 +256,7 @@ const CreatePostPage = () => {
 
         <div className={formStyles.field}>
           <label htmlFor='tags'>
-            Tag<sup>*</sup>:
+            Tags<sup>*</sup>:
           </label>
           <InputTagsSuggest
             name='tags'
@@ -240,6 +265,7 @@ const CreatePostPage = () => {
             data={tagsData?.tags}
             value={formData.tags}
             onChange={handleTagsChange}
+            onTagCreate={handleTagCreate}
           />
         </div>
 
