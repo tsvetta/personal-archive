@@ -8,7 +8,7 @@ export type TagData = {
 };
 
 export type TagsData = {
-  tags: [TagData];
+  tags: TagData[];
 };
 
 function Tags({ tags }: TagsData) {

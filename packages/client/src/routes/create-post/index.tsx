@@ -1,5 +1,5 @@
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 
 import { cx } from '../../utils/cx';
 
@@ -9,6 +9,17 @@ import FieldPhotos from './field-photos';
 
 import formStyles from '../../components/Form/index.module.css';
 import styles from './index.module.css';
+import InputTagsSuggest from '../../components/InputTagsSuggest';
+import { TagData } from '../../components/Tags';
+
+const getTags = gql`
+  query Tags {
+    tags {
+      _id
+      name
+    }
+  }
+`;
 
 const SUBMIT_CREATE_POST_FORM = gql`
   mutation SubmitCreatePostForm($data: PostInput!) {
@@ -51,12 +62,14 @@ type CreatePostFormData = {
   title?: string;
   date?: string;
   photos: Photo[];
-  tags: string[]; // id
+  tags: TagData[];
   privacy: Privacy;
   text?: string;
 };
 
 const CreatePostPage = () => {
+  const { data: tagsData } = useQuery(getTags);
+
   const now = new Date();
   const d = ('0' + now.getDate()).slice(-2);
   const m = ('0' + (now.getMonth() + 1)).slice(-2);
@@ -111,6 +124,10 @@ const CreatePostPage = () => {
         photos: updatedPhotos,
       });
     };
+
+  const handleTagsChange = () => {
+    console.log('TAGS CHANGE');
+  };
 
   const handleAddPhoto = () => {
     setFormData({
@@ -189,7 +206,6 @@ const CreatePostPage = () => {
             placeholder={now.toLocaleDateString('ru-RU')} // по умолчанию заголовок - дата поста
             name='title'
             onChange={handleChange}
-            state={validation.title}
             value={formData.title}
           />
         </div>
@@ -201,7 +217,6 @@ const CreatePostPage = () => {
             type='date'
             name='date'
             onChange={handleChange}
-            state={validation.date}
             value={formData.date}
           />
         </div>
@@ -214,20 +229,20 @@ const CreatePostPage = () => {
           validation={validation.photos}
         />
 
-        {/* multi select */}
         <div className={formStyles.field}>
-          <label htmlFor='tags'>Tags:</label>
-          <Input
-            placeholder='Tags'
-            type='text'
+          <label htmlFor='tags'>
+            Tag<sup>*</sup>:
+          </label>
+          <InputTagsSuggest
             name='tags'
-            onChange={handleChange}
+            placeholder='Input tags here'
             state={validation.tags}
-            value={formData.tags[0]}
+            data={tagsData?.tags}
+            value={formData.tags}
+            onChange={handleTagsChange}
           />
         </div>
 
-        {/* textarea */}
         <div className={formStyles.field}>
           <label htmlFor='text'>Text:</label>
           <Input
@@ -235,7 +250,6 @@ const CreatePostPage = () => {
             type='textarea'
             name='text'
             onChange={handleChange}
-            state={validation.text}
             value={formData.text}
           />
         </div>

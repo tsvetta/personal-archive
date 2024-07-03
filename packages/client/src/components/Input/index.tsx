@@ -1,4 +1,4 @@
-import { ChangeEventHandler } from 'react';
+import { ChangeEventHandler, HTMLInputTypeAttribute } from 'react';
 import styles from './index.module.css';
 
 import { cx } from '../../utils/cx';
@@ -11,7 +11,7 @@ export enum InputValidationState {
 
 type InputProps = {
   placeholder?: string;
-  type?: string;
+  type?: HTMLInputTypeAttribute;
   name?: string;
   id?: string;
   autoComplete?: string;
