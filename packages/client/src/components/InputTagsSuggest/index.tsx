@@ -30,10 +30,10 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
 
   const suggestedData = props.data.filter((tag) => {
     const isInputted = tag.name.includes(input.trim());
-    const notInValues =
+    const notInEnteredValues =
       props.value.find((vtag) => vtag._id === tag._id) === undefined;
 
-    return isInputted && notInValues;
+    return isInputted && notInEnteredValues;
   });
 
   const handleClick = () => {
@@ -89,6 +89,10 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
       />
 
       <ul className={suggestionClasses}>
+        {suggestedData.length === 0 && (
+          <li className={styles.itemEmpty}>Click Space to create a new Tag</li>
+        )}
+
         {suggestedData.map((suggestion) => {
           return (
             <li key={suggestion._id} className={styles.item}>
