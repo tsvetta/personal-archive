@@ -62,13 +62,15 @@ legend {
     font-size: 10px;
 }
 
-.tag a {
+.tag a,
+.tag button {
     display: block;
     padding: 5px;
     color: inherit;
     text-decoration: none;
-}
-
-.linkDisabled {
-    pointer-events: none;
+    background-color: transparent;
+    border-radius: 5px;
+    border: none;
+    font-size: 10px;
+    cursor: pointer;
 }

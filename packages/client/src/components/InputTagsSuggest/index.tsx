@@ -52,6 +52,10 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
     props.onChange(clickedTag);
   };
 
+  const handleSelectedTagClick = (clickedTag: TagData) => () => {
+    props.onChange(clickedTag);
+  };
+
   const handleDeleteTag = (clickedTag: TagData) => () => {
     props.onTagDelete(clickedTag._id);
   };
@@ -118,7 +122,7 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
       </ul>
 
       <ul className={styles.selectedTags}>
-        <Tags isDisabled tags={props.value} />
+        <Tags isButtons tags={props.value} onClick={handleSelectedTagClick} />
       </ul>
     </div>
   );

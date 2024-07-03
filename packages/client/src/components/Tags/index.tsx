@@ -9,15 +9,19 @@ export type TagData = {
 
 export type TagsData = {
   tags: TagData[];
-  isDisabled?: boolean
+  isButtons?: boolean;
+  onClick: (tag: TagData) => () => void;
 };
 
-const Tags = ({ tags, isDisabled }: TagsData) => {
+const Tags = ({ tags, isButtons, onClick }: TagsData) => {
   return (
     <ul className={commonStyles.tags}>
       {tags.map((tag: TagData) => (
         <li key={`tag_${tag._id}`} className={commonStyles.tag}>
-          <Link to={`/tags/${tag._id}`} className={isDisabled ? commonStyles.linkDisabled : ''}>{tag.name}</Link>
+          {isButtons 
+            ? <button type="button" onClick={onClick(tag)} className={commonStyles.tagButton}>{tag.name}</button>
+            : <Link to={`/tags/${tag._id}`}>{tag.name}</Link>
+          }
         </li>
       ))}
     </ul>
@@ -26,7 +30,8 @@ const Tags = ({ tags, isDisabled }: TagsData) => {
 
 Tags.defaultProps = {
   tags: [],
-  isDisabled: false,
+  isButtons: false,
+  onClick: () => {}
 }
 
 export default Tags;

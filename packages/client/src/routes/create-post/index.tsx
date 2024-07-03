@@ -145,9 +145,16 @@ const CreatePostPage = () => {
     };
 
   const handleTagsChange = (clickedTag: TagData) => {
+    const isNewTag =
+      formData.tags.find((t) => t._id === clickedTag._id) === undefined;
+
+    const updatedTags = isNewTag
+      ? [...formData.tags, clickedTag]
+      : formData.tags.filter((t) => t._id !== clickedTag._id);
+
     setFormData({
       ...formData,
-      tags: [...formData.tags, clickedTag],
+      tags: updatedTags,
     });
   };
 
