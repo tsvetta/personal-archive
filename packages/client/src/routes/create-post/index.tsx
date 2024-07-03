@@ -160,11 +160,16 @@ const CreatePostPage = () => {
 
   const handleTagCreate = async (name: string) => {
     try {
-      await submitAddTag({
+      const { data } = await submitAddTag({
         variables: {
           name,
         },
         refetchQueries: ['Tags'],
+      });
+
+      setFormData({
+        ...formData,
+        tags: [...formData.tags, data.addTag],
       });
     } catch (error) {
       console.error('Error saving tag:', error);
