@@ -58,7 +58,7 @@ export const resolvers = {
     },
 
     posts: async () => {
-      return await Post.find({}).exec();
+      return await Post.find({}).sort({ date: 1 }).exec();
     },
   },
 

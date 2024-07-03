@@ -2,7 +2,7 @@ import { ChangeEventHandler, Key, useRef, useState } from 'react';
 import styles from './index.module.css';
 
 import { cx } from '../../utils/cx';
-import { TagData } from '../Tags';
+import Tags, { TagData } from '../Tags';
 import Input from '../Input';
 import { useOutsideClick } from '../../utils/useClickOutside';
 import Button from '../Button';
@@ -27,9 +27,14 @@ type InputTagsSuggestProps = {
 const InputTagsSuggest = (props: InputTagsSuggestProps) => {
   const [input, setInput] = useState('');
   const [isSuggestOpened, toggleSuggest] = useState(false);
-  const suggestedData = props.data.filter((tag) =>
-    tag.name.includes(input.trim())
-  );
+
+  const suggestedData = props.data.filter((tag) => {
+    const isInputted = tag.name.includes(input.trim());
+    const notInValues =
+      props.value.find((vtag) => vtag._id === tag._id) === undefined;
+
+    return isInputted && notInValues;
+  });
 
   const handleClick = () => {
     toggleSuggest(!isSuggestOpened);
@@ -106,6 +111,10 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
             </li>
           );
         })}
+      </ul>
+
+      <ul className={styles.selectedTags}>
+        <Tags isDisabled tags={props.value} />
       </ul>
     </div>
   );

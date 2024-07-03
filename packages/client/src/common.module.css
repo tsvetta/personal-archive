@@ -50,8 +50,8 @@ legend {
 
 .tags {
     display: flex;
+    flex-wrap: wrap;
     gap: 5px;
-    margin-top: 15px;
 }
 
 .tag {
@@ -67,4 +67,8 @@ legend {
     padding: 5px;
     color: inherit;
     text-decoration: none;
+}
+
+.linkDisabled {
+    pointer-events: none;
 }

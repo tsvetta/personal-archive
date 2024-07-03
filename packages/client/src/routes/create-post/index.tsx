@@ -145,7 +145,10 @@ const CreatePostPage = () => {
     };
 
   const handleTagsChange = (clickedTag: TagData) => {
-    console.log('TAGS CHANGE', clickedTag);
+    setFormData({
+      ...formData,
+      tags: [...formData.tags, clickedTag],
+    });
   };
 
   const handleTagCreate = async (name: string) => {

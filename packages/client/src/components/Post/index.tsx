@@ -67,7 +67,11 @@ function Post({ data }: PostProps) {
           <Photo key={`photo_${photo._id}`} date={data.date} {...photo} />
         ))}
 
-      {hasTags && <Tags tags={data.tags} />}
+      {hasTags && (
+        <div className={styles.tags}>
+          <Tags tags={data.tags} />
+        </div>
+      )}
     </section>
   );
 }

@@ -9,18 +9,24 @@ export type TagData = {
 
 export type TagsData = {
   tags: TagData[];
+  isDisabled?: boolean
 };
 
-function Tags({ tags }: TagsData) {
+const Tags = ({ tags, isDisabled }: TagsData) => {
   return (
     <ul className={commonStyles.tags}>
       {tags.map((tag: TagData) => (
         <li key={`tag_${tag._id}`} className={commonStyles.tag}>
-          <Link to={`/tags/${tag._id}`}>{tag.name}</Link>
+          <Link to={`/tags/${tag._id}`} className={isDisabled ? commonStyles.linkDisabled : ''}>{tag.name}</Link>
         </li>
       ))}
     </ul>
   );
+}
+
+Tags.defaultProps = {
+  tags: [],
+  isDisabled: false,
 }
 
 export default Tags;

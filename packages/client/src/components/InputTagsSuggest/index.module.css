@@ -9,7 +9,7 @@
     background-color: white;
     border: 1px solid black;
     width: 100%;
-    top: calc(100% + 5px);
+    top: 35px;
     box-shadow: 0px 0px 1px 1px royalblue;
 
     &:hover {
@@ -49,4 +49,8 @@
     &:hover + .suggestionButton {
         background-color: royalblue;
     }
+}
+
+.selectedTags {
+    margin-top: 10px;
 }
