@@ -8,9 +8,10 @@ import {
 import { useMutation, useQuery } from '@apollo/client';
 
 import { cx } from '../../utils/cx';
+import { getNowFormatted, nowRu } from '../../utils/date-formatted';
 
 import { TagData } from '../../components/Tags';
-import Input, { InputValidationState } from '../../components/Input';
+import Input from '../../components/Input';
 import Button from '../../components/Button';
 import InputTagsSuggest from '../../components/InputTagsSuggest';
 
@@ -19,10 +20,8 @@ import styles from './index.module.css';
 
 import { addTag, deleteTag, getTags, submitCreatePostForm } from '../../api';
 
-import { getNowFormatted, nowRu } from '../../utils/date-formatted';
-
 import FieldPhotos from './field-photos';
-import { ValidationState } from './form-validation';
+import { ValidationState, validateForm } from './form-validation';
 
 export type Photo = {
   id: string;
@@ -64,14 +63,9 @@ const CreatePostPage = () => {
     text: '',
   });
 
-  const [validation, validate] = useState<ValidationState>({
-    title: InputValidationState.DEFAULT,
-    date: InputValidationState.DEFAULT,
-    photos: [],
-    tags: InputValidationState.DEFAULT,
-    privacy: InputValidationState.DEFAULT,
-    text: InputValidationState.DEFAULT,
-  });
+  const [validationState, setValidationState] = useState<ValidationState>(
+    validateForm(formData, true)
+  );
 
   const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) => {
@@ -179,24 +173,11 @@ const CreatePostPage = () => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
-    const validatePhotos = () => {
-      return formData.photos.map((photo) =>
-        Boolean(photo.src)
-          ? { id: photo.id, validationState: InputValidationState.SUCCESS }
-          : { id: photo.id, validationState: InputValidationState.ERROR }
-      );
-    };
+    const preSubmitValidationState = validateForm(formData);
 
-    validate({
-      title: InputValidationState.SUCCESS,
-      date: InputValidationState.SUCCESS,
-      photos: validatePhotos(),
-      tags: InputValidationState.SUCCESS,
-      privacy: InputValidationState.SUCCESS,
-      text: InputValidationState.SUCCESS,
-    });
+    setValidationState(preSubmitValidationState);
 
-    console.log('handleSubmit', formData);
+    console.log('handleSubmit', preSubmitValidationState, formData);
 
     try {
       const { data } = await submitForm({
@@ -253,7 +234,7 @@ const CreatePostPage = () => {
           onChange={handlePhotosChange}
           onAddPhoto={handleAddPhoto}
           onDeletePhoto={handleDeletePhoto}
-          validation={validation.photos}
+          validation={validationState.photos}
         />
 
         <div className={formStyles.field}>
@@ -263,7 +244,7 @@ const CreatePostPage = () => {
           <InputTagsSuggest
             name='tags'
             placeholder='Input tags here'
-            state={validation.tags}
+            state={validationState.tags}
             data={tagsData?.tags}
             value={formData.tags}
             onChange={handleTagsChange}
@@ -291,7 +272,7 @@ const CreatePostPage = () => {
             type='text'
             name='privacy'
             onChange={handleChange}
-            state={validation.privacy}
+            state={validationState.privacy}
             value={formData.privacy}
           />
         </div>
