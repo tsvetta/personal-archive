@@ -14,6 +14,7 @@ import { TagData } from '../../components/Tags';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import InputTagsSuggest from '../../components/InputTagsSuggest';
+import Select from '../../components/Select';
 
 import formStyles from '../../components/Form/index.module.css';
 import styles from './index.module.css';
@@ -36,6 +37,29 @@ export enum Privacy {
   CLOSE_FRIENDS = 'CLOSE_FRIENDS',
   TSVETTA = 'TSVETTA',
 }
+
+const selectOptions = [
+  {
+    id: Privacy.ALL,
+    name: Privacy.ALL,
+  },
+  {
+    id: Privacy.FAMILY,
+    name: Privacy.FAMILY,
+  },
+  {
+    id: Privacy.FRIENDS,
+    name: Privacy.FRIENDS,
+  },
+  {
+    id: Privacy.CLOSE_FRIENDS,
+    name: Privacy.CLOSE_FRIENDS,
+  },
+  {
+    id: Privacy.TSVETTA,
+    name: Privacy.TSVETTA,
+  },
+];
 
 type CreatePostFormData = {
   title?: string;
@@ -264,16 +288,13 @@ const CreatePostPage = () => {
           />
         </div>
 
-        {/* select */}
         <div className={formStyles.field}>
           <label htmlFor='privacy'>Privacy:</label>
-          <Input
-            placeholder='ALL'
-            type='text'
+          <Select
             name='privacy'
-            onChange={handleChange}
-            state={validationState.privacy}
+            options={selectOptions}
             value={formData.privacy}
+            onChange={handleChange}
           />
         </div>
 
