@@ -14,6 +14,8 @@ import { TagData } from '../../components/Tags';
 
 import { addTag, deleteTag, getTags, submitCreatePostForm } from '../../api';
 
+import { getNowFormatted } from '../../utils/get-now-formatted';
+
 export type PhotosValidation = {
   id: string;
   validationState: InputValidationState;
@@ -57,11 +59,7 @@ const CreatePostPage = () => {
   const [submitAddTag] = useMutation(addTag);
   const [submitDeleteTag] = useMutation(deleteTag);
 
-  const now = new Date();
-  const d = ('0' + now.getDate()).slice(-2);
-  const m = ('0' + (now.getMonth() + 1)).slice(-2);
-  const y = now.getFullYear();
-  const nowFormatted = `${y}-${m}-${d}`;
+  const nowFormatted = getNowFormatted();
 
   const [formData, setFormData] = useState<CreatePostFormData>({
     title: undefined,
