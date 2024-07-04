@@ -1,5 +1,5 @@
 import { ChangeEventHandler, FormEventHandler, Key, useState } from 'react';
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 
 import { cx } from '../../utils/cx';
 
@@ -12,43 +12,7 @@ import styles from './index.module.css';
 import InputTagsSuggest from '../../components/InputTagsSuggest';
 import { TagData } from '../../components/Tags';
 
-const getTags = gql`
-  query Tags {
-    tags {
-      _id
-      name
-      posts {
-        _id
-      }
-    }
-  }
-`;
-
-const addTag = gql`
-  mutation AddTag($name: String!) {
-    addTag(name: $name) {
-      _id
-      name
-    }
-  }
-`;
-
-const deleteTag = gql`
-  mutation DeleteTag($id: ID!) {
-    deleteTag(id: $id) {
-      name
-    }
-  }
-`;
-
-const SUBMIT_CREATE_POST_FORM = gql`
-  mutation SubmitCreatePostForm($data: PostInput!) {
-    addPost(data: $data) {
-      _id
-      date
-    }
-  }
-`;
+import { addTag, deleteTag, getTags, submitCreatePostForm } from '../../api';
 
 export type PhotosValidation = {
   id: string;
@@ -89,6 +53,9 @@ type CreatePostFormData = {
 
 const CreatePostPage = () => {
   const { data: tagsData } = useQuery(getTags);
+  const [submitForm] = useMutation(submitCreatePostForm);
+  const [submitAddTag] = useMutation(addTag);
+  const [submitDeleteTag] = useMutation(deleteTag);
 
   const now = new Date();
   const d = ('0' + now.getDate()).slice(-2);
@@ -113,10 +80,6 @@ const CreatePostPage = () => {
     privacy: InputValidationState.DEFAULT,
     text: InputValidationState.DEFAULT,
   });
-
-  const [submitForm] = useMutation(SUBMIT_CREATE_POST_FORM);
-  const [submitAddTag] = useMutation(addTag);
-  const [submitDeleteTag] = useMutation(deleteTag);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { name, value } = e.target;
