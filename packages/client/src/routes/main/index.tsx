@@ -14,6 +14,7 @@ const getPosts = gql`
         name
       }
       photos {
+        _id
         src
         description
       }

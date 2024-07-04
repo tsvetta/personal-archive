@@ -33,7 +33,6 @@ export const submitCreatePostForm = gql`
   mutation SubmitCreatePostForm($data: PostInput!) {
     addPost(data: $data) {
       _id
-      date
     }
   }
 `;
