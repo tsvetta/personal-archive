@@ -17,6 +17,9 @@ const getTags = gql`
     tags {
       _id
       name
+      posts {
+        _id
+      }
     }
   }
 `;

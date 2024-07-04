@@ -7,6 +7,27 @@ const TagSchema = new Schema({
     type: String,
     required: true,
   },
+  posts: [{ type: ObjectId, ref: 'Post' }],
+});
+
+// Middleware для удаления тега
+TagSchema.pre('findOneAndDelete', async function (next) {
+  try {
+    const options = this.getFilter();
+
+    // Проверяем есть ли у тега связанные посты
+    const posts = await Post.find({ tags: { $in: options._id } });
+
+    if (posts.length > 0) {
+      throw new Error(
+        'Невозможно удалить тег, у которого есть связанные посты'
+      );
+    }
+
+    next();
+  } catch (error: any) {
+    next(error);
+  }
 });
 
 export const Tag = mongoose.model('Tag', TagSchema);

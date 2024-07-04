@@ -35,12 +35,16 @@ export const resolvers = {
   },
 
   Post: {
-    tags: async ({ tags }: any) => {
-      const newTags = await Promise.all(
-        tags.map((tagId: string) => Tag.findById(tagId))
-      );
+    tags: async (parent: any) => {
+      try {
+        const post = await Post.findById(parent.id).populate('tags').exec();
 
-      return newTags;
+        return post?.tags;
+      } catch (err: any) {
+        throw new Error(
+          `Failed to fetch tags for post ${parent.id}: ${err.message}`
+        );
+      }
     },
   },
 
@@ -50,7 +54,7 @@ export const resolvers = {
     },
 
     tags: async () => {
-      return await Tag.find({}).sort({ name: 1 }).exec();
+      return await Tag.find().sort({ name: 1 }).exec();
     },
 
     post: async (_: any, args: any) => {
@@ -58,13 +62,12 @@ export const resolvers = {
     },
 
     posts: async () => {
-      return await Post.find({}).sort({ date: 1 }).exec();
+      return await Post.find().sort({ date: 1 }).exec();
     },
   },
 
   Mutation: {
-    addTag: async (_: any, args: TagInput) => {
-      const { name } = args;
+    addTag: async (_: any, { name }: TagInput) => {
       const newTag = new Tag({ name });
 
       await newTag.save();
@@ -73,16 +76,21 @@ export const resolvers = {
     },
 
     deleteTag: async (_: any, args: { id: String }) => {
-      await Tag.findByIdAndDelete(args.id);
+      const posts = await Post.find({ tags: { $in: args.id } });
+
+      if (posts.length > 0) {
+        throw new Error(
+          'Apollo: Невозможно удалить пользователя, у которого есть связанные посты'
+        );
+      }
+
+      await Tag.findOneAndDelete({ _id: args.id });
 
       return Tag.find({});
     },
 
     addPost: async (_: any, args: { data: PostInput }) => {
       const newPost = new Post(args.data);
-
-      console.log('addPost', newPost);
-      return;
 
       await newPost.save();
 
@@ -103,7 +111,7 @@ export const resolvers = {
     },
 
     submitLoginForm: (_: any, args: { name: string; password: string }) => {
-      console.log('apollo Login Form data received:', args);
+      console.log('Login Form data received:', args);
 
       return {
         success: true,

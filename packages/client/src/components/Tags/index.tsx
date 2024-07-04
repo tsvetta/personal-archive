@@ -5,6 +5,7 @@ import commonStyles from '../../common.module.css';
 export type TagData = {
   _id: Key;
   name: string;
+  posts?: { _id: Key }[]
 };
 
 export type TagsData = {

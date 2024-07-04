@@ -36,7 +36,7 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
     return isInputted && notInEnteredValues;
   });
 
-  const handleClick = () => {
+  const handleInputClick = () => {
     toggleSuggest(!isSuggestOpened);
   };
 
@@ -88,7 +88,7 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
         placeholder={props.placeholder}
         state={props.state}
         onChange={handleInputChange}
-        onClick={handleClick}
+        onClick={handleInputClick}
         onKeyDown={handleInputKeyDown}
       />
 
@@ -98,17 +98,21 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
         )}
 
         {suggestedData.map((suggestion) => {
+          const hasLinkedPosts = Boolean(suggestion.posts?.length);
+
           return (
             <li key={suggestion._id} className={styles.item}>
-              <Button
-                view='danger'
-                size='s'
-                type='button'
-                className={styles.deleteTagButton}
-                onClick={handleDeleteTag(suggestion)}
-              >
-                x
-              </Button>
+              {hasLinkedPosts ? null : (
+                <Button
+                  view='danger'
+                  size='s'
+                  type='button'
+                  className={styles.deleteTagButton}
+                  onClick={handleDeleteTag(suggestion)}
+                >
+                  x
+                </Button>
+              )}
               <button
                 type='button'
                 className={styles.suggestionButton}
