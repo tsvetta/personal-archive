@@ -201,7 +201,9 @@ const CreatePostPage = () => {
 
     setValidationState(preSubmitValidationState);
 
-    console.log('handleSubmit', preSubmitValidationState, formData);
+    // TODO
+    const isValid = false;
+    console.log('handleSubmit', formData);
 
     try {
       const { data } = await submitForm({

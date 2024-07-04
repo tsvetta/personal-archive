@@ -1,5 +1,9 @@
 @import url('../../common-style-vars.css');
 
+.fieldset {
+    position: relative;
+}
+
 .formInner {
     max-width: 500px;
 }
@@ -25,4 +29,23 @@
 
 .fieldInner {
     width: 100%;
+}
+
+.preview {
+    position: absolute;
+    left: calc(100% + 45px);
+
+    &:hover {
+        z-index: 1;
+    }
+
+    & img {
+        height: 120px;
+        max-height: 300px;
+        transition: height 0.5s ease;
+    }
+
+    & img:hover {
+        height: 300px;
+    }
 }

@@ -13,6 +13,7 @@ export type ValidationState = {
   privacy: InputValidationState;
 };
 
+// TODO: regexp for url
 export const validatePhotos = (photos: Photo[]) => {
   return photos.map((photo) =>
     Boolean(photo.src)

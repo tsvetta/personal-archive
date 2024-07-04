@@ -6,7 +6,8 @@ import Button from '../../components/Button';
 import formStyles from '../../components/Form/index.module.css';
 import styles from './index.module.css';
 import { ChangeEventHandler, MouseEventHandler } from 'react';
-import { Photo, PhotosValidation } from '.';
+import { Photo } from '.';
+import { PhotosValidation } from './form-validation';
 
 type FieldPhotosProps = {
   value: Photo[];
@@ -21,7 +22,13 @@ type FieldPhotosProps = {
 
 const FieldPhotos = (props: FieldPhotosProps) => {
   return (
-    <fieldset className={cx([formStyles.fieldset, formStyles.fieldsetInner])}>
+    <fieldset
+      className={cx([
+        formStyles.fieldset,
+        formStyles.fieldsetInner,
+        styles.fieldset,
+      ])}
+    >
       <legend>Photos:</legend>
       {props.value.map((photo: Photo) => {
         const validationState = props.validation.find(
@@ -30,6 +37,9 @@ const FieldPhotos = (props: FieldPhotosProps) => {
 
         return (
           <div key={photo.id} className={styles.field}>
+            <div className={styles.preview}>
+              <img src={photo.src} alt='Preview' />
+            </div>
             <div className={styles.fieldInner}>
               <div className={formStyles.field}>
                 <Input

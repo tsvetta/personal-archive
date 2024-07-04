@@ -9,7 +9,6 @@ import { cx } from '../../utils/cx';
 import { InputValidationState } from '../Input';
 
 import inputStyles from '../../components/Input/index.module.css';
-// import styles from './index.module.css';
 
 type Option = {
   id: string;
