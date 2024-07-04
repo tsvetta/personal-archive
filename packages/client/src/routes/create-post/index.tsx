@@ -14,7 +14,7 @@ import { TagData } from '../../components/Tags';
 
 import { addTag, deleteTag, getTags, submitCreatePostForm } from '../../api';
 
-import { getNowFormatted } from '../../utils/get-now-formatted';
+import { getNowFormatted, nowRu } from '../../utils/date-formatted';
 
 export type PhotosValidation = {
   id: string;
@@ -82,10 +82,7 @@ const CreatePostPage = () => {
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { name, value } = e.target;
 
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handlePhotosChange =
@@ -102,10 +99,7 @@ const CreatePostPage = () => {
         return photo;
       });
 
-      setFormData({
-        ...formData,
-        photos: updatedPhotos,
-      });
+      setFormData((prevData) => ({ ...prevData, photos: updatedPhotos }));
     };
 
   const handleTagsChange = (clickedTag: TagData) => {
@@ -116,10 +110,7 @@ const CreatePostPage = () => {
       ? [...formData.tags, clickedTag]
       : formData.tags.filter((t) => t._id !== clickedTag._id);
 
-    setFormData({
-      ...formData,
-      tags: updatedTags,
-    });
+    setFormData((prevData) => ({ ...prevData, tags: updatedTags }));
   };
 
   const handleTagCreate = async (name: string) => {
@@ -131,10 +122,10 @@ const CreatePostPage = () => {
         refetchQueries: ['Tags'],
       });
 
-      setFormData({
-        ...formData,
+      setFormData((prevData) => ({
+        ...prevData,
         tags: [...formData.tags, data.addTag],
-      });
+      }));
     } catch (error) {
       console.error('Error saving tag:', error);
     }
@@ -154,13 +145,13 @@ const CreatePostPage = () => {
   };
 
   const handleAddPhoto = () => {
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       photos: [
         ...formData.photos,
         { id: Math.random().toString(), src: '', description: '' },
       ],
-    });
+    }));
   };
 
   const handleDeletePhoto = (deleteId: string) => () => {
@@ -168,10 +159,10 @@ const CreatePostPage = () => {
       (photo) => photo.id !== deleteId
     );
 
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       photos: [...photosWithoutDeleted],
-    });
+    }));
   };
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -227,7 +218,7 @@ const CreatePostPage = () => {
         <div className={formStyles.field}>
           <label htmlFor='title'>Title:</label>
           <Input
-            placeholder={now.toLocaleDateString('ru-RU')} // по умолчанию заголовок - дата поста
+            placeholder={nowRu} // по умолчанию заголовок - дата поста
             name='title'
             onChange={handleChange}
             value={formData.title}
@@ -237,7 +228,7 @@ const CreatePostPage = () => {
         <div className={formStyles.field}>
           <label htmlFor='date'>Date:</label>
           <Input
-            placeholder={now.toLocaleDateString('ru-RU')}
+            placeholder={nowRu}
             type='date'
             name='date'
             onChange={handleChange}

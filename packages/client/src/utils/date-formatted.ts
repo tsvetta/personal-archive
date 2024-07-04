@@ -6,3 +6,5 @@ export const getNowFormatted = () => {
 
   return `${y}-${m}-${d}`;
 };
+
+export const nowRu = new Date().toLocaleDateString('ru-RU');
