@@ -64,7 +64,7 @@ const selectOptions = [
 type CreatePostFormData = {
   title?: string;
   date?: string;
-  photos: Photo[];
+  photos: Partial<Photo>[];
   tags: TagData[];
   privacy: Privacy;
   text?: string;
@@ -111,6 +111,7 @@ const CreatePostPage = () => {
             [type]: value,
           };
         }
+
         return photo;
       });
 
@@ -201,25 +202,34 @@ const CreatePostPage = () => {
 
     setValidationState(preSubmitValidationState);
 
-    // TODO
+    // TODO отправка после успешной валидации
     const isValid = false;
-    console.log('handleSubmit', formData);
+
+    const preparedData = {
+      title: formData.title || undefined,
+      date: formData.date,
+      photos: formData.photos.map((photo) => ({
+        src: photo.src,
+        description: photo.description,
+      })),
+      tags: formData.tags.map((tag) => tag._id),
+      privacy: formData.privacy,
+      text: formData.text || undefined,
+    };
+
+    console.log('handleSubmit', preparedData);
 
     try {
       const { data } = await submitForm({
         variables: {
-          data: {
-            title: formData.title || undefined,
-            date: formData.date,
-            photos: formData.photos,
-            tags: formData.tags,
-            privacy: formData.privacy,
-            text: formData.text || undefined,
-          },
+          data: preparedData,
         },
       });
 
       console.log('try', data);
+
+      // очищать форму
+      // нотификация об успешном добавлении
     } catch (error) {
       console.error('Error submitting form:', error);
     }
