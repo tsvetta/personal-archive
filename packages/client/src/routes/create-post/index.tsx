@@ -1,34 +1,28 @@
-import { ChangeEventHandler, FormEventHandler, Key, useState } from 'react';
+import {
+  ChangeEventHandler,
+  FormEventHandler,
+  Key,
+  useCallback,
+  useState,
+} from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 
 import { cx } from '../../utils/cx';
 
+import { TagData } from '../../components/Tags';
 import Input, { InputValidationState } from '../../components/Input';
 import Button from '../../components/Button';
-import FieldPhotos from './field-photos';
+import InputTagsSuggest from '../../components/InputTagsSuggest';
 
 import formStyles from '../../components/Form/index.module.css';
 import styles from './index.module.css';
-import InputTagsSuggest from '../../components/InputTagsSuggest';
-import { TagData } from '../../components/Tags';
 
 import { addTag, deleteTag, getTags, submitCreatePostForm } from '../../api';
 
 import { getNowFormatted, nowRu } from '../../utils/date-formatted';
 
-export type PhotosValidation = {
-  id: string;
-  validationState: InputValidationState;
-};
-
-type ValidationState = {
-  title: InputValidationState;
-  date: InputValidationState;
-  photos: PhotosValidation[];
-  tags: InputValidationState;
-  privacy: InputValidationState;
-  text: InputValidationState;
-};
+import FieldPhotos from './field-photos';
+import { ValidationState } from './form-validation';
 
 export type Photo = {
   id: string;
@@ -62,12 +56,12 @@ const CreatePostPage = () => {
   const nowFormatted = getNowFormatted();
 
   const [formData, setFormData] = useState<CreatePostFormData>({
-    title: undefined,
+    title: '',
     date: nowFormatted,
     photos: [],
     tags: [],
     privacy: Privacy.ALL,
-    text: undefined,
+    text: '',
   });
 
   const [validation, validate] = useState<ValidationState>({
@@ -79,13 +73,16 @@ const CreatePostPage = () => {
     text: InputValidationState.DEFAULT,
   });
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const { name, value } = e.target;
+  const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+    (e) => {
+      const { name, value } = e.target;
 
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    },
+    []
+  );
 
-  const handlePhotosChange =
+  const handlePhotosChange = useCallback(
     (changedId: string, type: 'src' | 'description') => (e: any) => {
       const { value } = e.target;
 
@@ -100,51 +97,62 @@ const CreatePostPage = () => {
       });
 
       setFormData((prevData) => ({ ...prevData, photos: updatedPhotos }));
-    };
+    },
+    [formData.photos]
+  );
 
-  const handleTagsChange = (clickedTag: TagData) => {
-    const isNewTag =
-      formData.tags.find((t) => t._id === clickedTag._id) === undefined;
+  const handleTagsChange = useCallback(
+    (clickedTag: TagData) => {
+      const isNewTag =
+        formData.tags.find((t) => t._id === clickedTag._id) === undefined;
 
-    const updatedTags = isNewTag
-      ? [...formData.tags, clickedTag]
-      : formData.tags.filter((t) => t._id !== clickedTag._id);
+      const updatedTags = isNewTag
+        ? [...formData.tags, clickedTag]
+        : formData.tags.filter((t) => t._id !== clickedTag._id);
 
-    setFormData((prevData) => ({ ...prevData, tags: updatedTags }));
-  };
+      setFormData((prevData) => ({ ...prevData, tags: updatedTags }));
+    },
+    [formData.tags]
+  );
 
-  const handleTagCreate = async (name: string) => {
-    try {
-      const { data } = await submitAddTag({
-        variables: {
-          name,
-        },
-        refetchQueries: ['Tags'],
-      });
+  const handleTagCreate = useCallback(
+    async (name: string) => {
+      try {
+        const { data } = await submitAddTag({
+          variables: {
+            name,
+          },
+          refetchQueries: ['Tags'],
+        });
 
-      setFormData((prevData) => ({
-        ...prevData,
-        tags: [...formData.tags, data.addTag],
-      }));
-    } catch (error) {
-      console.error('Error saving tag:', error);
-    }
-  };
+        setFormData((prevData) => ({
+          ...prevData,
+          tags: [...formData.tags, data.addTag],
+        }));
+      } catch (error) {
+        console.error('Error saving tag:', error);
+      }
+    },
+    [submitAddTag]
+  );
 
-  const handleTagDelete = async (id: Key) => {
-    try {
-      await submitDeleteTag({
-        variables: {
-          id,
-        },
-        refetchQueries: ['Tags'],
-      });
-    } catch (error) {
-      console.error('Error deleting tag:', error);
-    }
-  };
+  const handleTagDelete = useCallback(
+    async (id: Key) => {
+      try {
+        await submitDeleteTag({
+          variables: {
+            id,
+          },
+          refetchQueries: ['Tags'],
+        });
+      } catch (error) {
+        console.error('Error deleting tag:', error);
+      }
+    },
+    [submitDeleteTag]
+  );
 
-  const handleAddPhoto = () => {
+  const handleAddPhoto = useCallback(() => {
     setFormData((prevData) => ({
       ...prevData,
       photos: [
@@ -152,18 +160,21 @@ const CreatePostPage = () => {
         { id: Math.random().toString(), src: '', description: '' },
       ],
     }));
-  };
+  }, [formData.photos]);
 
-  const handleDeletePhoto = (deleteId: string) => () => {
-    const photosWithoutDeleted = formData.photos.filter(
-      (photo) => photo.id !== deleteId
-    );
+  const handleDeletePhoto = useCallback(
+    (deleteId: string) => () => {
+      const photosWithoutDeleted = formData.photos.filter(
+        (photo) => photo.id !== deleteId
+      );
 
-    setFormData((prevData) => ({
-      ...prevData,
-      photos: [...photosWithoutDeleted],
-    }));
-  };
+      setFormData((prevData) => ({
+        ...prevData,
+        photos: [...photosWithoutDeleted],
+      }));
+    },
+    [formData.photos]
+  );
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -191,15 +202,16 @@ const CreatePostPage = () => {
       const { data } = await submitForm({
         variables: {
           data: {
-            title: formData.title,
+            title: formData.title || undefined,
             date: formData.date,
             photos: formData.photos,
             tags: formData.tags,
             privacy: formData.privacy,
-            text: formData.text,
+            text: formData.text || undefined,
           },
         },
       });
+
       console.log('try', data);
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -220,8 +232,8 @@ const CreatePostPage = () => {
           <Input
             placeholder={nowRu} // по умолчанию заголовок - дата поста
             name='title'
-            onChange={handleChange}
             value={formData.title}
+            onChange={handleChange}
           />
         </div>
 
@@ -231,8 +243,8 @@ const CreatePostPage = () => {
             placeholder={nowRu}
             type='date'
             name='date'
-            onChange={handleChange}
             value={formData.date}
+            onChange={handleChange}
           />
         </div>
 
