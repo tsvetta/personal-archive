@@ -5,6 +5,7 @@ import {
   useCallback,
   useState,
 } from 'react';
+import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 
 import { cx } from '../../utils/cx';
@@ -91,7 +92,10 @@ const mapFormData = (formData: CreatePostFormData) => ({
   text: formData.text || undefined,
 });
 
-const CreatePostPage = () => {
+const PostFormPage = () => {
+  const { id: urlId } = useParams();
+  console.log('URL ID', urlId);
+
   const { data: tagsData } = useQuery(getTags);
   const [submitForm] = useMutation(submitCreatePostForm);
   const [submitAddTag] = useMutation(addTag);
@@ -250,7 +254,7 @@ const CreatePostPage = () => {
 
         <label htmlFor='title'>Title:</label>
         <Input
-          placeholder={nowRu} // по умолчанию заголовок - дата поста
+          placeholder={formData.date === nowFormatted ? nowRu : formData.date} // по умолчанию заголовок - дата поста
           name='title'
           value={formData.title}
           onChange={handleChange}
@@ -319,4 +323,4 @@ const CreatePostPage = () => {
   );
 };
 
-export default CreatePostPage;
+export default PostFormPage;

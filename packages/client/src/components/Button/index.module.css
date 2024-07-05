@@ -23,6 +23,7 @@
 .size_s {
     padding: 0 5px;
     font-size: 12px;
+    max-height: 20px;
 }
 
 .view_danger {

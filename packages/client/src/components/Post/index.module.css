@@ -6,3 +6,18 @@
 .tags {
     margin-top: 10px;
 }
+
+.editLink {
+    color: white;
+    font-size: 12px;
+
+    &:hover {
+        color: royalblue;
+    }
+}
+
+.manager {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}

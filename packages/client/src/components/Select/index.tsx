@@ -9,7 +9,7 @@ import { cx } from '../../utils/cx';
 import {
   FieldValidation,
   FieldValidationStateType,
-} from '../../routes/create-post/form-validation';
+} from '../../routes/post-form/form-validation';
 
 import formStyles from '../../components/Form/index.module.css';
 import inputStyles from '../../components/Input/index.module.css';

@@ -8,7 +8,7 @@ import formStyles from '../../components/Form/index.module.css';
 import {
   FieldValidation,
   FieldValidationStateType,
-} from '../create-post/form-validation';
+} from '../post-form/form-validation';
 
 import { submitLoginForm } from '../../api';
 

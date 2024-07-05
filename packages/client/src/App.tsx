@@ -7,7 +7,7 @@ import PageHeader from './components/PageHeader';
 
 import MainPage from './routes/main';
 import LoginPage from './routes/login';
-import CreatePostPage from './routes/create-post';
+import PostFormPage from './routes/post-form';
 
 const App = () => {
   return (
@@ -18,7 +18,9 @@ const App = () => {
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/create-post" element={<CreatePostPage />} />
+            <Route path="/create-post" element={<PostFormPage />} />
+            {/* <Route path="/post/:id" element={<PostPage />} /> */}
+            <Route path="/post/:id/edit" element={<PostFormPage />} />
             <Route path="*" element={<div>404 Not Found</div>} />
           </Routes>
         </main>
