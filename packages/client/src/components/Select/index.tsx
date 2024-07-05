@@ -6,18 +6,23 @@ import {
 
 import { cx } from '../../utils/cx';
 
-import { InputValidationState } from '../Input';
+import {
+  FieldValidation,
+  FieldValidationStateType,
+} from '../../routes/create-post/form-validation';
 
 import inputStyles from '../../components/Input/index.module.css';
 
-type Option = {
-  id: string;
-  name: string;
-};
+export type SelectOption =
+  | {
+      id: string;
+      name: string;
+    }
+  | undefined;
 
 type SelectProps = {
-  options: Option[];
-  state: InputValidationState;
+  options: SelectOption[];
+  validation: FieldValidation;
   name?: string;
   id?: string;
   value: string;
@@ -30,8 +35,10 @@ type SelectProps = {
 const Select = (props: SelectProps) => {
   const selectStyles = cx([
     inputStyles.input,
-    props.state === InputValidationState.ERROR && inputStyles.error,
-    props.state === InputValidationState.SUCCESS && inputStyles.success,
+    props.validation.state === FieldValidationStateType.ERROR &&
+      inputStyles.error,
+    props.validation.state === FieldValidationStateType.SUCCESS &&
+      inputStyles.success,
   ]);
 
   return (
@@ -42,18 +49,24 @@ const Select = (props: SelectProps) => {
       name={props.name}
       id={props.id}
     >
-      {props.options.map((option: Option) => (
-        <option key={option.id} value={option.id}>
-          {option.name}
-        </option>
-      ))}
+      {props.options.map((option: SelectOption) => {
+        return option ? (
+          <option key={option.id} value={option.id}>
+            {option.name}
+          </option>
+        ) : (
+          <option key='none' />
+        );
+      })}
     </select>
   );
 };
 
 Select.defaultProps = {
   options: [],
-  state: 'default',
+  validation: {
+    state: FieldValidationStateType,
+  },
   name: undefined,
   id: undefined,
   value: undefined,

@@ -1,39 +1,99 @@
-import { InputValidationState } from '../../components/Input';
+import { Photo, Privacy } from '.';
+import { TagData } from '../../components/Tags';
 
-import { Photo } from '.';
+export enum FieldValidationStateType {
+  DEFAULT = 'DEFAULT',
+  SUCCESS = 'SUCCESS',
+  ERROR = 'ERROR',
+}
 
 export type PhotosValidation = {
   id: string;
-  validationState: InputValidationState;
+  state: FieldValidationStateType;
+  errorMessage?: string;
+};
+
+export type FieldValidation = {
+  state: FieldValidationStateType;
+  errorMessage?: string;
 };
 
 export type ValidationState = {
   photos: PhotosValidation[];
-  tags: InputValidationState;
-  privacy: InputValidationState;
+  tags: FieldValidation;
+  privacy: FieldValidation;
 };
 
 // TODO: regexp for url
-export const validatePhotos = (photos: Photo[]) => {
+const validatePhotos = (photos: Photo[]) => {
   return photos.map((photo) =>
     Boolean(photo.src)
-      ? { id: photo.id, validationState: InputValidationState.SUCCESS }
-      : { id: photo.id, validationState: InputValidationState.ERROR }
+      ? { id: photo.id, state: FieldValidationStateType.SUCCESS }
+      : {
+          id: photo.id,
+          state: FieldValidationStateType.ERROR,
+          errorMessage: 'Поле не должно быть пустым',
+        }
   );
+};
+
+const validatePrivacy = (privacy?: Privacy) => {
+  if (!privacy) {
+    return {
+      state: FieldValidationStateType.ERROR,
+      errorMessage: 'Выберите тип доступа',
+    };
+  }
+
+  return {
+    state: FieldValidationStateType.SUCCESS,
+  };
+};
+
+const validateTags = (tags: TagData[]) => {
+  if (tags.length === 0) {
+    return {
+      state: FieldValidationStateType.ERROR,
+      errorMessage: 'Добавьте хотя бы 1 тег',
+    };
+  }
+
+  return {
+    state: FieldValidationStateType.SUCCESS,
+  };
 };
 
 export const validateForm = (formData: any, isDefault?: boolean) => {
   if (isDefault) {
     return {
+      isValid: true,
       photos: [],
-      tags: InputValidationState.DEFAULT,
-      privacy: InputValidationState.DEFAULT,
+      tags: {
+        state: FieldValidationStateType.DEFAULT,
+      },
+      privacy: {
+        state: FieldValidationStateType.DEFAULT,
+      },
     };
   }
 
-  return {
+  const validations: ValidationState = {
     photos: validatePhotos(formData.photos),
-    tags: InputValidationState.SUCCESS,
-    privacy: InputValidationState.SUCCESS,
+    tags: validateTags(formData.tags),
+    privacy: validatePrivacy(formData.privacy),
+  };
+
+  const isPhotosValid =
+    validations.photos.find((p) => Boolean(p.errorMessage)) === undefined;
+  const isTagsValid = validations.tags.errorMessage === undefined;
+  const isPrivacyValid = validations.privacy.errorMessage === undefined;
+
+  const isValid = isPhotosValid && isTagsValid && isPrivacyValid;
+
+  // (Object.keys(validations) as (keyof typeof validations)[])
+
+  return {
+    isValid,
+    ...validations,
   };
 };

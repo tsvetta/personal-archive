@@ -1,10 +1,14 @@
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
 
-import Input, { InputValidationState } from '../../components/Input';
+import Input from '../../components/Input';
 import Button from '../../components/Button';
 
 import formStyles from '../../components/Form/index.module.css';
+import {
+  FieldValidation,
+  FieldValidationStateType,
+} from '../create-post/form-validation';
 
 const SUBMIT_LOGIN_FORM = gql`
   mutation SubmitLoginForm($input: LoginFormInput!) {
@@ -15,9 +19,9 @@ const SUBMIT_LOGIN_FORM = gql`
   }
 `;
 
-type ValidationState = {
-  nameInput: InputValidationState;
-  passwordInput: InputValidationState;
+type LoginFormValidationState = {
+  nameInput: FieldValidation;
+  passwordInput: FieldValidation;
 };
 
 const LoginPage = () => {
@@ -26,9 +30,13 @@ const LoginPage = () => {
     password: '',
   });
 
-  const [validation, validate] = useState<ValidationState>({
-    nameInput: InputValidationState.DEFAULT,
-    passwordInput: InputValidationState.DEFAULT,
+  const [validation, validate] = useState<LoginFormValidationState>({
+    nameInput: {
+      state: FieldValidationStateType.DEFAULT,
+    },
+    passwordInput: {
+      state: FieldValidationStateType.DEFAULT,
+    },
   });
 
   const [submitForm] = useMutation(SUBMIT_LOGIN_FORM);
@@ -46,8 +54,12 @@ const LoginPage = () => {
     e.preventDefault();
 
     validate({
-      nameInput: InputValidationState.SUCCESS,
-      passwordInput: InputValidationState.SUCCESS,
+      nameInput: {
+        state: FieldValidationStateType.ERROR,
+      },
+      passwordInput: {
+        state: FieldValidationStateType.ERROR,
+      },
     });
 
     try {
@@ -75,7 +87,7 @@ const LoginPage = () => {
             name='name'
             autoComplete='name'
             onChange={handleChange}
-            state={validation.nameInput}
+            validation={validation.nameInput}
           />
         </div>
 
@@ -87,7 +99,7 @@ const LoginPage = () => {
             name='password'
             autoComplete='current-password'
             onChange={handleChange}
-            state={validation.passwordInput}
+            validation={validation.passwordInput}
           />
         </div>
         <Button type='submit'>Войти</Button>

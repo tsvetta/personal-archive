@@ -14,7 +14,7 @@ import { TagData } from '../../components/Tags';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import InputTagsSuggest from '../../components/InputTagsSuggest';
-import Select from '../../components/Select';
+import Select, { SelectOption } from '../../components/Select';
 
 import formStyles from '../../components/Form/index.module.css';
 import styles from './index.module.css';
@@ -38,7 +38,8 @@ export enum Privacy {
   TSVETTA = 'TSVETTA',
 }
 
-const selectOptions = [
+const selectOptions: SelectOption[] = [
+  undefined,
   {
     id: Privacy.ALL,
     name: Privacy.ALL,
@@ -64,11 +65,31 @@ const selectOptions = [
 type CreatePostFormData = {
   title?: string;
   date?: string;
-  photos: Partial<Photo>[];
+  photos: Photo[];
   tags: TagData[];
-  privacy: Privacy;
+  privacy?: Privacy;
   text?: string;
 };
+
+const deafultFormData: CreatePostFormData = {
+  title: '',
+  photos: [],
+  tags: [],
+  privacy: undefined,
+  text: '',
+};
+
+const mapFormData = (formData: CreatePostFormData) => ({
+  title: formData.title || undefined,
+  date: formData.date,
+  photos: formData.photos.map((photo) => ({
+    src: photo.src,
+    description: photo.description,
+  })),
+  tags: formData.tags.map((tag) => tag._id),
+  privacy: formData.privacy,
+  text: formData.text || undefined,
+});
 
 const CreatePostPage = () => {
   const { data: tagsData } = useQuery(getTags);
@@ -79,15 +100,11 @@ const CreatePostPage = () => {
   const nowFormatted = getNowFormatted();
 
   const [formData, setFormData] = useState<CreatePostFormData>({
-    title: '',
     date: nowFormatted,
-    photos: [],
-    tags: [],
-    privacy: Privacy.ALL,
-    text: '',
+    ...deafultFormData,
   });
 
-  const [validationState, setValidationState] = useState<ValidationState>(
+  const [fieldsValidation, setFieldsValidation] = useState<ValidationState>(
     validateForm(formData, true)
   );
 
@@ -199,25 +216,15 @@ const CreatePostPage = () => {
     e.preventDefault();
 
     const preSubmitValidationState = validateForm(formData);
+    setFieldsValidation(preSubmitValidationState);
 
-    setValidationState(preSubmitValidationState);
+    console.log('validation state', preSubmitValidationState);
 
-    // TODO отправка после успешной валидации
-    const isValid = false;
+    if (!preSubmitValidationState.isValid) {
+      throw new Error('Create Post: Validation fail!');
+    }
 
-    const preparedData = {
-      title: formData.title || undefined,
-      date: formData.date,
-      photos: formData.photos.map((photo) => ({
-        src: photo.src,
-        description: photo.description,
-      })),
-      tags: formData.tags.map((tag) => tag._id),
-      privacy: formData.privacy,
-      text: formData.text || undefined,
-    };
-
-    console.log('handleSubmit', preparedData);
+    const preparedData = mapFormData(formData);
 
     try {
       const { data } = await submitForm({
@@ -270,7 +277,7 @@ const CreatePostPage = () => {
           onChange={handlePhotosChange}
           onAddPhoto={handleAddPhoto}
           onDeletePhoto={handleDeletePhoto}
-          validation={validationState.photos}
+          validation={fieldsValidation.photos}
         />
 
         <div className={formStyles.field}>
@@ -280,7 +287,7 @@ const CreatePostPage = () => {
           <InputTagsSuggest
             name='tags'
             placeholder='Input tags here'
-            state={validationState.tags}
+            validation={fieldsValidation.tags}
             data={tagsData?.tags}
             value={formData.tags}
             onChange={handleTagsChange}
@@ -306,6 +313,7 @@ const CreatePostPage = () => {
             name='privacy'
             options={selectOptions}
             value={formData.privacy}
+            validation={fieldsValidation.tags}
             onChange={handleChange}
           />
         </div>

@@ -1,3 +1,5 @@
+import { ChangeEventHandler, MouseEventHandler } from 'react';
+
 import { cx } from '../../utils/cx';
 
 import Input from '../../components/Input';
@@ -5,7 +7,7 @@ import Button from '../../components/Button';
 
 import formStyles from '../../components/Form/index.module.css';
 import styles from './index.module.css';
-import { ChangeEventHandler, MouseEventHandler } from 'react';
+
 import { Photo } from '.';
 import { PhotosValidation } from './form-validation';
 
@@ -31,9 +33,7 @@ const FieldPhotos = (props: FieldPhotosProps) => {
     >
       <legend>Photos:</legend>
       {props.value.map((photo: Photo) => {
-        const validationState = props.validation.find(
-          (photoValidation) => photoValidation.id === photo.id
-        )?.validationState;
+        const validationState = props.validation.find((p) => p.id === photo.id);
 
         return (
           <div key={photo.id} className={styles.field}>
@@ -48,7 +48,7 @@ const FieldPhotos = (props: FieldPhotosProps) => {
                   name={`photo_${photo.id}`}
                   onChange={props.onChange(photo.id, 'src')}
                   value={photo.src}
-                  state={validationState}
+                  validation={validationState}
                 />
               </div>
               <div className={formStyles.field}>

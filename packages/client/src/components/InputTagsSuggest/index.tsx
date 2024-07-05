@@ -2,21 +2,21 @@ import { ChangeEventHandler, Key, useRef, useState } from 'react';
 import styles from './index.module.css';
 
 import { cx } from '../../utils/cx';
+import { useOutsideClick } from '../../utils/useClickOutside';
+
 import Tags, { TagData } from '../Tags';
 import Input from '../Input';
-import { useOutsideClick } from '../../utils/useClickOutside';
 import Button from '../Button';
 
-export enum InputValidationState {
-  DEFAULT = 'DEFAULT',
-  SUCCESS = 'SUCCESS',
-  ERROR = 'ERROR',
-}
+import {
+  FieldValidation,
+  FieldValidationStateType,
+} from '../../routes/create-post/form-validation';
 
 type InputTagsSuggestProps = {
   name?: string;
   placeholder?: string;
-  state: InputValidationState;
+  validation: FieldValidation;
   data: TagData[];
   value: TagData[];
   onTagCreate: (name: string) => void;
@@ -86,7 +86,7 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
         value={input}
         name={props.name}
         placeholder={props.placeholder}
-        state={props.state}
+        validation={props.validation}
         onChange={handleInputChange}
         onClick={handleInputClick}
         onKeyDown={handleInputKeyDown}
@@ -137,7 +137,9 @@ export default InputTagsSuggest;
 InputTagsSuggest.defaultProps = {
   name: undefined,
   placeholder: 'Placeholder',
-  state: 'default',
+  validation: {
+    state: FieldValidationStateType.DEFAULT,
+  },
   value: '',
   data: [],
   onTagCreate: () => {},

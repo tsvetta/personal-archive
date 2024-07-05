@@ -4,15 +4,14 @@ import {
   KeyboardEventHandler,
   MouseEventHandler,
 } from 'react';
+
 import styles from './index.module.css';
 
 import { cx } from '../../utils/cx';
-
-export enum InputValidationState {
-  DEFAULT = 'DEFAULT',
-  SUCCESS = 'SUCCESS',
-  ERROR = 'ERROR',
-}
+import {
+  FieldValidation,
+  FieldValidationStateType,
+} from '../../routes/create-post/form-validation';
 
 type InputProps = {
   placeholder?: string;
@@ -20,7 +19,7 @@ type InputProps = {
   name?: string;
   id?: string;
   autoComplete?: string;
-  state: InputValidationState;
+  validation: FieldValidation;
   value: string;
   defaultValue?: string;
   onChange?: ChangeEventHandler;
@@ -33,8 +32,9 @@ const Input = (props: InputProps) => {
   const isTextarea = props.type === 'textarea';
   const inputStyles = [
     styles.input,
-    props.state === InputValidationState.ERROR && styles.error,
-    props.state === InputValidationState.SUCCESS && styles.success,
+    props.validation.state === FieldValidationStateType.ERROR && styles.error,
+    props.validation.state === FieldValidationStateType.SUCCESS &&
+      styles.success,
     isTextarea && styles.textarea,
   ];
 
@@ -66,7 +66,9 @@ Input.defaultProps = {
   type: 'text',
   name: undefined,
   id: undefined,
-  state: 'default',
+  validation: {
+    state: FieldValidationStateType.DEFAULT,
+  },
   value: undefined,
   defaultValue: undefined,
   onChange: () => {},
