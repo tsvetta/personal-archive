@@ -4,6 +4,7 @@ import styles from './index.module.css';
 import Photo from '../Photo';
 import Tags, { TagData } from '../Tags';
 import { gql, useMutation } from '@apollo/client';
+import Button from '../Button';
 
 enum Privacy {
   'ALL',
@@ -59,7 +60,7 @@ function Post({ data }: PostProps) {
         {deletePostState.loading ? (
           'Удаление'
         ) : (
-          <button onClick={onPostDelete(data._id)}>Удалить</button>
+          <Button size="s" onClick={onPostDelete(data._id)}>Удалить</Button>
         )}
       </header>
       {hasPhotos &&

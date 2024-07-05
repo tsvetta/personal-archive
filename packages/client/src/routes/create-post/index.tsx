@@ -62,7 +62,7 @@ const selectOptions: SelectOption[] = [
   },
 ];
 
-type CreatePostFormData = {
+export type CreatePostFormData = {
   title?: string;
   date?: string;
   photos: Photo[];
@@ -311,6 +311,12 @@ const CreatePostPage = () => {
         <Button type='submit' className={styles.submitFormButton}>
           Save
         </Button>
+
+        {fieldsValidation.formError && (
+          <span className={styles.errorMessage}>
+            {fieldsValidation.formError}
+          </span>
+        )}
       </fieldset>
     </form>
   );

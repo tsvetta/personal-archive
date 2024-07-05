@@ -11,6 +11,7 @@
 }
 
 .fieldset {
+    position: relative;
     padding: 8px var(--default-gap) var(--default-gap);
 }
 

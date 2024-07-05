@@ -1,4 +1,4 @@
-import { Photo, Privacy } from '.';
+import { CreatePostFormData, Photo, Privacy } from '.';
 import { TagData } from '../../components/Tags';
 
 export enum FieldValidationStateType {
@@ -22,6 +22,7 @@ export type ValidationState = {
   photos: PhotosValidation[];
   tags: FieldValidation;
   privacy: FieldValidation;
+  formError?: string;
 };
 
 // TODO: regexp for url
@@ -63,7 +64,10 @@ const validateTags = (tags: TagData[]) => {
   };
 };
 
-export const validateForm = (formData: any, isDefault?: boolean) => {
+export const validateForm = (
+  formData: CreatePostFormData,
+  isDefault?: boolean
+) => {
   if (isDefault) {
     return {
       isValid: true,
@@ -74,6 +78,7 @@ export const validateForm = (formData: any, isDefault?: boolean) => {
       privacy: {
         state: FieldValidationStateType.DEFAULT,
       },
+      formError: undefined,
     };
   }
 
@@ -87,13 +92,18 @@ export const validateForm = (formData: any, isDefault?: boolean) => {
     validations.photos.find((p) => Boolean(p.errorMessage)) === undefined;
   const isTagsValid = validations.tags.errorMessage === undefined;
   const isPrivacyValid = validations.privacy.errorMessage === undefined;
+  const noTextNoPhotos = !formData.text && formData.photos.length === 0;
 
-  const isValid = isPhotosValid && isTagsValid && isPrivacyValid;
+  const isValid =
+    isPhotosValid && isTagsValid && isPrivacyValid && !noTextNoPhotos;
 
   // (Object.keys(validations) as (keyof typeof validations)[])
 
   return {
     isValid,
     ...validations,
+    formError: noTextNoPhotos
+      ? 'Пост должен содержать фото и/или текст'
+      : undefined,
   };
 };
