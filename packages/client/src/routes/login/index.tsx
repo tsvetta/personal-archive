@@ -10,14 +10,7 @@ import {
   FieldValidationStateType,
 } from '../create-post/form-validation';
 
-const SUBMIT_LOGIN_FORM = gql`
-  mutation SubmitLoginForm($input: LoginFormInput!) {
-    submitLoginForm(input: $input) {
-      success
-      message
-    }
-  }
-`;
+import { submitLoginForm } from '../../api';
 
 type LoginFormValidationState = {
   nameInput: FieldValidation;
@@ -39,7 +32,7 @@ const LoginPage = () => {
     },
   });
 
-  const [submitForm] = useMutation(SUBMIT_LOGIN_FORM);
+  const [submitForm] = useMutation(submitLoginForm);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { name, value } = e.target;

@@ -1,10 +1,14 @@
 import { Key } from 'react';
-import commonStyles from '../../common.module.css';
-import styles from './index.module.css';
+import { useMutation } from '@apollo/client';
+
 import Photo from '../Photo';
 import Tags, { TagData } from '../Tags';
-import { gql, useMutation } from '@apollo/client';
 import Button from '../Button';
+
+import { deletePostMutation } from '../../api';
+
+import commonStyles from '../../common.module.css';
+import styles from './index.module.css';
 
 enum Privacy {
   'ALL',
@@ -33,14 +37,6 @@ export type PostData = {
 type PostProps = {
   data: PostData;
 };
-
-const deletePostMutation = gql`
-  mutation DeletePost($id: ID!) {
-    deletePost(id: $id) {
-      _id
-    }
-  }
-`;
 
 function Post({ data }: PostProps) {
   const title = data.title || new Date(data.date).toDateString();

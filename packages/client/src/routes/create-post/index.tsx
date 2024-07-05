@@ -218,8 +218,6 @@ const CreatePostPage = () => {
     const preSubmitValidationState = validateForm(formData);
     setFieldsValidation(preSubmitValidationState);
 
-    console.log('validation state', preSubmitValidationState);
-
     if (!preSubmitValidationState.isValid) {
       throw new Error('Create Post: Validation fail!');
     }
@@ -231,9 +229,8 @@ const CreatePostPage = () => {
         variables: {
           data: preparedData,
         },
+        refetchQueries: ['Posts'],
       });
-
-      console.log('try', data);
 
       // очищать форму
       // нотификация об успешном добавлении

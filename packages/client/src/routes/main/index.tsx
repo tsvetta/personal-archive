@@ -4,26 +4,7 @@ import Post, { PostData } from '../../components/Post';
 
 import commonStyles from '../../common.module.css';
 
-const getPosts = gql`
-  query Posts {
-    posts {
-      _id
-      date
-      tags {
-        _id
-        name
-      }
-      photos {
-        _id
-        src
-        description
-      }
-      title
-      text
-      privacy
-    }
-  }
-`;
+import { getPosts } from '../../api';
 
 const MainPage = () => {
   const { loading, error, data } = useQuery(getPosts);
