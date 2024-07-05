@@ -15,9 +15,9 @@
 
 .deletePhotoButton {
     display: block;
-    margin-left: 5px;
-    width: 30px;
-    height: var(--input-height);
+    margin-left: 7px;
+    margin-top: 5px;
+    padding-bottom: 2px;
 }
 
 .field {
@@ -37,7 +37,7 @@
     }
 
     & img {
-        height: 120px;
+        height: 126px;
         max-height: 300px;
         transition: height 0.5s ease;
     }
