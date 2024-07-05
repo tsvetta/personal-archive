@@ -3,13 +3,14 @@ import {
   FormEventHandler,
   Key,
   useCallback,
+  useEffect,
   useState,
 } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 
 import { cx } from '../../utils/cx';
-import { getNowFormatted, nowRu } from '../../utils/date-formatted';
+import { getDateFormatted, nowRu } from '../../utils/date-formatted';
 
 import { TagData } from '../../components/Tags';
 import Input from '../../components/Input';
@@ -20,13 +21,21 @@ import Select, { SelectOption } from '../../components/Select';
 import formStyles from '../../components/Form/index.module.css';
 import styles from './index.module.css';
 
-import { addTag, deleteTag, getTags, submitCreatePostForm } from '../../api';
+import {
+  addTag,
+  deleteTag,
+  getTags,
+  submitCreatePostForm,
+  getPost,
+  submitEditPostForm,
+} from '../../api';
 
 import FieldPhotos from './field-photos';
 import { ValidationState, validateForm } from './form-validation';
 
 export type Photo = {
   id: string;
+  _id: string;
   src: string;
   description?: string;
 };
@@ -93,24 +102,48 @@ const mapFormData = (formData: CreatePostFormData) => ({
 });
 
 const PostFormPage = () => {
+  // is Edit page
   const { id: urlId } = useParams();
-  console.log('URL ID', urlId);
+  const { data: postData } = useQuery(getPost, {
+    variables: { id: urlId },
+    skip: !urlId,
+  });
+  const isEditPage = Boolean(urlId);
 
   const { data: tagsData } = useQuery(getTags);
-  const [submitForm] = useMutation(submitCreatePostForm);
+  const [submitCreateForm] = useMutation(submitCreatePostForm);
+  const [submitEditForm] = useMutation(submitEditPostForm);
   const [submitAddTag] = useMutation(addTag);
   const [submitDeleteTag] = useMutation(deleteTag);
 
-  const nowFormatted = getNowFormatted();
+  const nowFormatted = getDateFormatted();
 
-  const [formData, setFormData] = useState<CreatePostFormData>({
-    date: nowFormatted,
-    ...deafultFormData,
-  });
+  const initialFormData = postData
+    ? { ...postData.post, date: getDateFormatted(postData.post.date) } // is Edit page
+    : {
+        date: nowFormatted,
+        ...deafultFormData,
+      };
+  const [formData, setFormData] = useState<CreatePostFormData>(initialFormData);
 
   const [fieldsValidation, setFieldsValidation] = useState<ValidationState>(
     validateForm(formData, true)
   );
+
+  // when route chacnges?
+  useEffect(() => {
+    if (postData?.post) {
+      setFormData({
+        ...postData.post,
+        date: getDateFormatted(postData.post.date),
+      });
+    } else {
+      setFormData({
+        date: nowFormatted,
+        ...deafultFormData,
+      });
+    }
+  }, [postData, urlId]);
 
   const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) => {
@@ -126,7 +159,9 @@ const PostFormPage = () => {
       const { value } = e.target;
 
       const updatedPhotos = formData.photos.map((photo) => {
-        if (changedId === photo.id) {
+        const photoId = photo.id || photo._id; // TODO remove duplication
+
+        if (changedId === photoId) {
           return {
             ...photo,
             [type]: value,
@@ -197,7 +232,12 @@ const PostFormPage = () => {
       ...prevData,
       photos: [
         ...formData.photos,
-        { id: Math.random().toString(), src: '', description: '' },
+        {
+          id: Math.random().toString(),
+          _id: Math.random().toString(), // TODO remove duplication
+          src: '',
+          description: '',
+        },
       ],
     }));
   }, [formData.photos]);
@@ -228,8 +268,27 @@ const PostFormPage = () => {
 
     const preparedData = mapFormData(formData);
 
+    if (isEditPage) {
+      try {
+        await submitEditForm({
+          variables: {
+            id: urlId,
+            data: preparedData,
+          },
+          refetchQueries: ['Posts'],
+        });
+
+        // редирект на страницу поста?
+        // нотификация об успешном обновлении
+      } catch (error) {
+        console.error('Error submitting form:', error);
+      }
+
+      return;
+    }
+
     try {
-      const { data } = await submitForm({
+      const { data } = await submitCreateForm({
         variables: {
           data: preparedData,
         },
@@ -256,7 +315,7 @@ const PostFormPage = () => {
         <Input
           placeholder={formData.date === nowFormatted ? nowRu : formData.date} // по умолчанию заголовок - дата поста
           name='title'
-          value={formData.title}
+          value={formData.title || ''}
           onChange={handleChange}
         />
 
@@ -297,7 +356,7 @@ const PostFormPage = () => {
           type='textarea'
           name='text'
           onChange={handleChange}
-          value={formData.text}
+          value={formData.text || ''}
         />
 
         <label htmlFor='privacy'>Privacy:</label>

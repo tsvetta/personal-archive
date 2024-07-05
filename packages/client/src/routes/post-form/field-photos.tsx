@@ -33,10 +33,11 @@ const FieldPhotos = (props: FieldPhotosProps) => {
     >
       <legend>Photos:</legend>
       {props.value.map((photo: Photo) => {
-        const validationState = props.validation.find((p) => p.id === photo.id);
+        const photoId = photo.id || photo._id;
+        const validationState = props.validation.find((p) => p.id === photoId);
 
         return (
-          <div key={photo.id} className={styles.field}>
+          <div key={photoId} className={styles.field}>
             <div className={styles.preview}>
               <img src={photo.src} alt='Preview' />
             </div>
@@ -44,16 +45,16 @@ const FieldPhotos = (props: FieldPhotosProps) => {
               <Input
                 placeholder='Photo URL'
                 type='text'
-                name={`photo_${photo.id}`}
-                onChange={props.onChange(photo.id, 'src')}
+                name={`photo_${photoId}`}
+                onChange={props.onChange(photoId, 'src')}
                 value={photo.src}
                 validation={validationState}
               />
               <Input
                 placeholder='Photo Description'
                 type='textarea'
-                name={`photo-description_${photo.id}`}
-                onChange={props.onChange(photo.id, 'description')}
+                name={`photo-description_${photoId}`}
+                onChange={props.onChange(photoId, 'description')}
                 value={photo.description}
               />
             </div>
@@ -61,7 +62,7 @@ const FieldPhotos = (props: FieldPhotosProps) => {
               view='danger'
               size='s'
               className={styles.deletePhotoButton}
-              onClick={props.onDeletePhoto(photo.id)}
+              onClick={props.onDeletePhoto(photoId)}
             >
               x
             </Button>

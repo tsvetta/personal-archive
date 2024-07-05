@@ -21,6 +21,27 @@ export const getPosts = gql`
   }
 `;
 
+export const getPost = gql`
+  query Post($id: ID!) {
+    post(id: $id) {
+      _id
+      date
+      tags {
+        _id
+        name
+      }
+      photos {
+        _id
+        src
+        description
+      }
+      title
+      text
+      privacy
+    }
+  }
+`;
+
 export const submitLoginForm = gql`
   mutation SubmitLoginForm($input: LoginFormInput!) {
     submitLoginForm(input: $input) {
@@ -62,6 +83,14 @@ export const deleteTag = gql`
 export const submitCreatePostForm = gql`
   mutation SubmitCreatePostForm($data: PostInput!) {
     addPost(data: $data) {
+      _id
+    }
+  }
+`;
+
+export const submitEditPostForm = gql`
+  mutation SubmitEditPostForm($id: ID!, $data: PostInput!) {
+    updatePost(id: $id, data: $data) {
       _id
     }
   }
