@@ -41,25 +41,21 @@ const FieldPhotos = (props: FieldPhotosProps) => {
               <img src={photo.src} alt='Preview' />
             </div>
             <div className={styles.fieldInner}>
-              <div className={formStyles.field}>
-                <Input
-                  placeholder='Photo URL'
-                  type='text'
-                  name={`photo_${photo.id}`}
-                  onChange={props.onChange(photo.id, 'src')}
-                  value={photo.src}
-                  validation={validationState}
-                />
-              </div>
-              <div className={formStyles.field}>
-                <Input
-                  placeholder='Photo Description'
-                  type='textarea'
-                  name={`photo-description_${photo.id}`}
-                  onChange={props.onChange(photo.id, 'description')}
-                  value={photo.description}
-                />
-              </div>
+              <Input
+                placeholder='Photo URL'
+                type='text'
+                name={`photo_${photo.id}`}
+                onChange={props.onChange(photo.id, 'src')}
+                value={photo.src}
+                validation={validationState}
+              />
+              <Input
+                placeholder='Photo Description'
+                type='textarea'
+                name={`photo-description_${photo.id}`}
+                onChange={props.onChange(photo.id, 'description')}
+                value={photo.description}
+              />
             </div>
             <Button
               view='danger'

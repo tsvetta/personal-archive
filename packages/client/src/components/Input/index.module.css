@@ -17,6 +17,13 @@
     border-color: tomato;
 }
 
+.errorMessage {
+    color: tomato;
+    font-size: 10px;
+    position: absolute;
+    bottom: 3px;
+}
+
 .success {
     border-color: limegreen;
 }

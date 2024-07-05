@@ -5,6 +5,7 @@ import {
   MouseEventHandler,
 } from 'react';
 
+import formStyles from '../../components/Form/index.module.css';
 import styles from './index.module.css';
 
 import { cx } from '../../utils/cx';
@@ -52,11 +53,23 @@ const Input = (props: InputProps) => {
     onKeyDown: props.onKeyDown,
   };
 
+  let inputNode = <input type={props.type} {...inputProps} />;
+
   if (isTextarea) {
-    return <textarea {...inputProps} />;
+    inputNode = <textarea {...inputProps} />;
   }
 
-  return <input type={props.type} {...inputProps} />;
+  return (
+    <div className={formStyles.field}>
+      {inputNode}
+
+      {props.validation.state === FieldValidationStateType.ERROR && (
+        <span className={styles.errorMessage}>
+          {props.validation.errorMessage}
+        </span>
+      )}
+    </div>
+  );
 };
 
 export default Input;

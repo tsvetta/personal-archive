@@ -6,7 +6,8 @@
 }
 
 .field {
-    margin-bottom: var(--default-gap);
+    position: relative;
+    padding-bottom: 16px;
 }
 
 .fieldset {
@@ -20,14 +21,6 @@
     legend {
         padding: 0;
         font-size: var(--font-size);
-    }
-
-    .field {
-        margin-bottom: 5px;
-    }
-
-    & + .field {
-        margin-top: var(--default-gap);
     }
 
     & + .fieldsetInner {

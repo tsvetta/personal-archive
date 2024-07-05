@@ -251,26 +251,22 @@ const CreatePostPage = () => {
       <fieldset className={cx([formStyles.fieldset, styles.formInner])}>
         <legend>Create Post</legend>
 
-        <div className={formStyles.field}>
-          <label htmlFor='title'>Title:</label>
-          <Input
-            placeholder={nowRu} // по умолчанию заголовок - дата поста
-            name='title'
-            value={formData.title}
-            onChange={handleChange}
-          />
-        </div>
+        <label htmlFor='title'>Title:</label>
+        <Input
+          placeholder={nowRu} // по умолчанию заголовок - дата поста
+          name='title'
+          value={formData.title}
+          onChange={handleChange}
+        />
 
-        <div className={formStyles.field}>
-          <label htmlFor='date'>Date:</label>
-          <Input
-            placeholder={nowRu}
-            type='date'
-            name='date'
-            value={formData.date}
-            onChange={handleChange}
-          />
-        </div>
+        <label htmlFor='date'>Date:</label>
+        <Input
+          placeholder={nowRu}
+          type='date'
+          name='date'
+          value={formData.date}
+          onChange={handleChange}
+        />
 
         <FieldPhotos
           value={formData.photos}
@@ -280,45 +276,41 @@ const CreatePostPage = () => {
           validation={fieldsValidation.photos}
         />
 
-        <div className={formStyles.field}>
-          <label htmlFor='tags'>
-            Tags<sup>*</sup>:
-          </label>
-          <InputTagsSuggest
-            name='tags'
-            placeholder='Input tags here'
-            validation={fieldsValidation.tags}
-            data={tagsData?.tags}
-            value={formData.tags}
-            onChange={handleTagsChange}
-            onTagCreate={handleTagCreate}
-            onTagDelete={handleTagDelete}
-          />
-        </div>
+        <label htmlFor='tags'>
+          Tags<sup>*</sup>:
+        </label>
+        <InputTagsSuggest
+          name='tags'
+          placeholder='Input tags here'
+          validation={fieldsValidation.tags}
+          data={tagsData?.tags}
+          value={formData.tags}
+          onChange={handleTagsChange}
+          onTagCreate={handleTagCreate}
+          onTagDelete={handleTagDelete}
+        />
 
-        <div className={formStyles.field}>
-          <label htmlFor='text'>Text:</label>
-          <Input
-            placeholder='Text'
-            type='textarea'
-            name='text'
-            onChange={handleChange}
-            value={formData.text}
-          />
-        </div>
+        <label htmlFor='text'>Text:</label>
+        <Input
+          placeholder='Text'
+          type='textarea'
+          name='text'
+          onChange={handleChange}
+          value={formData.text}
+        />
 
-        <div className={formStyles.field}>
-          <label htmlFor='privacy'>Privacy:</label>
-          <Select
-            name='privacy'
-            options={selectOptions}
-            value={formData.privacy}
-            validation={fieldsValidation.tags}
-            onChange={handleChange}
-          />
-        </div>
+        <label htmlFor='privacy'>Privacy:</label>
+        <Select
+          name='privacy'
+          options={selectOptions}
+          value={formData.privacy}
+          validation={fieldsValidation.tags}
+          onChange={handleChange}
+        />
 
-        <Button type='submit'>Save</Button>
+        <Button type='submit' className={styles.submitFormButton}>
+          Save
+        </Button>
       </fieldset>
     </form>
   );

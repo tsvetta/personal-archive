@@ -11,6 +11,7 @@ import {
   FieldValidationStateType,
 } from '../../routes/create-post/form-validation';
 
+import formStyles from '../../components/Form/index.module.css';
 import inputStyles from '../../components/Input/index.module.css';
 
 export type SelectOption =
@@ -42,23 +43,31 @@ const Select = (props: SelectProps) => {
   ]);
 
   return (
-    <select
-      className={selectStyles}
-      value={props.value}
-      onChange={props.onChange}
-      name={props.name}
-      id={props.id}
-    >
-      {props.options.map((option: SelectOption) => {
-        return option ? (
-          <option key={option.id} value={option.id}>
-            {option.name}
-          </option>
-        ) : (
-          <option key='none' />
-        );
-      })}
-    </select>
+    <div className={formStyles.field}>
+      <select
+        className={selectStyles}
+        value={props.value}
+        onChange={props.onChange}
+        name={props.name}
+        id={props.id}
+      >
+        {props.options.map((option: SelectOption) => {
+          return option ? (
+            <option key={option.id} value={option.id}>
+              {option.name}
+            </option>
+          ) : (
+            <option key='none' />
+          );
+        })}
+      </select>
+
+      {props.validation.state === FieldValidationStateType.ERROR && (
+        <span className={inputStyles.errorMessage}>
+          {props.validation.errorMessage}
+        </span>
+      )}
+    </div>
   );
 };
 
