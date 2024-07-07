@@ -58,3 +58,21 @@ const PostSchema = new Schema({
 });
 
 export const Post = mongoose.model('Post', PostSchema);
+
+const UserSchema = new Schema({
+  username: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    enum: ['ALL', 'FAMILY', 'FRIENDS', 'CLOSE_FRIENDS', 'TSVETTA'],
+    required: true,
+  },
+});
+
+export const User = mongoose.model('User', UserSchema);

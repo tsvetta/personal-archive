@@ -1,16 +1,16 @@
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 
-import Input from '../../components/Input';
-import Button from '../../components/Button';
+import Input from '../../components/Input/index.js';
+import Button from '../../components/Button/index.js';
 
 import formStyles from '../../components/Form/index.module.css';
 import {
   FieldValidation,
   FieldValidationStateType,
-} from '../post-form/form-validation';
+} from '../post-form/form-validation.js';
 
-import { submitLoginForm } from '../../api';
+import { loginUser } from '../../../server/apollo/index.js';
 
 type LoginFormValidationState = {
   nameInput: FieldValidation;
@@ -19,7 +19,7 @@ type LoginFormValidationState = {
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    username: '',
     password: '',
   });
 
@@ -32,7 +32,7 @@ const LoginPage = () => {
     },
   });
 
-  const [submitForm] = useMutation(submitLoginForm);
+  const [submitLogin] = useMutation(loginUser);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { name, value } = e.target;
@@ -49,22 +49,22 @@ const LoginPage = () => {
     validate({
       nameInput: {
         state: FieldValidationStateType.ERROR,
+        errorMessage: '123',
       },
       passwordInput: {
         state: FieldValidationStateType.ERROR,
+        errorMessage: '234',
       },
     });
 
     try {
-      console.log(formData);
-      const { data } = await submitForm({
+      const { data } = await submitLogin({
         variables: {
-          input: { name: formData.name, password: formData.password },
+          data: { username: formData.username, password: formData.password },
         },
       });
-      console.log('try', data);
-    } catch (error) {
-      console.error('Error submitting form:', error);
+    } catch (error: any) {
+      console.error('Error submitting form:', error.message);
     }
   };
 
@@ -72,29 +72,25 @@ const LoginPage = () => {
     <form id='login-form' onSubmit={handleSubmit} className={formStyles.form}>
       <fieldset className={formStyles.fieldset}>
         <legend>Login</legend>
+        <label htmlFor='username'>Name:</label>
+        <Input
+          placeholder='username'
+          name='username'
+          autoComplete='name'
+          onChange={handleChange}
+          validation={validation.nameInput}
+        />
 
-        <div className={formStyles.field}>
-          <label htmlFor='name'>Name:</label>
-          <Input
-            placeholder='name'
-            name='name'
-            autoComplete='name'
-            onChange={handleChange}
-            validation={validation.nameInput}
-          />
-        </div>
+        <label htmlFor='password'>Password:</label>
+        <Input
+          placeholder='password'
+          type='password'
+          name='password'
+          autoComplete='current-password'
+          onChange={handleChange}
+          validation={validation.passwordInput}
+        />
 
-        <div className={formStyles.field}>
-          <label htmlFor='password'>Password:</label>
-          <Input
-            placeholder='password'
-            type='password'
-            name='password'
-            autoComplete='current-password'
-            onChange={handleChange}
-            validation={validation.passwordInput}
-          />
-        </div>
         <Button type='submit'>Войти</Button>
       </fieldset>
     </form>

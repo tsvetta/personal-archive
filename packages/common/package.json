@@ -2,5 +2,8 @@
   "name": "@archive/common",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "argon2": "^0.40.3"
+  }
 }

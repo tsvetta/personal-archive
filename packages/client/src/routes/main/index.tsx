@@ -4,7 +4,7 @@ import Post, { PostData } from '../../components/Post';
 
 import commonStyles from '../../common.module.css';
 
-import { getPosts } from '../../api';
+import { getPosts } from '../../../server/apollo/index.js';
 
 const MainPage = () => {
   const { loading, error, data } = useQuery(getPosts);

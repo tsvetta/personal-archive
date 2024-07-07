@@ -42,11 +42,16 @@ export const getPost = gql`
   }
 `;
 
-export const submitLoginForm = gql`
-  mutation SubmitLoginForm($input: LoginFormInput!) {
-    submitLoginForm(input: $input) {
-      success
-      message
+export const loginUser = gql`
+  mutation LoginUser($data: LoginInput!) {
+    loginUser(data: $data) {
+      # authToken
+      refreshToken
+      user {
+        _id
+        username
+        role
+      }
     }
   }
 `;

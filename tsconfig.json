@@ -1,20 +1,18 @@
 {
   "exclude": ["**/node_modules"],
   "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "jsx": "react-jsx",
     "baseUrl": ".",
     "lib": ["ESNext"],
-    "allowJs": true,
+    "esModuleInterop": true,
     "useDefineForClassFields": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
-
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "noEmit": true,
-    "types": ["node", "vite/client"],
-
     /* Type Checking */
+    "types": ["node", "vite/client"],
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

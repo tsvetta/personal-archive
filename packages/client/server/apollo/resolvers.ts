@@ -1,5 +1,10 @@
+import 'dotenv/config';
+import jwt from 'jsonwebtoken';
+
 import { GraphQLScalarType, Kind } from 'graphql';
-import { Tag, Post } from './models.js';
+import { verifyPassword } from '@archive/common/crypt-pass.js';
+import { Tag, Post, User } from './models.js';
+import { ApolloContext } from './context.js';
 
 type TagInput = {
   name: Required<String>;
@@ -25,6 +30,12 @@ type PostInput = {
   tags: String[];
   text: String;
   privacy: Required<Privacy>;
+};
+
+type UserInput = {
+  username: String;
+  password: String;
+  role: Required<Privacy>;
 };
 
 export const resolvers = {
@@ -63,6 +74,14 @@ export const resolvers = {
 
     posts: async () => {
       return await Post.find().sort({ date: 1 }).exec();
+    },
+
+    user: async (_: any, args: any) => {
+      return await User.findById(args.id);
+    },
+
+    users: async () => {
+      return await User.find().exec();
     },
   },
 
@@ -110,13 +129,65 @@ export const resolvers = {
       return Post.find({});
     },
 
-    submitLoginForm: (_: any, args: { name: string; password: string }) => {
-      console.log('Login Form data received:', args);
+    loginUser: async (
+      _: any,
+      args: { data: { username: string; password: string } },
+      context: ApolloContext
+    ) => {
+      const { username, password } = args.data;
+
+      const user = await User.findOne({ username });
+
+      if (!user) {
+        throw new Error('Incorrect username or password');
+      }
+
+      const isPasswordValid = await verifyPassword(user?.password, password);
+
+      if (!isPasswordValid) {
+        throw new Error('Incorrect username or password');
+      }
+
+      const authToken = jwt.sign(
+        {
+          userId: user._id,
+          username: user.username,
+          role: user.role,
+        },
+        process.env.SECRET_KEY || '',
+        { expiresIn: '1h' }
+      );
+
+      const refreshToken = jwt.sign(
+        {
+          userId: user._id,
+          username: user.username,
+          role: user.role,
+        },
+        process.env.SECRET_KEY || '',
+        { expiresIn: '1d' }
+      );
+
+      context.universalCookies?.set('auth_token', authToken, {
+        httpOnly: true, // Куки доступны только для сервера
+        secure: process.env.NODE_ENV === 'production', // Требуется HTTPS в production
+        maxAge: 3600000, // Время жизни куки (в миллисекундах, здесь 1 час)
+        sameSite: 'strict', // Ограничение куки для отправки только с того же сайта
+      });
 
       return {
-        success: true,
-        message: 'Form submitted successfully!',
+        // authToken,
+        refreshToken,
+        user,
       };
+    },
+
+    addUser: async (_: any, args: { data: UserInput }) => {
+      const newUser = new User(args.data);
+
+      await newUser.save();
+
+      return newUser;
     },
   },
 

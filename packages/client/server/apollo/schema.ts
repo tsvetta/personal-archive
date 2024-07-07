@@ -1,4 +1,4 @@
-export const schema = `#graphql
+export const apolloSchema = `#graphql
     scalar Date
 
     enum Privacy {
@@ -45,21 +45,41 @@ export const schema = `#graphql
         title: String
     }
 
-    input LoginFormInput {
-        name: String!
+    type User {
+        _id: ID!
+        username: String!
+        role: Privacy!
+    }
+
+    type UserWithToken {
+        # authToken: String!
+        refreshToken: String!
+        user: User!
+    }
+
+    input UserInput {
+        username: String!
+        password: String!
+        role: Privacy!
+    }
+
+    input LoginInput {
+        username: String!
         password: String!
     }
 
-    type FormResponse {
-        success: Boolean!
-        message: String!
-    }
+    # type FormResponse {
+    #     success: Boolean!
+    #     message: String!
+    # }
 
     type Query {
         tag(id: ID!): Tag
         tags: [Tag]
         post(id: ID!): Post
         posts: [Post]
+        user(id: ID!): User
+        users: [User]
     }
 
     type Mutation {
@@ -69,6 +89,7 @@ export const schema = `#graphql
         updatePost(id: ID!, data: PostInput!): Post
         deletePost(id: ID!): [Post]
 
-        submitLoginForm(input: LoginFormInput!): FormResponse!
+        addUser(data: UserInput!): User
+        loginUser(data: LoginInput!): UserWithToken
     }
 `;

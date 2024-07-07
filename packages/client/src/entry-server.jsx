@@ -1,20 +1,19 @@
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
 import { CookiesProvider } from 'react-cookie';
+import { StaticRouter } from 'react-router-dom/server';
 import { ApolloProvider } from '@apollo/client';
 import { renderToStringWithData } from '@apollo/client/react/ssr';
-import { StaticRouter } from 'react-router-dom/server';
 
 import { createApolloClient } from './apollo-client';
 import App from './App';
 
-export async function render(url, ssrManifest, req, res) {
+export async function render(url, ssrManifest, { universalCookies }) {
   const context = {};
-  const apolloClient = createApolloClient(req);
+  const apolloClient = createApolloClient();
 
   const AppWithRouter = (
     <React.StrictMode>
-      <CookiesProvider cookies={req.universalCookies}>
+      <CookiesProvider cookies={universalCookies}>
         <ApolloProvider client={apolloClient}>
           <StaticRouter location={url} context={context}>
             <App env='server' />
@@ -28,7 +27,7 @@ export async function render(url, ssrManifest, req, res) {
     const content = await renderToStringWithData(AppWithRouter);
     const initialState = apolloClient.extract();
 
-     // Используйте ssrManifest для получения правильных ссылок на ассеты
+     // ssrManifest для получения правильных ссылок на ассеты
      const scripts = [];
      const styles = [];
 

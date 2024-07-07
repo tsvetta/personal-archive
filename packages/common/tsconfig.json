@@ -3,7 +3,7 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "dist",
-    "module": "Node16",
-    "moduleResolution": "Node16"
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
   }
 }

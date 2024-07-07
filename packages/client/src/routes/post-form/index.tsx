@@ -28,7 +28,7 @@ import {
   submitCreatePostForm,
   getPost,
   submitEditPostForm,
-} from '../../api';
+} from '../../../server/apollo/index.js';
 
 import FieldPhotos from './field-photos';
 import { ValidationState, validateForm } from './form-validation';
@@ -204,8 +204,8 @@ const PostFormPage = () => {
           ...prevData,
           tags: [...formData.tags, data.addTag],
         }));
-      } catch (error) {
-        console.error('Error saving tag:', error);
+      } catch (error: any) {
+        console.error('Error saving tag:', error.message);
       }
     },
     [submitAddTag]
@@ -220,8 +220,8 @@ const PostFormPage = () => {
           },
           refetchQueries: ['Tags'],
         });
-      } catch (error) {
-        console.error('Error deleting tag:', error);
+      } catch (error: any) {
+        console.error('Error deleting tag:', error.message);
       }
     },
     [submitDeleteTag]
@@ -280,8 +280,8 @@ const PostFormPage = () => {
 
         // редирект на страницу поста?
         // нотификация об успешном обновлении
-      } catch (error) {
-        console.error('Error submitting form:', error);
+      } catch (error: any) {
+        console.error('Error submitting form:', error.message);
       }
 
       return;
@@ -297,8 +297,8 @@ const PostFormPage = () => {
 
       // очищать форму
       // нотификация об успешном добавлении
-    } catch (error) {
-      console.error('Error submitting form:', error);
+    } catch (error: any) {
+      console.error('Error submitting form:', error.message);
     }
   };
 

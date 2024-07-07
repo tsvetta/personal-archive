@@ -14,7 +14,6 @@ if (window.__APOLLO_STATE__) {
   apolloClient.cache.restore(window.__APOLLO_STATE__);
 }
 
-
 ReactDOM.hydrateRoot(
   document.getElementById('root'),
   <React.StrictMode>
