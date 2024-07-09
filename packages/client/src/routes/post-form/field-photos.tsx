@@ -8,8 +8,8 @@ import Button from '../../components/Button';
 import formStyles from '../../components/Form/index.module.css';
 import styles from './index.module.css';
 
-import { Photo } from '.';
 import { PhotosValidation } from './form-validation';
+import { Photo } from '../../../server/apollo/types.js';
 
 type FieldPhotosProps = {
   value: Photo[];

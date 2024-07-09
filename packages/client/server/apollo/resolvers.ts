@@ -1,42 +1,10 @@
-import 'dotenv/config';
-import jwt from 'jsonwebtoken';
-
 import { GraphQLScalarType, Kind } from 'graphql';
-import { verifyPassword } from '@archive/common/crypt-pass.js';
+
 import { Tag, Post, User } from './models.js';
-import { ApolloContext } from './context.js';
-
-type TagInput = {
-  name: Required<String>;
-};
-
-type Photo = {
-  src: Required<String>;
-  description?: String;
-};
-
-export enum Privacy {
-  'ALL',
-  'FAMILY',
-  'FRIENDS',
-  'CLOSE_FRIENDS',
-  'TSVETTA',
-}
-
-type PostInput = {
-  date: Date;
-  title: String;
-  photos: Photo[];
-  tags: String[];
-  text: String;
-  privacy: Required<Privacy>;
-};
-
-type UserInput = {
-  username: String;
-  password: String;
-  role: Required<Privacy>;
-};
+import { loginUser } from './resolvers/mutations/login-user.js';
+import { deleteTag } from './resolvers/mutations/delete-tag.js';
+import { PostInput, TagInput, UserInput } from './types.js';
+import { postTags } from './resolvers/Posts/tags.js';
 
 export const resolvers = {
   Tag: {
@@ -46,17 +14,7 @@ export const resolvers = {
   },
 
   Post: {
-    tags: async (parent: any) => {
-      try {
-        const post = await Post.findById(parent.id).populate('tags').exec();
-
-        return post?.tags;
-      } catch (err: any) {
-        throw new Error(
-          `Failed to fetch tags for post ${parent.id}: ${err.message}`
-        );
-      }
-    },
+    tags: postTags,
   },
 
   Query: {
@@ -94,19 +52,7 @@ export const resolvers = {
       return newTag;
     },
 
-    deleteTag: async (_: any, args: { id: String }) => {
-      const posts = await Post.find({ tags: { $in: args.id } });
-
-      if (posts.length > 0) {
-        throw new Error(
-          'Apollo: Невозможно удалить пользователя, у которого есть связанные посты'
-        );
-      }
-
-      await Tag.findOneAndDelete({ _id: args.id });
-
-      return Tag.find({});
-    },
+    deleteTag,
 
     addPost: async (_: any, args: { data: PostInput }) => {
       const newPost = new Post(args.data);
@@ -116,7 +62,6 @@ export const resolvers = {
       return newPost;
     },
 
-    // TODO: check
     updatePost: async (_: any, args: { id: String; data: PostInput }) => {
       const updatedPost = await Post.findByIdAndUpdate(args.id, args.data);
 
@@ -129,58 +74,7 @@ export const resolvers = {
       return Post.find({});
     },
 
-    loginUser: async (
-      _: any,
-      args: { data: { username: string; password: string } },
-      context: ApolloContext
-    ) => {
-      const { username, password } = args.data;
-
-      const user = await User.findOne({ username });
-
-      if (!user) {
-        throw new Error('Incorrect username or password');
-      }
-
-      const isPasswordValid = await verifyPassword(user?.password, password);
-
-      if (!isPasswordValid) {
-        throw new Error('Incorrect username or password');
-      }
-
-      const authToken = jwt.sign(
-        {
-          userId: user._id,
-          username: user.username,
-          role: user.role,
-        },
-        process.env.SECRET_KEY || '',
-        { expiresIn: '1h' }
-      );
-
-      const refreshToken = jwt.sign(
-        {
-          userId: user._id,
-          username: user.username,
-          role: user.role,
-        },
-        process.env.SECRET_KEY || '',
-        { expiresIn: '1d' }
-      );
-
-      context.universalCookies?.set('auth_token', authToken, {
-        httpOnly: true, // Куки доступны только для сервера
-        secure: process.env.NODE_ENV === 'production', // Требуется HTTPS в production
-        maxAge: 3600000, // Время жизни куки (в миллисекундах, здесь 1 час)
-        sameSite: 'strict', // Ограничение куки для отправки только с того же сайта
-      });
-
-      return {
-        // authToken,
-        refreshToken,
-        user,
-      };
-    },
+    loginUser,
 
     addUser: async (_: any, args: { data: UserInput }) => {
       const newUser = new User(args.data);

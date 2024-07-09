@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import fs from 'node:fs/promises';
 import express from 'express';
 import http from 'http';
@@ -101,12 +102,7 @@ app
     })
   )
   // Serve HTML
-  .use('*', async (req, res, next) => {
-    if (req.originalUrl.startsWith('/graphql')) {
-      next();
-      return;
-    }
-
+  .use('*', async (req, res) => {
     try {
       const url = req.originalUrl.replace(base, '/');
       let template;

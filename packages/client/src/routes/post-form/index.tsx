@@ -33,20 +33,7 @@ import {
 import FieldPhotos from './field-photos';
 import { ValidationState, validateForm } from './form-validation';
 
-export type Photo = {
-  id: string;
-  _id: string;
-  src: string;
-  description?: string;
-};
-
-export enum Privacy {
-  ALL = 'ALL',
-  FAMILY = 'FAMILY',
-  FRIENDS = 'FRIENDS',
-  CLOSE_FRIENDS = 'CLOSE_FRIENDS',
-  TSVETTA = 'TSVETTA',
-}
+import { Photo, Privacy } from '../../../server/apollo/types.js';
 
 const selectOptions: SelectOption[] = [
   undefined,

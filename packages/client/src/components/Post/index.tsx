@@ -10,14 +10,7 @@ import { deletePostMutation } from '../../../server/apollo/index.js';
 
 import commonStyles from '../../common.module.css';
 import styles from './index.module.css';
-
-enum Privacy {
-  'ALL',
-  'FAMILY',
-  'FRIENDS',
-  'CLOSE_FRIENDS',
-  'TSVETTA',
-}
+import { Privacy } from '../../../server/apollo/types.js';
 
 export type PhotoData = {
   _id: Required<Key>;
@@ -56,11 +49,15 @@ function Post({ data }: PostProps) {
         <h3 className={commonStyles.sectionTitle}>{title}</h3>
 
         <div className={styles.manager}>
-          <Link className={styles.editLink} to={`/post/${data._id}/edit`}>Редактировать</Link>
+          <Link className={styles.editLink} to={`/post/${data._id}/edit`}>
+            Редактировать
+          </Link>
           {deletePostState.loading ? (
             'Удаление'
           ) : (
-            <Button size="s" onClick={handlePostDelete(data._id)}>Удалить</Button>
+            <Button size='s' onClick={handlePostDelete(data._id)}>
+              Удалить
+            </Button>
           )}
         </div>
       </header>

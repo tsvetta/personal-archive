@@ -1,10 +1,10 @@
-import { useQuery, gql } from '@apollo/client';
-
-import Post, { PostData } from '../../components/Post';
-
-import commonStyles from '../../common.module.css';
+import { useQuery } from '@apollo/client';
 
 import { getPosts } from '../../../server/apollo/index.js';
+
+import Post, { PostData } from '../../components/Post/index.js';
+
+import commonStyles from '../../common.module.css';
 
 const MainPage = () => {
   const { loading, error, data } = useQuery(getPosts);

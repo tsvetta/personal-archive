@@ -8,14 +8,13 @@ import { createApolloClient } from './apollo-client';
 import App from './App';
 
 export async function render(url, ssrManifest, { universalCookies }) {
-  const context = {};
   const apolloClient = createApolloClient();
 
   const AppWithRouter = (
     <React.StrictMode>
       <CookiesProvider cookies={universalCookies}>
         <ApolloProvider client={apolloClient}>
-          <StaticRouter location={url} context={context}>
+          <StaticRouter location={url}>
             <App env='server' />
           </StaticRouter>
         </ApolloProvider>
@@ -27,19 +26,19 @@ export async function render(url, ssrManifest, { universalCookies }) {
     const content = await renderToStringWithData(AppWithRouter);
     const initialState = apolloClient.extract();
 
-     // ssrManifest для получения правильных ссылок на ассеты
-     const scripts = [];
-     const styles = [];
+    // ssrManifest для получения правильных ссылок на ассеты
+    const scripts = [];
+    const styles = [];
 
-     if (ssrManifest) {
-       for (const entry of ssrManifest[url]) {
-         if (entry.endsWith('.js')) {
-           scripts.push(`<script type="module" src="${entry}"></script>`);
-         } else if (entry.endsWith('.css')) {
-           styles.push(`<link rel="stylesheet" href="${entry}">`);
-         }
-       }
-     }
+    if (ssrManifest) {
+      for (const entry of ssrManifest[url]) {
+        if (entry.endsWith('.js')) {
+          scripts.push(`<script type="module" src="${entry}"></script>`);
+        } else if (entry.endsWith('.css')) {
+          styles.push(`<link rel="stylesheet" href="${entry}">`);
+        }
+      }
+    }
 
     return {
       html: content,
@@ -50,4 +49,4 @@ export async function render(url, ssrManifest, { universalCookies }) {
     console.error('Error during SSR:', error);
     throw error;
   }
-};
+}

@@ -1,5 +1,6 @@
-import { CreatePostFormData, Photo, Privacy } from '.';
-import { TagData } from '../../components/Tags';
+import { Photo, Privacy } from '../../../server/apollo/types.js';
+import { CreatePostFormData } from './index.js';
+import { TagData } from '../../components/Tags/index.js';
 
 export enum FieldValidationStateType {
   DEFAULT = 'DEFAULT',
