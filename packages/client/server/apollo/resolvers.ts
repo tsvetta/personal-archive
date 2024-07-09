@@ -1,10 +1,12 @@
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { GraphQLScalarType, Kind } from 'graphql';
 
 import { Tag, Post, User } from './models.js';
 import { loginUser } from './resolvers/mutations/login-user.js';
 import { deleteTag } from './resolvers/mutations/delete-tag.js';
-import { PostInput, TagInput, UserInput } from './types.js';
+import { PostInput, TagInput, UserDataFromToken, UserInput } from './types.js';
 import { postTags } from './resolvers/Posts/tags.js';
+import { ApolloContext } from './context.js';
 
 export const resolvers = {
   Tag: {
@@ -30,8 +32,19 @@ export const resolvers = {
       return await Post.findById(args.id);
     },
 
-    posts: async () => {
-      return await Post.find().sort({ date: 1 }).exec();
+    posts: async (_: any, __: any, { authToken = '' }: ApolloContext) => {
+      const userData: UserDataFromToken = jwt.verify(
+        authToken,
+        process.env.SECRET_KEY || ''
+      );
+
+      const filteredByRole = await Post.find({ privacy: userData.role })
+        .sort({ date: 1 })
+        .exec();
+
+      console.log(4, filteredByRole);
+
+      return filteredByRole;
     },
 
     user: async (_: any, args: any) => {

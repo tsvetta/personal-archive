@@ -1,3 +1,5 @@
+import { JwtPayload } from 'jsonwebtoken';
+
 export type TagInput = {
   name: Required<String>;
 };
@@ -31,3 +33,9 @@ export type UserInput = {
   password: String;
   role: Required<Privacy>;
 };
+
+export interface UserDataFromToken extends JwtPayload {
+  userId: String;
+  username: String;
+  role: Privacy;
+}

@@ -92,7 +92,7 @@ app
     express.json(),
     apolloExpressMiddlewar(apolloServer, {
       context: ({ req }) => {
-        const authToken = req.universalCookies?.cookies.auth_token;
+        const authToken = req.universalCookies?.getAll().auth_token;
 
         return Promise.resolve({
           authToken,
@@ -121,6 +121,7 @@ app
       }
 
       const rendered = await renderFunction(url, ssrManifest, {
+        headerCookie: req.header('Cookie'), // for Auth
         universalCookies: req.universalCookies,
       });
 

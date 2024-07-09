@@ -17,10 +17,6 @@ legend {
     transition: background-color 2s ease;
 }
 
-.articleTitle {
-    margin: 0 var(--default-gap) var(--default-gap) 40px;
-}
-
 .section {
     display: block;
     max-width: var(--max-width);

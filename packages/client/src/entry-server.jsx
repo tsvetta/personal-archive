@@ -7,8 +7,12 @@ import { renderToStringWithData } from '@apollo/client/react/ssr';
 import { createApolloClient } from './apollo-client';
 import App from './App';
 
-export async function render(url, ssrManifest, { universalCookies }) {
-  const apolloClient = createApolloClient();
+export async function render(
+  url,
+  ssrManifest,
+  { universalCookies, headerCookie }
+) {
+  const apolloClient = createApolloClient({ headerCookie });
 
   const AppWithRouter = (
     <React.StrictMode>

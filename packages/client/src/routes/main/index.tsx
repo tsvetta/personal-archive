@@ -4,8 +4,6 @@ import { getPosts } from '../../../server/apollo/index.js';
 
 import Post, { PostData } from '../../components/Post/index.js';
 
-import commonStyles from '../../common.module.css';
-
 const MainPage = () => {
   const { loading, error, data } = useQuery(getPosts);
 
@@ -23,8 +21,6 @@ const MainPage = () => {
 
   return (
     <article className='article'>
-      <h2 className={commonStyles.articleTitle}>2007</h2>
-
       {data.posts.map((post: PostData) => {
         return <Post key={post._id} data={post} />;
       })}
