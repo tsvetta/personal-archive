@@ -6,7 +6,7 @@ import Photo from '../Photo';
 import Tags, { TagData } from '../Tags';
 import Button from '../Button';
 
-import { deletePostMutation } from '../../../server/apollo/index.js';
+import { deletePostMutation } from '../../../server/apollo/queries.js';
 
 import commonStyles from '../../common.module.css';
 import styles from './index.module.css';

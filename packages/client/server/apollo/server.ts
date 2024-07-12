@@ -5,9 +5,9 @@ import { ApolloServer } from '@apollo/server';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { expressMiddleware as apolloExpressMiddlewar } from '@apollo/server/express4';
 
-import { ApolloContext } from './apollo/context.js';
-import { apolloSchema } from './apollo/schema.js';
-import { resolvers } from './apollo/resolvers.js';
+import { ApolloContext } from './context.js';
+import { apolloSchema } from './schema.js';
+import { resolvers } from './resolvers.js';
 
 const formatApolloServerEror = (err: GraphQLFormattedError) => {
   console.log('\n Apollo Format Error:', err);

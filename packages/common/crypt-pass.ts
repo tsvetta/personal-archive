@@ -23,8 +23,6 @@ export const getHashedPassword = async (password: string) => {
   return hash;
 };
 
-// getHashedPassword('136668119410ls_family');
-
 export const verifyPassword = async (hash: string, password: string) => {
   let isMatched = undefined;
 

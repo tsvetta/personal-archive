@@ -28,7 +28,7 @@ import {
   submitCreatePostForm,
   getPost,
   submitEditPostForm,
-} from '../../../server/apollo/index.js';
+} from '../../../server/apollo/queries.js';
 
 import FieldPhotos from './field-photos';
 import { ValidationState, validateForm } from './form-validation';

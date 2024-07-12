@@ -8,7 +8,7 @@ import { connectMongoDB } from './mongo.js';
 import {
   createApolloExpressMiddleware,
   createApolloServer,
-} from './apollo-server.js';
+} from './apollo/server.js';
 
 import { UniversalCookies } from '../src/utils/cookies.js';
 import { createViteServer } from './vite-server.js';

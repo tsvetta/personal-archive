@@ -10,7 +10,7 @@ import {
   FieldValidationStateType,
 } from '../post-form/form-validation.js';
 
-import { loginUser } from '../../../server/apollo/index.js';
+import { loginUser } from '../../../server/apollo/queries.js';
 
 type LoginFormValidationState = {
   nameInput: FieldValidation;
