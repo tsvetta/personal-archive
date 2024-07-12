@@ -8,6 +8,7 @@ const MainPage = () => {
   const { loading, error, data } = useQuery(getPosts);
 
   if (error) {
+    console.log('\n Main page error:', error);
     return error.message;
   }
 

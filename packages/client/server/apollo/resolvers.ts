@@ -7,6 +7,7 @@ import { deleteTag } from './resolvers/mutations/delete-tag.js';
 import { PostInput, TagInput, UserDataFromToken, UserInput } from './types.js';
 import { postTags } from './resolvers/Posts/tags.js';
 import { ApolloContext } from './context.js';
+import { AuthenticationError } from 'apollo-server-express';
 
 export const resolvers = {
   Tag: {
@@ -32,19 +33,29 @@ export const resolvers = {
       return await Post.findById(args.id);
     },
 
-    posts: async (_: any, __: any, { authToken = '' }: ApolloContext) => {
-      const userData: UserDataFromToken = jwt.verify(
-        authToken,
-        process.env.SECRET_KEY || ''
-      );
+    posts: async (_: any, __: any, { authToken }: ApolloContext) => {
+      console.log('\n posts resolver', authToken);
 
-      const filteredByRole = await Post.find({ privacy: userData.role })
-        .sort({ date: 1 })
-        .exec();
+      if (!authToken) {
+        throw new AuthenticationError('Auth required');
+      }
 
-      console.log(4, filteredByRole);
+      try {
+        const userData: UserDataFromToken = jwt.verify(
+          authToken,
+          process.env.SECRET_KEY || ''
+        );
 
-      return filteredByRole;
+        const filteredByRole = await Post.find({ privacy: userData.role })
+          .sort({ date: 1 })
+          .exec();
+
+        console.log(4, filteredByRole);
+
+        return filteredByRole;
+      } catch (e) {
+        return e;
+      }
     },
 
     user: async (_: any, args: any) => {
