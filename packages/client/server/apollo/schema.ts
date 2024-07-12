@@ -57,7 +57,7 @@ export const apolloSchema = `#graphql
         user: User!
     }
 
-    input UserInput {
+    input CreateUserInput {
         username: String!
         password: String!
         role: Privacy!
@@ -89,7 +89,7 @@ export const apolloSchema = `#graphql
         updatePost(id: ID!, data: PostInput!): Post
         deletePost(id: ID!): [Post]
 
-        addUser(data: UserInput!): User
+        addUser(data: CreateUserInput!): User
         loginUser(data: LoginInput!): UserWithToken
     }
 `;

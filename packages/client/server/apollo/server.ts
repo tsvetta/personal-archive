@@ -8,6 +8,8 @@ import { expressMiddleware as apolloExpressMiddlewar } from '@apollo/server/expr
 import { ApolloContext } from './context.js';
 import { apolloSchema } from './schema.js';
 import { resolvers } from './resolvers.js';
+import { UserDataFromToken } from './types.js';
+import { createAuthTokens } from '../../src/utils/auth.js';
 
 const formatApolloServerEror = (err: GraphQLFormattedError) => {
   console.log('\n Apollo Format Error:', err);
@@ -35,23 +37,46 @@ export const createApolloServer = (
     formatError: formatApolloServerEror,
   });
 
-const apolloContext = ({ req }: { req: Express.Request }) => {
-  let authToken = req.universalCookies?.getAll().auth_token?.toString();
-  let user: any = {};
+const apolloContext = ({
+  req,
+}: {
+  req: Express.Request;
+}): Promise<ApolloContext> => {
+  const cookies = req.universalCookies?.getAll() || {};
+  let authToken = cookies.auth_token?.toString() || '';
+  let refreshToken = cookies.refresh_token?.toString() || '';
 
-  try {
-    user = authToken ? jwt.verify(authToken, process.env.SECRET_KEY || '') : {};
-  } catch (e: any) {
-    console.error('\n Apollo Context Error:', e);
+  // const isLoggedIn = authToken && refreshToken;
+  // const wasLoggedIn = !authToken && refreshToken;
+  // let user = {};
 
-    if (e.message === 'jwt expired') {
-      authToken = undefined;
-    }
-  }
+  // if (isLoggedIn) {
+  //   user = jwt.verify(authToken, process.env.SECRET_KEY || '');
+
+  //   return Promise.resolve({
+  //     authToken,
+  //     refreshToken,
+  //     user,
+  //     universalCookies: req.universalCookies,
+  //   });
+  // }
+
+  // if (wasLoggedIn) {
+  //   user = jwt.verify(refreshToken, process.env.SECRET_KEY || '');
+
+  //   const tokens = createAuthTokens(user, req.universalCookies);
+
+  //   return Promise.resolve({
+  //     authToken: tokens.authToken,
+  //     refreshToken: tokens.refreshToken,
+  //     user,
+  //     universalCookies: req.universalCookies,
+  //   });
+  // }
 
   return Promise.resolve({
     authToken,
-    user: {},
+    refreshToken,
     universalCookies: req.universalCookies,
   });
 };

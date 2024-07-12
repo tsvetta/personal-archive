@@ -21,21 +21,28 @@ export enum Privacy {
 
 export type PostInput = {
   date: Date;
-  title: String;
+  title: string;
   photos: Photo[];
-  tags: String[];
-  text: String;
+  tags: string[];
+  text: string;
   privacy: Required<Privacy>;
 };
 
-export type UserInput = {
-  username: String;
-  password: String;
+export type CreateUserInput = {
+  username: string;
+  password: string;
   role: Required<Privacy>;
 };
 
+export type User = {
+  _id: string;
+  username: string;
+  password?: string;
+  role: Privacy;
+};
+
 export interface UserDataFromToken extends JwtPayload {
-  userId: String;
-  username: String;
+  userId: string;
+  username: string;
   role: Privacy;
 }

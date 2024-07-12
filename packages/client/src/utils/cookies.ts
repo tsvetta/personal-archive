@@ -1,6 +1,6 @@
 import { CookieOptions } from 'express';
 
-type Cookie = Record<string, string | number | undefined>;
+type Cookie = Record<string, string | undefined>;
 type CookieGetOptions = { doNotParse: boolean };
 
 export type UniversalCookies = {

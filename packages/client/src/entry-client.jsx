@@ -5,6 +5,7 @@ import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 
 import { createApolloClient } from './apollo-client';
+import { AuthProvider } from './features/auth/useAuth';
 import App from './App';
 import './index.css';
 
@@ -20,7 +21,9 @@ ReactDOM.hydrateRoot(
     <CookiesProvider>
       <ApolloProvider client={apolloClient}>
         <BrowserRouter>
-          <App />
+          <AuthProvider user={window.__ARCHIVE_USER__}>
+            <App />
+          </AuthProvider>
         </BrowserRouter>
       </ApolloProvider>
     </CookiesProvider>

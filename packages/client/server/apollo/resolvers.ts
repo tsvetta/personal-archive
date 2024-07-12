@@ -1,10 +1,15 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { GraphQLScalarType, Kind } from 'graphql';
 
 import { Tag, Post, User } from './models.js';
 import { loginUser } from './resolvers/mutations/login-user.js';
 import { deleteTag } from './resolvers/mutations/delete-tag.js';
-import { PostInput, TagInput, UserDataFromToken, UserInput } from './types.js';
+import {
+  PostInput,
+  TagInput,
+  UserDataFromToken,
+  CreateUserInput,
+} from './types.js';
 import { postTags } from './resolvers/Posts/tags.js';
 import { ApolloContext } from './context.js';
 import { AuthenticationError } from 'apollo-server-express';
@@ -100,7 +105,7 @@ export const resolvers = {
 
     loginUser,
 
-    addUser: async (_: any, args: { data: UserInput }) => {
+    addUser: async (_: any, args: { data: CreateUserInput }) => {
       const newUser = new User(args.data);
 
       await newUser.save();

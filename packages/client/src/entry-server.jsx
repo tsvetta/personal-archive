@@ -5,12 +5,13 @@ import { ApolloProvider } from '@apollo/client';
 import { renderToStringWithData } from '@apollo/client/react/ssr';
 
 import { createApolloClient } from './apollo-client';
+import { AuthProvider } from './features/auth/useAuth';
 import App from './App';
 
 export async function render(
   url,
   ssrManifest,
-  { universalCookies, headerCookie }
+  { universalCookies, headerCookie, user = {} }
 ) {
   const apolloClient = createApolloClient({ headerCookie });
 
@@ -19,7 +20,9 @@ export async function render(
       <CookiesProvider cookies={universalCookies}>
         <ApolloProvider client={apolloClient}>
           <StaticRouter location={url}>
-            <App env='server' />
+            <AuthProvider user={user}>
+              <App env='server' />
+            </AuthProvider>
           </StaticRouter>
         </ApolloProvider>
       </CookiesProvider>
