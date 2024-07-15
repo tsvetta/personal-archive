@@ -8,11 +8,8 @@ import {
 import formStyles from '../../components/Form/index.module.css';
 import styles from './index.module.css';
 
-import { cx } from '../../utils/cx';
-import {
-  FieldValidation,
-  FieldValidationStateType,
-} from '../../routes/post-form/form-validation';
+import { cx } from '../../utils/cx.js';
+import { FieldValidation, FieldValidationStateType } from '../Form/types.js';
 
 type InputProps = {
   placeholder?: string;

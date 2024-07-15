@@ -30,6 +30,7 @@ declare global {
             userId: string;
             username: string;
             role: Privacy;
+            refreshToken: string;
           }
         | {};
     }
@@ -77,10 +78,11 @@ app
           (await import('../dist/server/entry-server.js')).render(req, res);
       }
 
+      const user = req.user || {};
       const rendered = await renderFunction(url, ssrManifest, {
         headerCookie: req.header('Cookie'), // for Auth
         universalCookies: req.universalCookies,
-        user: req.user,
+        user,
       });
 
       const html = template
@@ -92,7 +94,7 @@ app
             window.__APOLLO_STATE__=${JSON.stringify(
               rendered.initialState
             ).replace(/</g, '\\u003c')}; 
-            window.__ARCHIVE_USER__=${JSON.stringify(req.user).replace(
+            window.__ARCHIVE_USER__=${JSON.stringify(user).replace(
               /</g,
               '\\u003c'
             )}

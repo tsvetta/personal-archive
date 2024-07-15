@@ -47,14 +47,12 @@
     }
 }
 
-.submitFormButton {
-    margin-top: var(--default-gap)
-}
-
 .errorMessage {
-    color: tomato;
-    font-size: 10px;
     position: absolute;
     bottom: 28px;
     left: 95px;
+}
+
+.submitFormButton {
+    margin-top: var(--default-gap)
 }

@@ -4,15 +4,11 @@ import {
   MouseEventHandler,
 } from 'react';
 
-import { cx } from '../../utils/cx';
-
-import {
-  FieldValidation,
-  FieldValidationStateType,
-} from '../../routes/post-form/form-validation';
+import { cx } from '../../utils/cx.js';
 
 import formStyles from '../../components/Form/index.module.css';
 import inputStyles from '../../components/Input/index.module.css';
+import { FieldValidation, FieldValidationStateType } from '../Form/types.js';
 
 export type SelectOption =
   | {

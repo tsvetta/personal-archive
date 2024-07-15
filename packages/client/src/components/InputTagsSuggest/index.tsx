@@ -1,17 +1,13 @@
 import { ChangeEventHandler, Key, useRef, useState } from 'react';
 import styles from './index.module.css';
 
-import { cx } from '../../utils/cx';
-import { useOutsideClick } from '../../utils/useClickOutside';
+import { cx } from '../../utils/cx.js';
+import { useOutsideClick } from '../../utils/useClickOutside.js';
 
-import Tags, { TagData } from '../Tags';
-import Input from '../Input';
-import Button from '../Button';
-
-import {
-  FieldValidation,
-  FieldValidationStateType,
-} from '../../routes/post-form/form-validation';
+import Tags, { TagData } from '../Tags/index.js';
+import Input from '../Input/index.js';
+import Button from '../Button/index.js';
+import { FieldValidation, FieldValidationStateType } from '../Form/types.js';
 
 type InputTagsSuggestProps = {
   name?: string;

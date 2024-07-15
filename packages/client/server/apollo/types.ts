@@ -1,4 +1,5 @@
 import { JwtPayload } from 'jsonwebtoken';
+import { Types } from 'mongoose';
 
 export type TagInput = {
   name: Required<String>;
@@ -35,10 +36,11 @@ export type CreateUserInput = {
 };
 
 export type User = {
-  _id: string;
+  _id: Types.ObjectId;
   username: string;
   password?: string;
-  role: Privacy;
+  role: `${Privacy}`;
+  refreshToken?: string | null;
 };
 
 export interface UserDataFromToken extends JwtPayload {

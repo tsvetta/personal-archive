@@ -38,24 +38,13 @@ export const resolvers = {
       return await Post.findById(args.id);
     },
 
-    posts: async (_: any, __: any, { authToken }: ApolloContext) => {
-      console.log('\n posts resolver', authToken);
-
-      if (!authToken) {
-        throw new AuthenticationError('Auth required');
-      }
-
+    posts: async (_: any, __: any, { user }: ApolloContext) => {
       try {
-        const userData: UserDataFromToken = jwt.verify(
-          authToken,
-          process.env.SECRET_KEY || ''
-        );
-
-        const filteredByRole = await Post.find({ privacy: userData.role })
+        const filteredByRole = await Post.find({ privacy: user?.role })
           .sort({ date: 1 })
           .exec();
 
-        console.log(4, filteredByRole);
+        console.log('\n filtered posts by role', filteredByRole);
 
         return filteredByRole;
       } catch (e) {

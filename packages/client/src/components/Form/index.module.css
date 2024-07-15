@@ -28,3 +28,8 @@
         margin-top: var(--default-gap);
     }
 }
+
+.errorMessage {
+    color: tomato;
+    font-size: 10px;
+}

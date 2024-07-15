@@ -42,16 +42,24 @@ export const getPost = gql`
   }
 `;
 
+export const getUser = gql`
+  query User($id: ID!) {
+    user(id: $id) {
+      _id
+      username
+      role
+      refreshToken
+    }
+  }
+`;
+
 export const loginUser = gql`
   mutation LoginUser($data: LoginInput!) {
     loginUser(data: $data) {
-      # authToken
+      _id
+      username
+      role
       refreshToken
-      user {
-        _id
-        username
-        role
-      }
     }
   }
 `;

@@ -73,6 +73,9 @@ const UserSchema = new Schema({
     enum: ['ALL', 'FAMILY', 'FRIENDS', 'CLOSE_FRIENDS', 'TSVETTA'],
     required: true,
   },
+  refreshToken: {
+    type: String,
+  },
 });
 
 export const User = mongoose.model('User', UserSchema);

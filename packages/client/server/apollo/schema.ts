@@ -45,18 +45,6 @@ export const apolloSchema = `#graphql
         title: String
     }
 
-    type User {
-        _id: ID!
-        username: String!
-        role: Privacy!
-    }
-
-    type UserWithToken {
-        # authToken: String!
-        refreshToken: String!
-        user: User!
-    }
-
     input CreateUserInput {
         username: String!
         password: String!
@@ -68,10 +56,12 @@ export const apolloSchema = `#graphql
         password: String!
     }
 
-    # type FormResponse {
-    #     success: Boolean!
-    #     message: String!
-    # }
+    type User {
+        _id: ID!
+        username: String!
+        role: Privacy!
+        refreshToken: String
+    }
 
     type Query {
         tag(id: ID!): Tag
@@ -90,6 +80,6 @@ export const apolloSchema = `#graphql
         deletePost(id: ID!): [Post]
 
         addUser(data: CreateUserInput!): User
-        loginUser(data: LoginInput!): UserWithToken
+        loginUser(data: LoginInput!): User
     }
 `;

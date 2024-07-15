@@ -25,14 +25,7 @@ export const loginUser = async (
     throw new Error('Incorrect username or password');
   }
 
-  const { authToken, refreshToken } = createAuthTokens(
-    user,
-    context.universalCookies
-  );
+  await createAuthTokens(user, context.universalCookies);
 
-  return {
-    authToken,
-    refreshToken,
-    user,
-  };
+  return await User.findOne({ username });
 };

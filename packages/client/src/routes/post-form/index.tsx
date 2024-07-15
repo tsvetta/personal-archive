@@ -9,14 +9,14 @@ import {
 import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 
-import { cx } from '../../utils/cx';
-import { getDateFormatted, nowRu } from '../../utils/date-formatted';
+import { cx } from '../../utils/cx.js';
+import { getDateFormatted, nowRu } from '../../utils/date-formatted.js';
 
-import { TagData } from '../../components/Tags';
-import Input from '../../components/Input';
-import Button from '../../components/Button';
-import InputTagsSuggest from '../../components/InputTagsSuggest';
-import Select, { SelectOption } from '../../components/Select';
+import { TagData } from '../../components/Tags/index.js';
+import Input from '../../components/Input/index.js';
+import Button from '../../components/Button/index.js';
+import InputTagsSuggest from '../../components/InputTagsSuggest/index.js';
+import Select, { SelectOption } from '../../components/Select/index.js';
 
 import formStyles from '../../components/Form/index.module.css';
 import styles from './index.module.css';
@@ -30,8 +30,8 @@ import {
   submitEditPostForm,
 } from '../../../server/apollo/queries.js';
 
-import FieldPhotos from './field-photos';
-import { ValidationState, validateForm } from './form-validation';
+import FieldPhotos from './field-photos.js';
+import { ValidationState, validateForm } from './form-validation.js';
 
 import { Photo, Privacy } from '../../../server/apollo/types.js';
 
@@ -249,32 +249,32 @@ const PostFormPage = () => {
     const preSubmitValidationState = validateForm(formData);
     setFieldsValidation(preSubmitValidationState);
 
-    if (!preSubmitValidationState.isValid) {
-      throw new Error('Create Post: Validation fail!');
-    }
-
-    const preparedData = mapFormData(formData);
-
-    if (isEditPage) {
-      try {
-        await submitEditForm({
-          variables: {
-            id: urlId,
-            data: preparedData,
-          },
-          refetchQueries: ['Posts'],
-        });
-
-        // редирект на страницу поста?
-        // нотификация об успешном обновлении
-      } catch (error: any) {
-        console.error('Error submitting form:', error.message);
+    try {
+      if (!preSubmitValidationState.isValid) {
+        throw new Error('Create Post: Validation fail!');
       }
 
-      return;
-    }
+      const preparedData = mapFormData(formData);
 
-    try {
+      if (isEditPage) {
+        try {
+          await submitEditForm({
+            variables: {
+              id: urlId,
+              data: preparedData,
+            },
+            refetchQueries: ['Posts'],
+          });
+
+          // редирект на страницу поста?
+          // нотификация об успешном обновлении
+        } catch (error: any) {
+          throw new Error('Edit Post: Validation fail!');
+        }
+
+        return;
+      }
+
       const { data } = await submitCreateForm({
         variables: {
           data: preparedData,
@@ -360,7 +360,7 @@ const PostFormPage = () => {
         </Button>
 
         {fieldsValidation.formError && (
-          <span className={styles.errorMessage}>
+          <span className={cx([formStyles.errorMessage, styles.errorMessage])}>
             {fieldsValidation.formError}
           </span>
         )}

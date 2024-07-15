@@ -15,6 +15,7 @@ export const getHashedPassword = async (password: string) => {
   try {
     hash = await argon2.hash(password);
 
+    console.log('Pass:', password);
     console.log('Generated hash:', hash);
   } catch (err) {
     console.error(err);

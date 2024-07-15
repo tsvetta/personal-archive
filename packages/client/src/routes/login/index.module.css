@@ -1,0 +1,9 @@
+.errorMessage {
+    position: absolute;
+    bottom: 28px;
+    left: 105px;
+}
+
+.submitFormButton {
+    margin-top: 10px;
+}

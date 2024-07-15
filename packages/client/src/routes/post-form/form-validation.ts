@@ -1,12 +1,7 @@
 import { Photo, Privacy } from '../../../server/apollo/types.js';
 import { CreatePostFormData } from './index.js';
 import { TagData } from '../../components/Tags/index.js';
-
-export enum FieldValidationStateType {
-  DEFAULT = 'DEFAULT',
-  SUCCESS = 'SUCCESS',
-  ERROR = 'ERROR',
-}
+import { FieldValidationStateType } from '../../components/Form/types.js';
 
 export type PhotosValidation = {
   id: string;
