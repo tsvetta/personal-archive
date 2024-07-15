@@ -44,7 +44,7 @@ export type User = {
 };
 
 export interface UserDataFromToken extends JwtPayload {
-  userId: string;
+  userId: Types.ObjectId;
   username: string;
   role: Privacy;
 }

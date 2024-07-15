@@ -21,7 +21,7 @@ ReactDOM.hydrateRoot(
     <CookiesProvider>
       <ApolloProvider client={apolloClient}>
         <BrowserRouter>
-          <AuthProvider user={window.__ARCHIVE_USER__}>
+          <AuthProvider userId={window.__ARCHIVE_USER_ID__}>
             <App />
           </AuthProvider>
         </BrowserRouter>

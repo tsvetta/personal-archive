@@ -1,16 +1,17 @@
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
+import { cx } from '../../utils/cx.js';
+
 import Input from '../../components/Input/index.js';
 import Button from '../../components/Button/index.js';
+import { FieldValidation } from '../../components/Form/types.js';
 
 import styles from './index.module.css';
 import formStyles from '../../components/Form/index.module.css';
 
-import { loginUser } from '../../../server/apollo/queries.js';
+import { loginUser as loginUserQuery } from '../../../server/apollo/queries.js';
 import { validateLoginForm } from './form-validation.js';
-import { cx } from '../../utils/cx.js';
-import { FieldValidation } from '../post-form/form-validation.js';
 
 export type LoginFormValidationState = {
   username: FieldValidation;
@@ -33,7 +34,7 @@ const LoginPage = () => {
   const [fieldsValidation, setFieldsValidation] =
     useState<LoginFormValidationState>(validateLoginForm(formData, true));
 
-  const [submitLogin] = useMutation(loginUser);
+  const [loginUser] = useMutation(loginUserQuery);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { name, value } = e.target;
@@ -55,12 +56,14 @@ const LoginPage = () => {
         throw new Error('Login: Validation fail!');
       }
 
-      const { data } = await submitLogin({
+      await loginUser({
         variables: {
           data: { username: formData.username, password: formData.password },
         },
       });
-      console.log('\n submitLogin', data.loginUser);
+
+      // TODO: разобраться, как обновлять AuthProvider после успешного логина
+      location.href = '/';
     } catch (error: any) {
       console.error('Error submitting form:', error.message);
     }

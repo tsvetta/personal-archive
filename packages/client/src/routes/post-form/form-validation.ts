@@ -1,15 +1,13 @@
 import { Photo, Privacy } from '../../../server/apollo/types.js';
 import { CreatePostFormData } from './index.js';
 import { TagData } from '../../components/Tags/index.js';
-import { FieldValidationStateType } from '../../components/Form/types.js';
+import {
+  FieldValidation,
+  FieldValidationStateType,
+} from '../../components/Form/types.js';
 
 export type PhotosValidation = {
   id: string;
-  state: FieldValidationStateType;
-  errorMessage?: string;
-};
-
-export type FieldValidation = {
   state: FieldValidationStateType;
   errorMessage?: string;
 };

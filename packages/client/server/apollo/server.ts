@@ -1,6 +1,8 @@
+import 'dotenv/config';
+import { Request } from 'express';
 import http from 'http';
 import jwt from 'jsonwebtoken';
-import { GraphQLFormattedError } from 'graphql';
+
 import { ApolloServer } from '@apollo/server';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { expressMiddleware as apolloExpressMiddlewar } from '@apollo/server/express4';
@@ -9,23 +11,12 @@ import { ApolloContext } from './context.js';
 import { apolloSchema } from './schema.js';
 import { resolvers } from './resolvers.js';
 import { UserDataFromToken } from './types.js';
-import { createAuthTokens } from '../../src/utils/auth.js';
 
-const formatApolloServerEror = (err: GraphQLFormattedError) => {
-  console.log('\n Apollo Format Error:', err);
+import { createAuthTokens } from '../../src/features/auth/index.js';
 
-  if (err.extensions?.code === 'UNAUTHENTICATED') {
-    // Если ошибка аутентификации, возвращаем статус и данные для редиректа
-    return {
-      statusCode: 302, // или другой подходящий HTTP статус
-      location: '/login', // URL для редиректа
-      message: err.message, // Ошибка аутентификации
-    };
-  }
+const secret = process.env.SECRET_KEY || '';
 
-  // Возвращаем стандартную обработку ошибок для других типов ошибок
-  return err;
-};
+// const formatApolloServerEror = async (err: GraphQLFormattedError) => {};
 
 export const createApolloServer = (
   httpServer: http.Server
@@ -34,49 +25,73 @@ export const createApolloServer = (
     typeDefs: apolloSchema,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })], // plugin ensure server gracefully shuts down
-    formatError: formatApolloServerEror,
+    // formatError: formatApolloServerEror,
   });
 
-const apolloContext = ({
+const apolloContext = async ({
   req,
 }: {
-  req: Express.Request;
+  req: Request;
 }): Promise<ApolloContext> => {
   const cookies = req.universalCookies?.getAll() || {};
   let authToken = cookies.auth_token?.toString() || '';
   let refreshToken = cookies.refresh_token?.toString() || '';
 
-  // const isLoggedIn = authToken && refreshToken;
-  // const wasLoggedIn = !authToken && refreshToken;
-  // let user = {};
+  // console.log('\n\n\n');
+  // console.log('! refreshToken:', refreshToken);
 
-  // if (isLoggedIn) {
-  //   user = jwt.verify(authToken, process.env.SECRET_KEY || '');
+  // No Auth
+  if (!authToken || !refreshToken) {
+    // console.log('...no auth!');
+    return Promise.resolve({
+      universalCookies: req.universalCookies,
+    });
+  }
 
-  //   return Promise.resolve({
-  //     authToken,
-  //     refreshToken,
-  //     user,
-  //     universalCookies: req.universalCookies,
-  //   });
-  // }
+  let userDecoded = jwt.decode(authToken) as UserDataFromToken;
+  let finalUser = undefined;
+  // console.log('...auth decoding', userDecoded);
 
-  // if (wasLoggedIn) {
-  //   user = jwt.verify(refreshToken, process.env.SECRET_KEY || '');
+  // token valid
+  if (userDecoded) {
+    // console.log('...auth token verification');
+    try {
+      // verification
+      const verifiedUser = await new Promise((resolve, reject) => {
+        jwt.verify(authToken, secret, async (err, decoded) => {
+          if (err) reject(err);
+          else resolve(decoded as UserDataFromToken);
+        });
+      });
 
-  //   const tokens = createAuthTokens(user, req.universalCookies);
+      if (verifiedUser) {
+        finalUser = verifiedUser;
+      }
+    } catch (err) {
+      // verification failed, token expired
+      if (err instanceof jwt.TokenExpiredError) {
+        // console.log('...auth token expired, create new tokens');
+        const newTokens = await createAuthTokens(
+          userDecoded.userId,
+          req.universalCookies
+        );
 
-  //   return Promise.resolve({
-  //     authToken: tokens.authToken,
-  //     refreshToken: tokens.refreshToken,
-  //     user,
-  //     universalCookies: req.universalCookies,
-  //   });
-  // }
+        // console.log('...new refresh token:', newTokens?.refreshToken);
+
+        finalUser = newTokens?.authToken
+          ? jwt.decode(newTokens.authToken)
+          : undefined;
+      } else if (err) {
+        // verification failed, other reasons
+        console.error('Auth token error', err);
+      }
+    }
+  }
+
+  // console.log('...final user', finalUser);
 
   return Promise.resolve({
-    authToken,
-    refreshToken,
+    user: finalUser as UserDataFromToken,
     universalCookies: req.universalCookies,
   });
 };

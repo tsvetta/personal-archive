@@ -5,6 +5,7 @@ import { verifyPassword } from '@archive/common/crypt-pass.js';
 import { ApolloContext } from '../../context.js';
 import { User } from '../../models.js';
 import { createAuthTokens } from '../../../../src/features/auth/index.js';
+import { User as UserType } from '../../types.js';
 
 export const loginUser = async (
   _: any,
@@ -13,19 +14,19 @@ export const loginUser = async (
 ) => {
   const { username, password } = args.data;
 
-  const user = await User.findOne({ username });
+  const user: UserType | undefined | null = await User.findOne({ username });
 
   if (!user) {
     throw new Error('Incorrect username or password');
   }
 
-  const isPasswordValid = await verifyPassword(user?.password, password);
+  const isPasswordValid = await verifyPassword(user?.password || '', password);
 
   if (!isPasswordValid) {
     throw new Error('Incorrect username or password');
   }
 
-  await createAuthTokens(user, context.universalCookies);
+  await createAuthTokens(user._id, context.universalCookies);
 
   return await User.findOne({ username });
 };

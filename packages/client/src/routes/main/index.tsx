@@ -1,23 +1,16 @@
+import { Navigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
+
+import Post, { PostData } from '../../components/Post/index.js';
 
 import { getPosts } from '../../../server/apollo/queries.js';
 
-import Post, { PostData } from '../../components/Post/index.js';
-import { useAuth } from '../../features/auth/useAuth.js';
-
 const MainPage = () => {
-  const { user, logout } = useAuth();
   const { loading, error, data } = useQuery(getPosts);
 
-  console.log('Main Page', user.userId);
-
-  if (!user.userId) {
-    logout();
-  }
-
   if (error) {
-    console.log('\n Main page error:', error);
-    return error.message;
+    // console.log('\n Main page error:', error);
+    return <Navigate to='/login' />;
   }
 
   if (loading) {

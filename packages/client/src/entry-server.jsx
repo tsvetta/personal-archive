@@ -11,7 +11,7 @@ import App from './App';
 export async function render(
   url,
   ssrManifest,
-  { universalCookies, headerCookie, user = {} }
+  { universalCookies, headerCookie, userId }
 ) {
   const apolloClient = createApolloClient({ headerCookie });
 
@@ -20,7 +20,7 @@ export async function render(
       <CookiesProvider cookies={universalCookies}>
         <ApolloProvider client={apolloClient}>
           <StaticRouter location={url}>
-            <AuthProvider user={user}>
+            <AuthProvider userId={userId}>
               <App env='server' />
             </AuthProvider>
           </StaticRouter>

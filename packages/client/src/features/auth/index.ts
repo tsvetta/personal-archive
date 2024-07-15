@@ -3,17 +3,27 @@ import jwt from 'jsonwebtoken';
 
 import { UniversalCookies } from '../../utils/cookies.js';
 import { User } from '../../../server/apollo/models.js';
-import { User as UserType } from '@archive/client/server/apollo/types.js';
+
+import mongoose, { Types } from 'mongoose';
 
 export const createAuthTokens = async (
-  user: UserType,
+  userId: Types.ObjectId,
   universalCookies?: UniversalCookies
 ) => {
+  const session = await mongoose.startSession();
+
+  const userFromDB = await User.findById(userId).session(session);
+
+  // нет такого юзера
+  if (!userFromDB) {
+    return;
+  }
+
   const authToken = jwt.sign(
     {
-      userId: user._id,
-      username: user.username,
-      role: user.role,
+      userId: userFromDB._id,
+      username: userFromDB.username,
+      role: userFromDB.role,
     },
     process.env.SECRET_KEY || '',
     { expiresIn: '15m' }
@@ -21,9 +31,9 @@ export const createAuthTokens = async (
 
   const refreshToken = jwt.sign(
     {
-      userId: user._id,
-      username: user.username,
-      role: user.role,
+      userId: userFromDB._id,
+      username: userFromDB.username,
+      role: userFromDB.role,
     },
     process.env.SECRET_KEY || '',
     { expiresIn: '1d' }
@@ -39,11 +49,12 @@ export const createAuthTokens = async (
   // записываем новый токен в БД
   try {
     await User.findByIdAndUpdate(
-      user._id,
+      userId,
       { $set: { refreshToken } },
       { new: true }
-    ).exec();
-    // user?.updateOne({})
+    )
+      .session(session)
+      .exec();
   } catch (e: any) {
     console.error(e.message);
   }
@@ -54,6 +65,8 @@ export const createAuthTokens = async (
     maxAge: 2592000, // 30 d
     sameSite: 'strict',
   });
+
+  session.endSession();
 
   return { authToken, refreshToken };
 };

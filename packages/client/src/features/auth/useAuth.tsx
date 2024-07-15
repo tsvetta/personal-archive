@@ -1,55 +1,40 @@
-import {
-  ReactElement,
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
-import { useNavigate } from 'react-router-dom';
-import { UserDataFromToken } from '../../../server/apollo/types.js';
+import { ReactElement, createContext, useContext } from 'react';
+import { useQuery, ApolloError } from '@apollo/client';
+
+import { User } from '../../../server/apollo/types.js';
+import { getUser } from '../../../server/apollo/queries.js';
 
 interface AuthContextType {
-  user: UserDataFromToken | {};
-  login: (data: UserDataFromToken) => void;
-  logout: () => void;
+  user?: User;
+  loading?: boolean;
+  error?: ApolloError;
 }
 
 const AuthContext = createContext<AuthContextType>({
-  user: {},
-  login: () => {},
-  logout: () => {},
+  user: undefined,
+  loading: false,
+  error: undefined,
 });
 
 export const AuthProvider = ({
+  userId,
   children,
-  user,
 }: {
+  userId?: string;
   children: ReactElement;
-  user: any;
 }) => {
-  const [userContext, setUserContext] = useState(user);
-  const navigate = useNavigate();
+  const { loading, error, data } = useQuery(getUser, {
+    variables: { id: userId },
+    skip: !userId,
+  });
 
-  const login = async (data: UserDataFromToken) => {
-    setUserContext(data);
-    navigate('/');
-  };
+  const user = data?.user;
 
-  const logout = () => {
-    setUserContext({});
-    navigate('/login', { replace: true });
-  };
-
-  const value = useMemo(
-    () => ({
-      user: userContext,
-      login,
-      logout,
-    }),
-    [userContext]
+  return (
+    <AuthContext.Provider value={{ user, loading, error }}>
+      {children}
+    </AuthContext.Provider>
   );
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "dev": "tsx server/index.ts",
+    "dev": "tsx watch --clear-screen=false --ignore './vite.config.ts*' server/index.ts",
     "build": "yarn run build:client && yarn run build:server",
     "build:client": "vite build --ssrManifest --outDir dist/client",
     "build:server": "vite build --ssr src/entry-server.jsx --outDir dist/server",

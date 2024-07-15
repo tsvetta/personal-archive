@@ -1,8 +1,8 @@
 import 'dotenv/config';
 import fs from 'node:fs/promises';
-import express, { NextFunction, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
+import { JwtPayload } from 'jsonwebtoken';
 import http from 'http';
-import jwt from 'jsonwebtoken';
 import cookiesMiddleware from 'universal-cookie-express';
 
 import { connectMongoDB } from './mongo.js';
@@ -13,26 +13,18 @@ import {
 
 import { UniversalCookies } from '../src/utils/cookies.js';
 import { createViteServer } from './vite-server.js';
-import { authMiddleware } from '../src/features/auth/auth-middleware.js';
-import { Privacy } from './apollo/types.js';
+import { userFromCookiesMiddleware } from '../src/features/auth/userFromCookiesMiddleware.js';
+import { UserDataFromToken } from './apollo/types.js';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const port = process.env.PORT || 5173;
 const base = process.env.BASE || '/';
 
-// cookies types in express request
 declare global {
   namespace Express {
     export interface Request {
       universalCookies?: UniversalCookies;
-      user?:
-        | {
-            userId: string;
-            username: string;
-            role: Privacy;
-            refreshToken: string;
-          }
-        | {};
+      user?: UserDataFromToken | JwtPayload | string | null | undefined;
     }
   }
 }
@@ -57,7 +49,7 @@ const ssrManifest = isProduction
   : undefined;
 
 app
-  .use('*', authMiddleware) // req.user
+  .use('*', userFromCookiesMiddleware) // req.user
   // Serve HTML
   .use('*', async (req: Request, res: Response) => {
     try {
@@ -78,11 +70,11 @@ app
           (await import('../dist/server/entry-server.js')).render(req, res);
       }
 
-      const user = req.user || {};
+      const userId = req.user?.userId || null;
       const rendered = await renderFunction(url, ssrManifest, {
         headerCookie: req.header('Cookie'), // for Auth
         universalCookies: req.universalCookies,
-        user,
+        userId,
       });
 
       const html = template
@@ -94,15 +86,15 @@ app
             window.__APOLLO_STATE__=${JSON.stringify(
               rendered.initialState
             ).replace(/</g, '\\u003c')}; 
-            window.__ARCHIVE_USER__=${JSON.stringify(user).replace(
-              /</g,
-              '\\u003c'
-            )}
+            window.__ARCHIVE_USER_ID__=${JSON.stringify(userId)}
           </script>
           </head>`
         );
 
-      res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
+      res
+        .status(res.statusCode) // 200 or 401
+        .set({ 'Content-Type': 'text/html' })
+        .send(html);
     } catch (e: any) {
       vite?.ssrFixStacktrace(e);
       console.log(e.stack);
