@@ -3,10 +3,6 @@
     justify-content: space-between;
 }
 
-.tags {
-    margin-top: 10px;
-}
-
 .editLink {
     color: white;
     font-size: 12px;
@@ -20,4 +16,18 @@
     display: flex;
     gap: 15px;
     align-items: center;
+}
+
+.footer {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.tags {}
+
+.accessLevel {
+    font-size: 10px;
 }

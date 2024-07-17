@@ -29,32 +29,31 @@ import {
   getPost,
   submitEditPostForm,
 } from '../../../server/apollo/queries.js';
+import { AccessLevels, Photo, Privacy } from '../../../server/apollo/types.js';
 
 import FieldPhotos from './field-photos.js';
 import { ValidationState, validateForm } from './form-validation.js';
 
-import { Photo, Privacy } from '../../../server/apollo/types.js';
-
 const selectOptions: SelectOption[] = [
   undefined,
   {
-    id: Privacy.ALL,
+    value: 0,
     name: Privacy.ALL,
   },
   {
-    id: Privacy.FAMILY,
+    value: 1,
     name: Privacy.FAMILY,
   },
   {
-    id: Privacy.FRIENDS,
+    value: 2,
     name: Privacy.FRIENDS,
   },
   {
-    id: Privacy.CLOSE_FRIENDS,
+    value: 3,
     name: Privacy.CLOSE_FRIENDS,
   },
   {
-    id: Privacy.TSVETTA,
+    value: 4,
     name: Privacy.TSVETTA,
   },
 ];
@@ -64,7 +63,7 @@ export type CreatePostFormData = {
   date?: string;
   photos: Photo[];
   tags: TagData[];
-  privacy?: Privacy;
+  accessLevel?: AccessLevels;
   text?: string;
 };
 
@@ -72,7 +71,7 @@ const deafultFormData: CreatePostFormData = {
   title: '',
   photos: [],
   tags: [],
-  privacy: undefined,
+  accessLevel: undefined,
   text: '',
 };
 
@@ -84,7 +83,7 @@ const mapFormData = (formData: CreatePostFormData) => ({
     description: photo.description,
   })),
   tags: formData.tags.map((tag) => tag._id),
-  privacy: formData.privacy,
+  accessLevel: formData.accessLevel,
   text: formData.text || undefined,
 });
 
@@ -346,12 +345,12 @@ const PostFormPage = () => {
           value={formData.text || ''}
         />
 
-        <label htmlFor='privacy'>Privacy:</label>
+        <label htmlFor='accessLevel'>Access Level:</label>
         <Select
-          name='privacy'
+          name='accessLevel'
           options={selectOptions}
-          value={formData.privacy}
-          validation={fieldsValidation.tags}
+          value={formData.accessLevel}
+          validation={fieldsValidation.accessLevel}
           onChange={handleChange}
         />
 

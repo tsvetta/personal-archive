@@ -11,7 +11,7 @@ import { deleteTag } from './resolvers/mutations/delete-tag.js';
 export const resolvers = {
   Tag: {
     posts: async (parent: any) => {
-      return await Post.find({ tags: { $in: parent.id } });
+      return await Post.find({ tags: { $in: parent.id } }).exec();
     },
   },
 
@@ -21,7 +21,7 @@ export const resolvers = {
 
   Query: {
     tag: async (_: any, args: any) => {
-      return await Tag.findById(args.id);
+      return await Tag.findById(args.id).exec();
     },
 
     tags: async () => {
@@ -29,17 +29,17 @@ export const resolvers = {
     },
 
     post: async (_: any, args: any) => {
-      return await Post.findById(args.id);
+      return await Post.findById(args.id).exec();
     },
 
     posts: postsQuery,
 
     user: async (_: any, args: any) => {
-      return await User.findById(args.id);
+      return await User.findById(args.id).lean().exec();
     },
 
     users: async () => {
-      return await User.find().exec();
+      return await User.find().lean().exec();
     },
   },
 

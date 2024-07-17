@@ -1,4 +1,4 @@
-import { Photo, Privacy } from '../../../server/apollo/types.js';
+import { AccessLevels, Photo, Privacy } from '../../../server/apollo/types.js';
 import { CreatePostFormData } from './index.js';
 import { TagData } from '../../components/Tags/index.js';
 import {
@@ -15,7 +15,7 @@ export type PhotosValidation = {
 export type ValidationState = {
   photos: PhotosValidation[];
   tags: FieldValidation;
-  privacy: FieldValidation;
+  accessLevel: FieldValidation;
   formError?: string;
 };
 
@@ -32,8 +32,8 @@ const validatePhotos = (photos: Photo[]) => {
   );
 };
 
-const validatePrivacy = (privacy?: Privacy) => {
-  if (!privacy) {
+const validateAccessLevels = (accessLevel?: AccessLevels) => {
+  if (!accessLevel) {
     return {
       state: FieldValidationStateType.ERROR,
       errorMessage: 'Выберите тип доступа',
@@ -69,7 +69,7 @@ export const validateForm = (
       tags: {
         state: FieldValidationStateType.DEFAULT,
       },
-      privacy: {
+      accessLevel: {
         state: FieldValidationStateType.DEFAULT,
       },
       formError: undefined,
@@ -79,19 +79,18 @@ export const validateForm = (
   const validations: ValidationState = {
     photos: validatePhotos(formData.photos),
     tags: validateTags(formData.tags),
-    privacy: validatePrivacy(formData.privacy),
+    accessLevel: validateAccessLevels(formData.accessLevel),
   };
 
   const isPhotosValid =
     validations.photos.find((p) => Boolean(p.errorMessage)) === undefined;
   const isTagsValid = validations.tags.errorMessage === undefined;
-  const isPrivacyValid = validations.privacy.errorMessage === undefined;
+  const isAccessLevelsValid =
+    validations.accessLevel.errorMessage === undefined;
   const noTextNoPhotos = !formData.text && formData.photos.length === 0;
 
   const isValid =
-    isPhotosValid && isTagsValid && isPrivacyValid && !noTextNoPhotos;
-
-  // (Object.keys(validations) as (keyof typeof validations)[])
+    isPhotosValid && isTagsValid && isAccessLevelsValid && !noTextNoPhotos;
 
   return {
     isValid,

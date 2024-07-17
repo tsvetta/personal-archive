@@ -2,14 +2,16 @@ import { Post } from '../../models.js';
 import { ApolloContext } from '../../context.js';
 
 export const postsQuery = async (_: any, __: any, { user }: ApolloContext) => {
-  console.log('\n Posts by user role:', user?.role);
-
   try {
-    const filteredByRole = await Post.find({ privacy: user?.role })
+    const filteredByRole = await Post.find({
+      accessLevel: { $lte: user?.accessLevel },
+    })
       .sort({ date: 1 })
+      // .lean()
       .exec();
 
-    return filteredByRole;
+    // TODO разобраться как перестать кешировать поле accessLevel без этого и без .lean()
+    return filteredByRole.map((post) => post?.toObject({ virtuals: true }));
   } catch (e) {
     return e;
   }

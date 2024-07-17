@@ -18,10 +18,14 @@ export const createApolloClient = ({ headerCookie = '' } = {}) => {
     fetch,
   });
 
-  return new ApolloClient({
+  const client = new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: httpLink,
     cache: new InMemoryCache(),
     credentials: 'include',
   });
+
+  // client.resetStore();
+
+  return client;
 };

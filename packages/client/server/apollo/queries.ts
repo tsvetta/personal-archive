@@ -16,7 +16,7 @@ export const getPosts = gql`
       }
       title
       text
-      privacy
+      accessLevel
     }
   }
 `;
@@ -37,7 +37,7 @@ export const getPost = gql`
       }
       title
       text
-      privacy
+      accessLevel
     }
   }
 `;
@@ -48,6 +48,7 @@ export const getUser = gql`
       _id
       username
       role
+      accessLevel
       refreshToken
     }
   }
@@ -59,6 +60,7 @@ export const loginUser = gql`
       _id
       username
       role
+      accessLevel
       refreshToken
     }
   }

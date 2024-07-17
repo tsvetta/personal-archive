@@ -31,7 +31,7 @@ export const apolloSchema = `#graphql
         date: Date
         photos: [Photo]
         tags: [Tag]
-        privacy: Privacy!
+        accessLevel: Int!
         text: String
         title: String
     }
@@ -40,7 +40,7 @@ export const apolloSchema = `#graphql
         date: Date
         photos: [PhotoInput]
         tags: [String]
-        privacy: Privacy!
+        accessLevel: Int!
         text: String
         title: String
     }
@@ -48,7 +48,8 @@ export const apolloSchema = `#graphql
     input CreateUserInput {
         username: String!
         password: String!
-        role: Privacy!
+        role: Privacy
+        accessLevel: Int!
     }
 
     input LoginInput {
@@ -59,7 +60,8 @@ export const apolloSchema = `#graphql
     type User {
         _id: ID!
         username: String!
-        role: Privacy!
+        role: Privacy
+        accessLevel: Int!
         refreshToken: String
     }
 

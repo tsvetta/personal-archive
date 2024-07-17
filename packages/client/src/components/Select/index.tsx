@@ -12,7 +12,7 @@ import { FieldValidation, FieldValidationStateType } from '../Form/types.js';
 
 export type SelectOption =
   | {
-      id: string;
+      value: string | number;
       name: string;
     }
   | undefined;
@@ -22,7 +22,7 @@ type SelectProps = {
   validation: FieldValidation;
   name?: string;
   id?: string;
-  value: string;
+  value: string | number;
   onChange?: ChangeEventHandler;
   onClick?: MouseEventHandler;
   onKeyUp?: KeyboardEventHandler;
@@ -49,7 +49,7 @@ const Select = (props: SelectProps) => {
       >
         {props.options.map((option: SelectOption) => {
           return option ? (
-            <option key={option.id} value={option.id}>
+            <option key={option.value} value={option.value}>
               {option.name}
             </option>
           ) : (

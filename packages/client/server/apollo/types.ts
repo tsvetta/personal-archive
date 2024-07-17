@@ -26,25 +26,30 @@ export type PostInput = {
   photos: Photo[];
   tags: string[];
   text: string;
-  privacy: Required<Privacy>;
+  accessLevel: number;
 };
 
 export type CreateUserInput = {
   username: string;
   password: string;
-  role: Required<Privacy>;
+  role?: Privacy;
+  accessLevel: AccessLevels;
 };
+
+export type AccessLevels = 0 | 1 | 2 | 3 | 4;
 
 export type User = {
   _id: Types.ObjectId;
   username: string;
   password?: string;
-  role: `${Privacy}`;
+  role?: `${Privacy}`;
+  accessLevel: AccessLevels;
   refreshToken?: string | null;
 };
 
 export interface UserDataFromToken extends JwtPayload {
   userId: Types.ObjectId;
   username: string;
-  role: Privacy;
+  role?: Privacy;
+  accessLevel: AccessLevels;
 }

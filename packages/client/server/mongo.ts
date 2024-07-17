@@ -13,4 +13,8 @@ export const connectMongoDB = () => {
   db.once('open', () => {
     console.log('Connected to MongoDB. Host:', db.host);
   });
+
+  db.on('close', () => {
+    console.log('Connection to MongoDB closed');
+  });
 };

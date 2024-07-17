@@ -49,11 +49,12 @@ const PostSchema = new Schema({
   text: {
     type: String,
   },
-  privacy: {
-    type: String,
-    enum: ['ALL', 'FAMILY', 'FRIENDS', 'CLOSE_FRIENDS', 'TSVETTA'],
-    default: 'ALL',
+  accessLevel: {
+    type: Number,
+    default: 0,
     required: true,
+    min: [0, 'Access level should be between 0 and 4'],
+    max: [4, 'Access level should be between 0 and 4'],
   },
 });
 
@@ -62,16 +63,25 @@ export const Post = mongoose.model('Post', PostSchema);
 const UserSchema = new Schema({
   username: {
     type: String,
-    required: true,
+    required: [true, 'Enter username'],
+    unique: true,
   },
   password: {
     type: String,
-    required: true,
+    required: [true, 'Enter password'],
+    minlength: [10, 'Minimal length is 10 characters'],
   },
   role: {
     type: String,
     enum: ['ALL', 'FAMILY', 'FRIENDS', 'CLOSE_FRIENDS', 'TSVETTA'],
+    default: 'ALL',
+  },
+  accessLevel: {
+    type: Number,
+    default: 0,
     required: true,
+    min: [0, 'Access level should be between 0 and 4'],
+    max: [4, 'Access level should be between 0 and 4'],
   },
   refreshToken: {
     type: String,

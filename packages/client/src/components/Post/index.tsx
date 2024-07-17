@@ -2,15 +2,15 @@ import { Key } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
-import Photo from '../Photo';
-import Tags, { TagData } from '../Tags';
-import Button from '../Button';
+import Photo from '../Photo/index.js';
+import Tags, { TagData } from '../Tags/index.js';
+import Button from '../Button/index.js';
 
 import { deletePostMutation } from '../../../server/apollo/queries.js';
 
 import commonStyles from '../../common.module.css';
 import styles from './index.module.css';
-import { Privacy } from '../../../server/apollo/types.js';
+import { AccessLevels as AccessLevelsType } from '@archive/client/server/apollo/types.js';
 
 export type PhotoData = {
   _id: Required<Key>;
@@ -25,14 +25,30 @@ export type PostData = {
   photos: [PhotoData];
   title: string;
   text: [string];
-  privacy: Required<Privacy>;
+  accessLevel: AccessLevelsType;
 };
 
 type PostProps = {
   data: PostData;
 };
 
-function Post({ data }: PostProps) {
+const AccessLevels = ({ accessLevel }: { accessLevel: AccessLevelsType }) => {
+  const accessLevelTextMap = [
+    'Всем',
+    'Семье и друзьям',
+    'Только друзьям',
+    'Близким друзьям',
+    'Никому',
+  ];
+
+  return (
+    <div className={styles.accessLevel}>
+      Доступ: {accessLevelTextMap[accessLevel]}
+    </div>
+  );
+};
+
+const Post = ({ data }: PostProps) => {
   const title = data.title || new Date(data.date).toDateString();
   const hasPhotos = data.photos && data.photos.length > 0;
   const hasTags = data.tags && data.tags.length > 0;
@@ -66,13 +82,17 @@ function Post({ data }: PostProps) {
           <Photo key={`photo_${photo._id}`} date={data.date} {...photo} />
         ))}
 
-      {hasTags && (
-        <div className={styles.tags}>
-          <Tags tags={data.tags} />
-        </div>
-      )}
+      <div className={styles.footer}>
+        <AccessLevels accessLevel={data.accessLevel} />
+
+        {hasTags && (
+          <div className={styles.tags}>
+            <Tags tags={data.tags} />
+          </div>
+        )}
+      </div>
     </section>
   );
-}
+};
 
 export default Post;

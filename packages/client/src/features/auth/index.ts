@@ -24,6 +24,7 @@ export const createAuthTokens = async (
       userId: userFromDB._id,
       username: userFromDB.username,
       role: userFromDB.role,
+      accessLevel: userFromDB.accessLevel,
     },
     process.env.SECRET_KEY || '',
     { expiresIn: '15m' }
@@ -34,6 +35,7 @@ export const createAuthTokens = async (
       userId: userFromDB._id,
       username: userFromDB.username,
       role: userFromDB.role,
+      accessLevel: userFromDB.accessLevel,
     },
     process.env.SECRET_KEY || '',
     { expiresIn: '1d' }
