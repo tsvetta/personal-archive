@@ -1,5 +1,7 @@
 import { GraphQLScalarType, Kind } from 'graphql';
 
+import { getBBCDNPhotos } from '../backblaze-b2.js';
+
 import { PostInput, TagInput, CreateUserInput } from './types.js';
 import { Tag, Post, User } from './models.js';
 
@@ -20,6 +22,9 @@ export const resolvers = {
   },
 
   Query: {
+    cdnPhotos: async (_: any, __: any) => {
+      return await getBBCDNPhotos();
+    },
     tag: async (_: any, args: any) => {
       return await Tag.findById(args.id).exec();
     },

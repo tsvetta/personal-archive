@@ -5,16 +5,16 @@ import { JwtPayload } from 'jsonwebtoken';
 import http from 'http';
 import cookiesMiddleware from 'universal-cookie-express';
 
-import { connectMongoDB } from './mongo.js';
 import {
   createApolloExpressMiddleware,
   createApolloServer,
 } from './apollo/server.js';
-
-import { UniversalCookies } from '../src/utils/cookies.js';
-import { createViteServer } from './vite-server.js';
-import { userFromCookiesMiddleware } from '../src/features/auth/userFromCookiesMiddleware.js';
 import { UserDataFromToken } from './apollo/types.js';
+
+import { userFromCookiesMiddleware } from '../src/features/auth/userFromCookiesMiddleware.js';
+import { UniversalCookies } from '../src/utils/cookies.js';
+import { connectMongoDB } from './mongo.js';
+import { createViteServer } from './vite-server.js';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const port = process.env.PORT || 5173;
