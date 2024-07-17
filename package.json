@@ -5,7 +5,9 @@
   ],
   "scripts": {
     "s3rm": "aws s3 rm s3://tsvetta/archive/ --exclude='*' --include='*/**/.DS_Store' --recursive --endpoint-url=https://s3.us-west-004.backblazeb2.com",
-    "s3sync": "aws s3 sync ./archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --exclude='*.DS_Store'"
+    "s3syncAll": "aws s3 sync ~/Downloads/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --exclude='*.DS_Store'",
+    "s3ls": "aws s3 ls --endpoint-url=https://s3.us-west-004.backblazeb2.com s3://tsvetta/archive/",
+    "s3removeIfNotLocal": "aws s3 sync ~/Downloads/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --exclude='*.DS_Store' --delete --dryrun"
   },
   "devDependencies": {
     "@types/jest": "^29.5.11",

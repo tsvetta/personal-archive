@@ -33,7 +33,7 @@ const validatePhotos = (photos: Photo[]) => {
 };
 
 const validateAccessLevels = (accessLevel?: AccessLevels) => {
-  if (!accessLevel) {
+  if (typeof accessLevel === 'undefined') {
     return {
       state: FieldValidationStateType.ERROR,
       errorMessage: 'Выберите тип доступа',

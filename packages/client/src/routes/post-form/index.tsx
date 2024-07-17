@@ -83,7 +83,7 @@ const mapFormData = (formData: CreatePostFormData) => ({
     description: photo.description,
   })),
   tags: formData.tags.map((tag) => tag._id),
-  accessLevel: formData.accessLevel,
+  accessLevel: Number(formData.accessLevel),
   text: formData.text || undefined,
 });
 
