@@ -12,7 +12,10 @@ import { apolloSchema } from './schema.js';
 import { resolvers } from './resolvers.js';
 import { UserDataFromToken } from './types.js';
 
-import { createAuthTokens } from '../../src/features/auth/index.js';
+import {
+  createAuthTokens,
+  deleteAuthTokens,
+} from '../../src/features/auth/index.js';
 
 const secret = process.env.SECRET_KEY || '';
 
@@ -37,12 +40,10 @@ const apolloContext = async ({
   let authToken = cookies.auth_token?.toString() || '';
   let refreshToken = cookies.refresh_token?.toString() || '';
 
-  // console.log('\n\n\n');
-  // console.log('! refreshToken:', refreshToken);
-
   // No Auth
   if (!authToken || !refreshToken) {
-    // console.log('...no auth!');
+    await deleteAuthTokens(undefined, req.universalCookies);
+
     return Promise.resolve({
       universalCookies: req.universalCookies,
     });
@@ -50,11 +51,9 @@ const apolloContext = async ({
 
   let userDecoded = jwt.decode(authToken) as UserDataFromToken;
   let finalUser = undefined;
-  // console.log('...auth decoding', userDecoded);
 
   // token valid
   if (userDecoded) {
-    // console.log('...auth token verification');
     try {
       // verification
       const verifiedUser = await new Promise((resolve, reject) => {
@@ -68,15 +67,14 @@ const apolloContext = async ({
         finalUser = verifiedUser;
       }
     } catch (err) {
+      await deleteAuthTokens(userDecoded.userId, req.universalCookies);
+
       // verification failed, token expired
       if (err instanceof jwt.TokenExpiredError) {
-        // console.log('...auth token expired, create new tokens');
         const newTokens = await createAuthTokens(
           userDecoded.userId,
           req.universalCookies
         );
-
-        // console.log('...new refresh token:', newTokens?.refreshToken);
 
         finalUser = newTokens?.authToken
           ? jwt.decode(newTokens.authToken)

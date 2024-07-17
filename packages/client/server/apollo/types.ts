@@ -20,6 +20,16 @@ export enum Privacy {
   TSVETTA = 'TSVETTA',
 }
 
+export type AccessLevels = 0 | 1 | 2 | 3 | 4;
+
+export enum AccessLevelsEnum {
+  ALL = 0,
+  FAMILY = 1,
+  FRIENDS = 2,
+  CLOSE_FRIENDS = 3,
+  TSVETTA = 4,
+}
+
 export type PostInput = {
   date: Date;
   title: string;
@@ -35,8 +45,6 @@ export type CreateUserInput = {
   role?: Privacy;
   accessLevel: AccessLevels;
 };
-
-export type AccessLevels = 0 | 1 | 2 | 3 | 4;
 
 export type User = {
   _id: Types.ObjectId;

@@ -6,11 +6,15 @@ import Photo from '../Photo/index.js';
 import Tags, { TagData } from '../Tags/index.js';
 import Button from '../Button/index.js';
 
+import {
+  AccessLevelsEnum,
+  AccessLevels as AccessLevelsType,
+} from '../../../server/apollo/types.js';
 import { deletePostMutation } from '../../../server/apollo/queries.js';
+import { useAuth } from '../../features/auth/useAuth.js';
 
 import commonStyles from '../../common.module.css';
 import styles from './index.module.css';
-import { AccessLevels as AccessLevelsType } from '@archive/client/server/apollo/types.js';
 
 export type PhotoData = {
   _id: Required<Key>;
@@ -49,6 +53,7 @@ const AccessLevels = ({ accessLevel }: { accessLevel: AccessLevelsType }) => {
 };
 
 const Post = ({ data }: PostProps) => {
+  const { user } = useAuth();
   const title = data.title || new Date(data.date).toDateString();
   const hasPhotos = data.photos && data.photos.length > 0;
   const hasTags = data.tags && data.tags.length > 0;
@@ -64,18 +69,20 @@ const Post = ({ data }: PostProps) => {
       <header className={styles.header}>
         <h3 className={commonStyles.sectionTitle}>{title}</h3>
 
-        <div className={styles.manager}>
-          <Link className={styles.editLink} to={`/post/${data._id}/edit`}>
-            Редактировать
-          </Link>
-          {deletePostState.loading ? (
-            'Удаление'
-          ) : (
-            <Button size='s' onClick={handlePostDelete(data._id)}>
-              Удалить
-            </Button>
-          )}
-        </div>
+        {user?.accessLevel === AccessLevelsEnum.TSVETTA && (
+          <div className={styles.manager}>
+            <Link className={styles.editLink} to={`/post/${data._id}/edit`}>
+              Редактировать
+            </Link>
+            {deletePostState.loading ? (
+              'Удаление'
+            ) : (
+              <Button size='s' onClick={handlePostDelete(data._id)}>
+                Удалить
+              </Button>
+            )}
+          </div>
+        )}
       </header>
       {hasPhotos &&
         data.photos.map((photo: PhotoData) => (

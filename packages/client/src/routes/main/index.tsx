@@ -1,4 +1,3 @@
-import { Navigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import Post, { PostData } from '../../components/Post/index.js';
@@ -9,8 +8,9 @@ const MainPage = () => {
   const { loading, error, data } = useQuery(getPosts);
 
   if (error) {
-    // console.log('\n Main page error:', error);
-    return <Navigate to='/login' />;
+    console.error('\n Main page error:', error);
+
+    return error.message;
   }
 
   if (loading) {
