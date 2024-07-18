@@ -56,3 +56,26 @@
 .submitFormButton {
     margin-top: var(--default-gap)
 }
+
+.gallery {
+    position: absolute;
+    left: calc(100% + 45px);
+    top: -181px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+    width: 1000px;
+}
+
+.photoWrapper {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.galleryPhoto {
+    width: 100%;
+}

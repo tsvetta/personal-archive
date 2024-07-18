@@ -1,19 +1,23 @@
 import { ChangeEventHandler, MouseEventHandler } from 'react';
+import { useQuery } from '@apollo/client';
 
-import { cx } from '../../utils/cx';
+import { cx } from '../../utils/cx.js';
 
-import Input from '../../components/Input';
-import Button from '../../components/Button';
+import Input from '../../components/Input/index.js';
+import Button from '../../components/Button/index.js';
+
+import { Photo } from '../../../server/apollo/types.js';
+import { getBBCDNPhotos } from '../../../server/apollo/queries.js';
+
+import { PhotosValidation } from './form-validation.js';
 
 import formStyles from '../../components/Form/index.module.css';
 import styles from './index.module.css';
 
-import { PhotosValidation } from './form-validation';
-import { Photo } from '../../../server/apollo/types.js';
-
 type FieldPhotosProps = {
   value: Photo[];
   validation: PhotosValidation[];
+  showGallery: boolean;
   onChange: (
     id: string,
     type: 'src' | 'description'
@@ -23,6 +27,8 @@ type FieldPhotosProps = {
 };
 
 const FieldPhotos = (props: FieldPhotosProps) => {
+  const { data, error, loading } = useQuery(getBBCDNPhotos);
+
   return (
     <fieldset
       className={cx([
@@ -77,12 +83,27 @@ const FieldPhotos = (props: FieldPhotosProps) => {
       >
         +
       </Button>
+
+      {props.showGallery && data?.cdnPhotos && (
+        <div className={styles.gallery}>
+          {data?.cdnPhotos?.slice(0, 50).map((photo: { url: string }) => (
+            <div className={styles.photoWrapper}>
+              <img
+                key={photo.url}
+                src={photo.url}
+                className={styles.galleryPhoto}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </fieldset>
   );
 };
 
 FieldPhotos.defaultProps = {
   value: [{ src: undefined, description: undefined }],
+  showGallery: false,
 };
 
 export default FieldPhotos;

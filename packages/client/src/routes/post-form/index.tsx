@@ -320,6 +320,7 @@ const PostFormPage = () => {
           onAddPhoto={handleAddPhoto}
           onDeletePhoto={handleDeletePhoto}
           validation={fieldsValidation.photos}
+          showGallery={!isEditPage}
         />
 
         <label htmlFor='tags'>
