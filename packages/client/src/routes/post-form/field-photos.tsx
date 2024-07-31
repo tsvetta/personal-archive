@@ -1,5 +1,4 @@
 import { ChangeEventHandler, MouseEventHandler } from 'react';
-import { useQuery } from '@apollo/client';
 
 import { cx } from '../../utils/cx.js';
 
@@ -7,12 +6,12 @@ import Input from '../../components/Input/index.js';
 import Button from '../../components/Button/index.js';
 
 import { Photo } from '../../../server/apollo/types.js';
-import { getBBCDNPhotos } from '../../../server/apollo/queries.js';
 
 import { PhotosValidation } from './form-validation.js';
 
 import formStyles from '../../components/Form/index.module.css';
 import styles from './index.module.css';
+import Gallery from './gallery.js';
 
 type FieldPhotosProps = {
   value: Photo[];
@@ -27,8 +26,6 @@ type FieldPhotosProps = {
 };
 
 const FieldPhotos = (props: FieldPhotosProps) => {
-  const { data, error, loading } = useQuery(getBBCDNPhotos);
-
   return (
     <fieldset
       className={cx([
@@ -84,19 +81,7 @@ const FieldPhotos = (props: FieldPhotosProps) => {
         +
       </Button>
 
-      {props.showGallery && data?.cdnPhotos && (
-        <div className={styles.gallery}>
-          {data?.cdnPhotos?.slice(0, 50).map((photo: { url: string }) => (
-            <div className={styles.photoWrapper}>
-              <img
-                key={photo.url}
-                src={photo.url}
-                className={styles.galleryPhoto}
-              />
-            </div>
-          ))}
-        </div>
-      )}
+      {props.showGallery && <Gallery />}
     </fieldset>
   );
 };

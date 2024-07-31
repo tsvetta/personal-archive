@@ -1,3 +1,7 @@
-import { mergeDeep, createNestedStructure } from './merge-deep.js';
+import {
+  mergeDeep,
+  createNestedStructure,
+  groupByDirectories,
+} from './merge-deep.js';
 
-export { mergeDeep, createNestedStructure };
+export { mergeDeep, createNestedStructure, groupByDirectories };

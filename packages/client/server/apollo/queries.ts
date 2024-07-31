@@ -121,8 +121,6 @@ export const deletePostMutation = gql`
 
 export const getBBCDNPhotos = gql`
   query BBCNDPhotos {
-    cdnPhotos {
-      url
-    }
+    cdnPhotos
   }
 `;

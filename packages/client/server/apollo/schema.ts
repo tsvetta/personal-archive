@@ -1,5 +1,6 @@
 export const apolloSchema = `#graphql
     scalar Date
+    scalar JSON
 
     enum Privacy {
         ALL
@@ -64,11 +65,7 @@ export const apolloSchema = `#graphql
         accessLevel: Int!
         refreshToken: String
     }
-
-    type BBPhoto {
-        url: String
-    }
-
+    
     type Query {
         tag(id: ID!): Tag
         tags: [Tag]
@@ -76,7 +73,7 @@ export const apolloSchema = `#graphql
         posts: [Post]
         user(id: ID!): User
         users: [User]
-        cdnPhotos: [BBPhoto]
+        cdnPhotos: JSON
     }
 
     type Mutation {

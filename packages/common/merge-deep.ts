@@ -53,3 +53,18 @@ export const createNestedStructure = (
 const isObject = (item: any): boolean => {
   return item && typeof item === 'object' && !Array.isArray(item);
 };
+
+export const groupByDirectories = (files: any[], cdnUrl: string) => {
+  let groupedFiles: any = {};
+
+  files.forEach((file) => {
+    const parts = file.fileName.split('/');
+    const filePath = parts.slice(0, -1); // ['2016', 'folder1', 'folder2']
+    const fileName = `${cdnUrl}/${file.fileName}`; // URL файла
+    const nested = createNestedStructure(filePath, fileName);
+
+    groupedFiles = mergeDeep(groupedFiles, nested);
+  });
+
+  return groupedFiles;
+};

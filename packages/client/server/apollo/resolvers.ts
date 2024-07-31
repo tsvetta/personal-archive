@@ -10,6 +10,31 @@ import { postsQuery } from './resolvers/queries/posts.js';
 import { loginUser } from './resolvers/mutations/login-user.js';
 import { deleteTag } from './resolvers/mutations/delete-tag.js';
 
+// Вспомогательная функция для парсинга литералов AST
+const parseLiteral = (ast: any) => {
+  switch (ast.kind) {
+    case Kind.STRING:
+      return ast.value;
+    case Kind.BOOLEAN:
+      return ast.value;
+    case Kind.INT:
+      return parseInt(ast.value, 10);
+    case Kind.FLOAT:
+      return parseFloat(ast.value);
+    case Kind.OBJECT: {
+      const value = Object.create(null);
+      ast.fields.forEach((field: any) => {
+        value[field.name.value] = parseLiteral(field.value);
+      });
+      return value;
+    }
+    case Kind.LIST:
+      return ast.values.map(parseLiteral);
+    default:
+      return null;
+  }
+};
+
 export const resolvers = {
   Tag: {
     posts: async (parent: any) => {
@@ -104,6 +129,30 @@ export const resolvers = {
         return new Date(+ast.value); // ast value is always in string format
       }
       return null;
+    },
+  }),
+
+  JSON: new GraphQLScalarType({
+    name: 'JSON',
+    description: 'Arbitrary JSON value',
+    parseValue(value) {
+      return value; // value from the client input variables
+    },
+    serialize(value) {
+      return value; // value sent to the client
+    },
+    parseLiteral(ast) {
+      switch (ast.kind) {
+        case Kind.STRING:
+        case Kind.BOOLEAN:
+        case Kind.INT:
+        case Kind.FLOAT:
+        case Kind.OBJECT:
+        case Kind.LIST:
+          return parseLiteral(ast);
+        default:
+          return null;
+      }
     },
   }),
 };

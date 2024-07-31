@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import B2 from 'backblaze-b2';
-import { mergeDeep, createNestedStructure } from '@archive/common';
+import { groupByDirectories } from '@archive/common';
 
 const applicationKeyId = process.env.BB_Id || '';
 const applicationKey = process.env.BB_Key || '';
@@ -24,31 +24,7 @@ export const getBBCDNPhotos = () => {
     .then((response: any) => {
       const files = response.data.files;
 
-      // Группировка файлов по директориям
-      const groupByDirectories = (files: any[]) => {
-        let groupedFiles: any = {};
-
-        files.forEach((file) => {
-          const parts = file.fileName.split('/');
-          const filePath = parts.slice(0, -1); // ['2016', 'folder1', 'folder2']
-          const fileName = `${bbCDNUrl}/${file.fileName}`; // URL файла
-          const nested = createNestedStructure(filePath, fileName);
-
-          groupedFiles = mergeDeep(groupedFiles, nested);
-        });
-
-        return groupedFiles;
-      };
-
-      console.log(groupByDirectories(files).archive.photos['2018']);
-
-      const urls = files.map((file: any) => {
-        return {
-          url: `${bbCDNUrl}/${file.fileName}`,
-        };
-      });
-
-      return urls;
+      return groupByDirectories(files, bbCDNUrl);
     })
     .catch((err) => {
       console.error('Ошибка при получении списка файлов:', err);
