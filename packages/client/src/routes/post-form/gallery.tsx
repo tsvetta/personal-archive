@@ -5,8 +5,6 @@ import { getBBCDNPhotos } from '../../../server/apollo/queries.js';
 import styles from './index.module.css';
 
 const createPhotoFolder = (folderOrFile: any): any => {
-  console.log(folderOrFile);
-
   if (typeof folderOrFile === 'string') {
     return (
       <div className={styles.photoWrapper} key={folderOrFile}>
@@ -22,7 +20,9 @@ const createPhotoFolder = (folderOrFile: any): any => {
   if (typeof folderOrFile === 'object') {
     return Object.keys(folderOrFile).map((name) => (
       <>
-        <p className={styles.folderTitle}>{name}</p>
+        <p key={name} className={styles.folderTitle}>
+          {name}
+        </p>
         {createPhotoFolder(folderOrFile[name])}
       </>
     ));
@@ -32,7 +32,6 @@ const createPhotoFolder = (folderOrFile: any): any => {
 const Gallery = () => {
   const { data, error, loading } = useQuery(getBBCDNPhotos);
   const cdnPhotos = data?.cdnPhotos?.archive?.photos;
-  //   console.log(cdnPhotos);
 
   return (
     <div className={styles.gallery}>

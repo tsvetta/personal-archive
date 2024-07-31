@@ -1,5 +1,36 @@
+const isObject = (item: any): boolean => {
+  return item && typeof item === 'object' && !Array.isArray(item);
+};
+
+const mergeArrays = (target: any[], source: any[]): any[] => {
+  const result = [...target];
+
+  source.forEach((sourceItem) => {
+    if (isObject(sourceItem)) {
+      const sourceKey = Object.keys(sourceItem)[0];
+      const existingIndex = result.findIndex(
+        (targetItem) =>
+          isObject(targetItem) && Object.keys(targetItem)[0] === sourceKey
+      );
+
+      if (existingIndex !== -1) {
+        result[existingIndex][sourceKey] = mergeDeep(
+          result[existingIndex][sourceKey],
+          sourceItem[sourceKey]
+        );
+      } else {
+        result.push(sourceItem);
+      }
+    } else {
+      result.push(sourceItem);
+    }
+  });
+
+  return result;
+};
+
 export const mergeDeep = (target: any, source: any): any => {
-  const output = { ...target };
+  let output = { ...target };
 
   if (isObject(target) && isObject(source)) {
     Object.keys(source).forEach((key) => {
@@ -13,7 +44,7 @@ export const mergeDeep = (target: any, source: any): any => {
         if (!(key in target)) {
           Object.assign(output, { [key]: source[key] });
         } else if (Array.isArray(target[key])) {
-          output[key] = target[key].concat(source[key]);
+          output[key] = mergeArrays(target[key], source[key]);
         } else {
           output[key] = source[key];
         }
@@ -22,10 +53,11 @@ export const mergeDeep = (target: any, source: any): any => {
       }
     });
   } else if (Array.isArray(target) && Array.isArray(source)) {
-    return target.concat(source);
+    return mergeArrays(target, source);
   } else if (Array.isArray(target) && isObject(source)) {
-    target.push(source);
-    return target;
+    const sourceInArray = new Array(source); // {abs: 1} => [{abc: 1}]
+
+    return mergeDeep(target, sourceInArray);
   } else {
     return source;
   }
@@ -43,6 +75,8 @@ export const createNestedStructure = (
   paths.forEach((part: string, index: number) => {
     if (!current[part]) {
       current[part] = index === paths.length - 1 ? [fileName] : {};
+    } else if (index === paths.length - 1) {
+      current[part].push(fileName);
     }
     current = current[part];
   });
@@ -50,11 +84,7 @@ export const createNestedStructure = (
   return result;
 };
 
-const isObject = (item: any): boolean => {
-  return item && typeof item === 'object' && !Array.isArray(item);
-};
-
-export const groupByDirectories = (files: any[], cdnUrl: string) => {
+export const groupByDirectories = (files: any[], cdnUrl: string): any => {
   let groupedFiles: any = {};
 
   files.forEach((file) => {
