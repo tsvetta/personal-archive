@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
+  "scripts": {
+    "test": "vitest"
+  },
   "dependencies": {
     "argon2": "^0.40.3"
+  },
+  "devDependencies": {
+    "vitest": "^2.0.5"
   }
 }

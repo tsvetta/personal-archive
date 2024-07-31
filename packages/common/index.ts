@@ -1,7 +1,3 @@
-import { passport } from './passport-config.js';
+import { mergeDeep, createNestedStructure } from './merge-deep.js';
 
-const common = () => {
-  console.log('common e2');
-};
-
-export { passport };
+export { mergeDeep, createNestedStructure };
