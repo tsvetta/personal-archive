@@ -2,6 +2,8 @@ import { useQuery } from '@apollo/client';
 
 import { getBBCDNPhotos } from '../../../server/apollo/queries.js';
 
+import Button from '../../components/Button/index.js';
+
 import styles from './index.module.css';
 import { useState } from 'react';
 
@@ -33,23 +35,30 @@ import { useState } from 'react';
 // };
 
 const Gallery = () => {
-  const [nextFileName, setNextFileName] = useState('');
+  const [pagination, setPagination] = useState({ limit: 20, skip: 0 });
   const { data, error, loading } = useQuery(getBBCDNPhotos, {
-    variables: { limit: 20, skip: 0 },
+    variables: { limit: pagination.limit, skip: pagination.skip },
   });
   const cdnPhotos = data?.cdnPhotos;
+
+  const loadMorePhotos = () => {
+    setPagination({ limit: pagination.limit + 20, skip: 0 });
+  };
 
   return (
     <div className={styles.gallery}>
       {loading && <p>Photos loading...</p>}
       {error && <p>{error.message}</p>}
 
-      {cdnPhotos &&
-        cdnPhotos.map((f: any) => (
+      {cdnPhotos?.map((f: any) => (
+        <>
           <div className={styles.photoWrapper} key={f.fileUrl}>
             <img src={f.fileUrl} className={styles.galleryPhoto} />
           </div>
-        ))}
+        </>
+      ))}
+
+      <Button onClick={loadMorePhotos}>Загрузить ещё</Button>
     </div>
   );
 };
