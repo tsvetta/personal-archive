@@ -3,7 +3,7 @@ import { GraphQLScalarType, Kind } from 'graphql';
 import { getBBCDNPhotos } from '../backblaze-b2.js';
 
 import { PostInput, TagInput, CreateUserInput } from './types.js';
-import { Tag, Post, User } from './models.js';
+import { Tag, Post, User, BBFiles } from './models.js';
 
 import { postTags } from './resolvers/Posts/tags.js';
 import { postsQuery } from './resolvers/queries/posts.js';
@@ -47,8 +47,13 @@ export const resolvers = {
   },
 
   Query: {
-    cdnPhotos: async (_: any, __: any) => {
-      return await getBBCDNPhotos();
+    cdnPhotos: async (_: any, args: any = { limit: 50, skip: 0 }) => {
+      const bbfiles = await BBFiles.find({ published: false })
+        .limit(args.limit)
+        .skip(args.skip)
+        .exec();
+
+      return bbfiles;
     },
     tag: async (_: any, args: any) => {
       return await Tag.findById(args.id).exec();

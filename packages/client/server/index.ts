@@ -13,8 +13,10 @@ import { UserDataFromToken } from './apollo/types.js';
 
 import { userFromCookiesMiddleware } from '../src/features/auth/userFromCookiesMiddleware.js';
 import { UniversalCookies } from '../src/utils/cookies.js';
-import { connectMongoDB } from './mongo.js';
+import { connectMongoDB, saveJsonToNewCollection } from './mongo.js';
 import { createViteServer } from './vite-server.js';
+import { getBBCDNPhotos } from './backblaze-b2.js';
+import { BBFiles } from './apollo/models.js';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const port = process.env.PORT || 5173;
@@ -49,6 +51,14 @@ const ssrManifest = isProduction
   : undefined;
 
 app
+  .use('/load-bb-to-mongo', async (req: Request, res: Response) => {
+    const bbData = await getBBCDNPhotos(10000);
+    const archiveFiles = bbData?.files;
+
+    await saveJsonToNewCollection('bbfiles', archiveFiles);
+
+    return res.send(JSON.stringify(archiveFiles));
+  })
   .use('*', userFromCookiesMiddleware) // req.user
   // Serve HTML
   .use('*', async (req: Request, res: Response) => {

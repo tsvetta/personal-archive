@@ -65,6 +65,11 @@ export const apolloSchema = `#graphql
         accessLevel: Int!
         refreshToken: String
     }
+
+    type CDNPhoto {
+        fileUrl: String!
+        published: Boolean
+    }
     
     type Query {
         tag(id: ID!): Tag
@@ -73,7 +78,7 @@ export const apolloSchema = `#graphql
         posts: [Post]
         user(id: ID!): User
         users: [User]
-        cdnPhotos: JSON
+        cdnPhotos(limit: Int, skip: Int): [CDNPhoto]
     }
 
     type Mutation {

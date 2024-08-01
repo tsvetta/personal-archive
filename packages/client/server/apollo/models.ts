@@ -89,3 +89,10 @@ const UserSchema = new Schema({
 });
 
 export const User = mongoose.model('User', UserSchema);
+
+const BBFilesSchema = new Schema({
+  fileUrl: { type: String, required: true },
+  published: { type: Boolean, required: true },
+});
+
+export const BBFiles = mongoose.model('BBFiles', BBFilesSchema);

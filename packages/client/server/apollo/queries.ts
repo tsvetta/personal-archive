@@ -120,7 +120,10 @@ export const deletePostMutation = gql`
 `;
 
 export const getBBCDNPhotos = gql`
-  query BBCNDPhotos {
-    cdnPhotos
+  query BBCNDPhotos($limit: Int, $skip: Int) {
+    cdnPhotos(limit: $limit, skip: $skip) {
+      fileUrl
+      published
+    }
   }
 `;
