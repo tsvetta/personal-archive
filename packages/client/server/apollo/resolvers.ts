@@ -1,7 +1,5 @@
 import { GraphQLScalarType, Kind } from 'graphql';
 
-import { getBBCDNPhotos } from '../backblaze-b2.js';
-
 import { PostInput, TagInput, CreateUserInput } from './types.js';
 import { Tag, Post, User, BBFiles } from './models.js';
 

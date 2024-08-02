@@ -61,11 +61,6 @@
     position: absolute;
     left: calc(100% + 45px);
     top: -181px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 2px;
-    width: 1000px;
 }
 
 .photoWrapper {
@@ -82,4 +77,23 @@
 
 .folderTitle {
     width: 100%;
+}
+
+.photosWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+    width: 1000px;
+    overflow-y: scroll;
+    max-height: 500px;
+}
+
+.loadButton {
+    margin: 10px 10px 10px 0;
+}
+
+.buttonWrapper {
+    display: flex;
+    align-items: center;
 }
