@@ -25,10 +25,24 @@ export const getBBCDNPhotos = (
       } as any);
     })
     .then((response: any) => {
-      const files = response.data?.files?.map((f: any) => ({
-        fileUrl: `${bbCDNUrl}/${f.fileName}`,
-        published: false,
-      }));
+      const files = response.data?.files?.reduce((acc: any[], f: any) => {
+        const isPreview = f.fileName.includes('_thumb');
+        if (isPreview) {
+          return acc;
+        }
+
+        const filePath = f.fileName.split('.')[0];
+        const fileExt = f.fileName.split('.')[1];
+
+        acc.push({
+          fileUrl: `${bbCDNUrl}/${f.fileName}`,
+          filePreview: `${bbCDNUrl}/${filePath}_thumb.${fileExt}`,
+          published: false,
+        });
+
+        return acc;
+      }, []);
+
       const nextFileName =
         files.length > 0 ? files[files.length - 1].fileName : null;
 

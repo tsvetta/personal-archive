@@ -123,6 +123,7 @@ export const getBBCDNPhotos = gql`
   query BBCNDPhotos($limit: Int, $skip: Int) {
     cdnPhotos(limit: $limit, skip: $skip) {
       fileUrl
+      filePreview
       published
     }
   }

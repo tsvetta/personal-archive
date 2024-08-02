@@ -4,10 +4,13 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "generate-previews": "tsx generate-previews.ts"
   },
   "dependencies": {
-    "argon2": "^0.40.3"
+    "argon2": "^0.40.3",
+    "sharp": "^0.33.4",
+    "tsx": "^4.16.5"
   },
   "devDependencies": {
     "vitest": "^2.0.5"

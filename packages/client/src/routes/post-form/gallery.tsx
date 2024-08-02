@@ -70,7 +70,7 @@ const Gallery = () => {
       <div className={styles.photosWrapper} ref={scrollRef}>
         {cdnPhotos?.map((f: any) => (
           <div className={styles.photoWrapper} key={f.fileUrl}>
-            <img src={f.fileUrl} className={styles.galleryPhoto} />
+            <img src={f.filePreview} className={styles.galleryPhoto} />
           </div>
         ))}
       </div>

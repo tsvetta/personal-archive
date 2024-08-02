@@ -92,6 +92,7 @@ export const User = mongoose.model('User', UserSchema);
 
 const BBFilesSchema = new Schema({
   fileUrl: { type: String, required: true },
+  filePreview: { type: String, required: true },
   published: { type: Boolean, required: true },
 });
 
