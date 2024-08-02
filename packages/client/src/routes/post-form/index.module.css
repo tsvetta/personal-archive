@@ -29,13 +29,6 @@
 }
 
 .preview {
-    position: absolute;
-    left: calc(100% + 45px);
-
-    &:hover {
-        z-index: 1;
-    }
-
     & img {
         height: 126px;
         max-height: 300px;

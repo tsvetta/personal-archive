@@ -42,9 +42,6 @@ const FieldPhotos = (props: FieldPhotosProps) => {
 
         return (
           <div key={photoId} className={styles.field}>
-            <div className={styles.preview}>
-              <img src={photo.src} alt='Preview' />
-            </div>
             <div className={styles.fieldInner}>
               <Input
                 placeholder='Photo URL'
@@ -61,6 +58,10 @@ const FieldPhotos = (props: FieldPhotosProps) => {
                 onChange={props.onChange(photoId, 'description')}
                 value={photo.description}
               />
+
+              <div className={styles.preview}>
+                <img src={photo.src} alt='Preview' />
+              </div>
             </div>
             <Button
               view='danger'
