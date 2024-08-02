@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../features/auth/useAuth.js';
 import styles from './index.module.css';
 
 type PageHeaderProps = {
@@ -6,6 +7,8 @@ type PageHeaderProps = {
 };
 
 function PageHeader({ title }: PageHeaderProps) {
+  const { user } = useAuth();
+
   return (
     <div className={styles.pageHeader}>
       <h1 className={styles.pageTitle}>
@@ -13,6 +16,11 @@ function PageHeader({ title }: PageHeaderProps) {
           {title}
         </Link>
       </h1>
+      {user && (
+        <div className={styles.user}>
+          User: {user.username}, role: {user.role}
+        </div>
+      )}
       <nav className={styles.pageMenu}>
         <ul className={styles.pageNav}>
           <li className={styles.navItem}>
