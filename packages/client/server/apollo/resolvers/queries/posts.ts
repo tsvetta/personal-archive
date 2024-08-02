@@ -6,7 +6,7 @@ export const postsQuery = async (_: any, __: any, { user }: ApolloContext) => {
     const filteredByRole = await Post.find({
       accessLevel: { $lte: user?.accessLevel },
     })
-      .sort({ date: 1 })
+      .sort({ date: -1 })
       // .lean()
       .exec();
 
