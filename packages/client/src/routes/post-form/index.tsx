@@ -94,7 +94,6 @@ const PostFormPage = () => {
     variables: { id: urlId },
     skip: !urlId,
   });
-  const isEditPage = Boolean(urlId);
 
   const { data: tagsData } = useQuery(getTags);
   const [submitCreateForm] = useMutation(submitCreatePostForm);
@@ -115,6 +114,9 @@ const PostFormPage = () => {
   const [fieldsValidation, setFieldsValidation] = useState<ValidationState>(
     validateForm(formData, true)
   );
+
+  const isEditPage = Boolean(urlId);
+  const isPhotosOpened = formData.photos.length > 0;
 
   // when route chacnges?
   useEffect(() => {
@@ -281,12 +283,33 @@ const PostFormPage = () => {
         refetchQueries: ['Posts'],
       });
 
-      // очищать форму
       // нотификация об успешном добавлении
+
+      // очищать форму
+      setFormData(deafultFormData);
     } catch (error: any) {
       console.error('Error submitting form:', error.message);
     }
   };
+
+  const handleGalleryPhotoClick = useCallback(
+    (photo: any) => {
+      setFormData((prevData) => {
+        const photosWithoutLast =
+          prevData.photos.length <= 1 ? [] : prevData.photos.slice(0, -1);
+        const photoLast = prevData.photos.slice(-1);
+
+        return {
+          ...prevData,
+          photos: [
+            ...photosWithoutLast,
+            { ...photoLast, id: photo._id, _id: photo._id, src: photo.fileUrl },
+          ],
+        };
+      });
+    },
+    [formData.photos]
+  );
 
   return (
     <form
@@ -320,7 +343,8 @@ const PostFormPage = () => {
           onAddPhoto={handleAddPhoto}
           onDeletePhoto={handleDeletePhoto}
           validation={fieldsValidation.photos}
-          showGallery={!isEditPage}
+          showGallery={!isEditPage && isPhotosOpened}
+          onGalleryPhotoClick={handleGalleryPhotoClick}
         />
 
         <label htmlFor='tags'>

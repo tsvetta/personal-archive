@@ -23,6 +23,7 @@ type FieldPhotosProps = {
   ) => ChangeEventHandler<HTMLInputElement>;
   onAddPhoto: MouseEventHandler;
   onDeletePhoto: (id: string) => () => void;
+  onGalleryPhotoClick: (photo: any) => void;
 };
 
 const FieldPhotos = (props: FieldPhotosProps) => {
@@ -81,7 +82,9 @@ const FieldPhotos = (props: FieldPhotosProps) => {
         +
       </Button>
 
-      {props.showGallery && <Gallery />}
+      {props.showGallery && (
+        <Gallery onPhotoClick={props.onGalleryPhotoClick} />
+      )}
     </fieldset>
   );
 };

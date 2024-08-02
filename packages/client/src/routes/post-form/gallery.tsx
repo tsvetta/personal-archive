@@ -10,35 +10,12 @@ import Button from '../../components/Button/index.js';
 
 import styles from './index.module.css';
 
-// const createPhotoFolder = (file: any): any => {
-//   return (
-//     <div className={styles.photoWrapper} key={file.fileUrl}>
-//       <img src={file.fileUrl} className={styles.galleryPhoto} />
-//     </div>
-//   );
-//   // if (typeof folderOrFile === 'string') {
-//   //   return (
-//   //   );
-//   // }
+type GalleryProps = {
+  onPhotoClick: (photo: any) => void;
+};
 
-//   // if (Array.isArray(folderOrFile)) {
-//   //   return folderOrFile.map((f) => createPhotoFolder(f));
-//   // }
-
-//   // if (typeof folderOrFile === 'object') {
-//   //   return Object.keys(folderOrFile).map((name) => (
-//   //     <>
-//   //       <p key={name} className={styles.folderTitle}>
-//   //         {name}
-//   //       </p>
-//   //       {createPhotoFolder(folderOrFile[name])}
-//   //     </>
-//   //   ));
-//   // }
-// };
-
-const Gallery = () => {
-  const [publishPhoto, publishPhotoState] = useMutation(setPhotoPublished);
+const Gallery = (props: GalleryProps) => {
+  const [publishPhoto] = useMutation(setPhotoPublished);
   const [pagination, setPagination] = useState({ limit: 20, skip: 0 });
   const [loadData, { data, error, loading }] = useLazyQuery(getBBCDNPhotos, {
     variables: { limit: pagination.limit, skip: pagination.skip },
@@ -84,13 +61,21 @@ const Gallery = () => {
     });
   };
 
+  const handlePhotoClick = (photo: any) => () => {
+    props.onPhotoClick(photo);
+  };
+
   return (
     <div className={styles.gallery}>
       {error && <p>{error.message}</p>}
       <div className={styles.photosWrapper} ref={scrollRef}>
         {cdnPhotos?.map((f: any) => (
           <div className={styles.photoWrapper} key={f.fileUrl}>
-            <img src={f.filePreview} className={styles.galleryPhoto} />
+            <img
+              src={f.filePreview}
+              className={styles.galleryPhoto}
+              onClick={handlePhotoClick(f)}
+            />
             <button
               type='button'
               className={styles.setPublishedButton}

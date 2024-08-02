@@ -74,6 +74,7 @@
 
 .galleryPhoto {
     width: 100%;
+    cursor: pointer;
 }
 
 .setPublishedButton {
