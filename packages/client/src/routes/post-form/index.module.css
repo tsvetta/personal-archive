@@ -64,6 +64,7 @@
 }
 
 .photoWrapper {
+    position: relative;
     width: 100px;
     height: 100px;
     overflow: hidden;
@@ -73,6 +74,23 @@
 
 .galleryPhoto {
     width: 100%;
+}
+
+.setPublishedButton {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    padding-bottom: 2px;
+    top: 1px;
+    right: 1px;
+    background-color: limegreen;
+    border: 1px solid rgba(0,0,0,0.5);
+    cursor: pointer;
+    transition: background-color 500ms ease;
+
+    &:hover {
+        background-color: #17b117;
+    }
 }
 
 .folderTitle {

@@ -86,8 +86,6 @@ const apolloContext = async ({
     }
   }
 
-  // console.log('...final user', finalUser);
-
   return Promise.resolve({
     user: finalUser as UserDataFromToken,
     universalCookies: req.universalCookies,

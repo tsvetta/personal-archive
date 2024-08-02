@@ -67,6 +67,7 @@ export const apolloSchema = `#graphql
     }
 
     type CDNPhoto {
+        _id: ID!
         fileUrl: String!
         filePreview: String!
         published: Boolean!
@@ -91,5 +92,7 @@ export const apolloSchema = `#graphql
 
         addUser(data: CreateUserInput!): User
         loginUser(data: LoginInput!): User
+
+        setPhotoPublished(id: ID!): CDNPhoto
     }
 `;

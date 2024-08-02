@@ -122,6 +122,18 @@ export const deletePostMutation = gql`
 export const getBBCDNPhotos = gql`
   query BBCNDPhotos($limit: Int, $skip: Int) {
     cdnPhotos(limit: $limit, skip: $skip) {
+      _id
+      fileUrl
+      filePreview
+      published
+    }
+  }
+`;
+
+export const setPhotoPublished = gql`
+  mutation SetPhotoPublished($id: ID!) {
+    setPhotoPublished(id: $id) {
+      _id
       fileUrl
       filePreview
       published

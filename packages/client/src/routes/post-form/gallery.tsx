@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 
-import { getBBCDNPhotos } from '../../../server/apollo/queries.js';
+import {
+  getBBCDNPhotos,
+  setPhotoPublished,
+} from '../../../server/apollo/queries.js';
 
 import Button from '../../components/Button/index.js';
 
@@ -35,6 +38,7 @@ import styles from './index.module.css';
 // };
 
 const Gallery = () => {
+  const [publishPhoto, publishPhotoState] = useMutation(setPhotoPublished);
   const [pagination, setPagination] = useState({ limit: 20, skip: 0 });
   const [loadData, { data, error, loading }] = useLazyQuery(getBBCDNPhotos, {
     variables: { limit: pagination.limit, skip: pagination.skip },
@@ -56,13 +60,29 @@ const Gallery = () => {
   };
 
   useEffect(() => {
-    if (pagination !== null) {
-      loadData().then((result) => {
-        setCdnPhotos(result?.data?.cdnPhotos);
-        setTimeout(scrollPhotos, 500);
-      });
-    }
+    loadData().then(() => {
+      setTimeout(scrollPhotos, 500);
+    });
   }, [pagination, loadData]);
+
+  useEffect(() => {
+    if (data && data.cdnPhotos) {
+      setCdnPhotos(data.cdnPhotos);
+    }
+  }, [data]);
+
+  const setPublished = (photoId: string) => () => {
+    console.log(photoId);
+    publishPhoto({
+      variables: { id: photoId },
+      refetchQueries: [
+        {
+          query: getBBCDNPhotos,
+          variables: { limit: pagination.limit, skip: pagination.skip },
+        },
+      ],
+    });
+  };
 
   return (
     <div className={styles.gallery}>
@@ -71,6 +91,13 @@ const Gallery = () => {
         {cdnPhotos?.map((f: any) => (
           <div className={styles.photoWrapper} key={f.fileUrl}>
             <img src={f.filePreview} className={styles.galleryPhoto} />
+            <button
+              type='button'
+              className={styles.setPublishedButton}
+              onClick={setPublished(f._id)}
+            >
+              x
+            </button>
           </div>
         ))}
       </div>

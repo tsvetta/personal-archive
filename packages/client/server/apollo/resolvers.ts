@@ -7,6 +7,7 @@ import { postTags } from './resolvers/Posts/tags.js';
 import { postsQuery } from './resolvers/queries/posts.js';
 import { loginUser } from './resolvers/mutations/login-user.js';
 import { deleteTag } from './resolvers/mutations/delete-tag.js';
+import { setPhotoPublished } from './resolvers/mutations/set-photo-published.js';
 
 // Вспомогательная функция для парсинга литералов AST
 const parseLiteral = (ast: any) => {
@@ -116,6 +117,8 @@ export const resolvers = {
 
       return newUser;
     },
+
+    setPhotoPublished,
   },
 
   Date: new GraphQLScalarType({
