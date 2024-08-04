@@ -109,3 +109,17 @@
     display: flex;
     align-items: center;
 }
+
+.dateFieldWrapper {
+    display: flex;
+}
+
+.dateFieldInput {
+    width: 100%;
+}
+
+.dateFieldDeleteButton {
+    margin-left: 8px;
+    margin-top: 5px;
+    padding: 2px 7px 4px;
+}

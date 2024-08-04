@@ -28,6 +28,8 @@ import {
   submitCreatePostForm,
   getPost,
   submitEditPostForm,
+  setPhotoPublished,
+  getBBCDNPhotos,
 } from '../../../server/apollo/queries.js';
 import { AccessLevels, Photo, Privacy } from '../../../server/apollo/types.js';
 
@@ -100,6 +102,7 @@ const PostFormPage = () => {
   const [submitEditForm] = useMutation(submitEditPostForm);
   const [submitAddTag] = useMutation(addTag);
   const [submitDeleteTag] = useMutation(deleteTag);
+  const [publishPhoto] = useMutation(setPhotoPublished);
 
   const nowFormatted = getDateFormatted();
 
@@ -282,9 +285,25 @@ const PostFormPage = () => {
         refetchQueries: ['Posts'],
       });
 
-      // нотификация об успешном добавлении
+      const hasPhotos = formData.photos.length > 0;
+      if (hasPhotos) {
+        formData.photos.forEach(async (photo) => {
+          const isPhotoFromGallery = Boolean(photo.fromGallery);
 
-      // очищать форму
+          if (isPhotoFromGallery && photo.src) {
+            await publishPhoto({
+              variables: { id: photo.id },
+              refetchQueries: [
+                {
+                  query: getBBCDNPhotos,
+                  variables: { limit: 20, skip: 0 },
+                },
+              ],
+            });
+          }
+        });
+      }
+
       setFormData(deafultFormData);
     } catch (error: any) {
       console.error('Error submitting form:', error.message);
@@ -302,7 +321,13 @@ const PostFormPage = () => {
           ...prevData,
           photos: [
             ...photosWithoutLast,
-            { ...photoLast, id: photo._id, _id: photo._id, src: photo.fileUrl },
+            {
+              ...photoLast,
+              id: photo._id,
+              _id: photo._id,
+              src: photo.fileUrl,
+              fromGallery: true,
+            },
           ],
         };
       });
@@ -317,6 +342,13 @@ const PostFormPage = () => {
     }));
   };
 
+  const hanldeDeleteDate = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      date: undefined,
+    }));
+  };
+
   return (
     <form
       id='create-post-form'
@@ -328,7 +360,7 @@ const PostFormPage = () => {
 
         <label htmlFor='title'>Title:</label>
         <Input
-          placeholder={formData.date === nowFormatted ? nowRu : formData.date} // по умолчанию заголовок - дата поста
+          placeholder={formData.date || 'Заголовок поста'}
           name='title'
           value={formData.title || ''}
           onChange={handleChange}
@@ -344,12 +376,23 @@ const PostFormPage = () => {
             +
           </Button>
           {formData.date && (
-            <Input
-              type='date'
-              name='date'
-              value={formData.date}
-              onChange={handleChange}
-            />
+            <div className={styles.dateFieldWrapper}>
+              <Input
+                type='date'
+                name='date'
+                value={formData.date}
+                className={styles.dateFieldInput}
+                onChange={handleChange}
+              />
+              <Button
+                view='danger'
+                size='s'
+                onClick={hanldeDeleteDate}
+                className={styles.dateFieldDeleteButton}
+              >
+                x
+              </Button>
+            </div>
           )}
         </div>
 

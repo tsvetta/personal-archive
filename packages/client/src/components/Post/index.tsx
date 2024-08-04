@@ -54,7 +54,8 @@ const AccessLevels = ({ accessLevel }: { accessLevel: AccessLevelsType }) => {
 
 const Post = ({ data }: PostProps) => {
   const { user } = useAuth();
-  const title = data.title || new Date(data.date).toDateString();
+  const date = data.date && new Date(data.date).toDateString();
+  const title = data.title || date || '';
   const hasPhotos = data.photos && data.photos.length > 0;
   const hasTags = data.tags && data.tags.length > 0;
 

@@ -48,9 +48,8 @@ const Gallery = (props: GalleryProps) => {
     }
   }, [data]);
 
-  const setPublished = (photoId: string) => () => {
-    console.log(photoId);
-    publishPhoto({
+  const setPublished = (photoId: string) => async () => {
+    await publishPhoto({
       variables: { id: photoId },
       refetchQueries: [
         {

@@ -10,6 +10,7 @@ export type Photo = {
   _id: string;
   src: string;
   description?: string;
+  fromGallery?: boolean;
 };
 
 export enum Privacy {

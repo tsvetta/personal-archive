@@ -20,6 +20,7 @@ type InputProps = {
   validation: FieldValidation;
   value: string;
   defaultValue?: string;
+  className?: string;
   onChange?: ChangeEventHandler;
   onClick?: MouseEventHandler;
   onKeyUp?: KeyboardEventHandler;
@@ -35,6 +36,8 @@ const Input = (props: InputProps) => {
       styles.success,
     isTextarea && styles.textarea,
   ];
+
+  const wrapperProps = [formStyles.field, props.className];
 
   const inputProps = {
     className: cx(inputStyles),
@@ -57,7 +60,7 @@ const Input = (props: InputProps) => {
   }
 
   return (
-    <div className={formStyles.field}>
+    <div className={cx(wrapperProps)}>
       {inputNode}
 
       {props.validation.state === FieldValidationStateType.ERROR && (
