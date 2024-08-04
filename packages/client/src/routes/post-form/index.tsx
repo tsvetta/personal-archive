@@ -127,7 +127,6 @@ const PostFormPage = () => {
       });
     } else {
       setFormData({
-        date: nowFormatted,
         ...deafultFormData,
       });
     }
@@ -311,6 +310,13 @@ const PostFormPage = () => {
     [formData.photos]
   );
 
+  const handleAddDate = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      date: nowFormatted,
+    }));
+  };
+
   return (
     <form
       id='create-post-form'
@@ -328,14 +334,24 @@ const PostFormPage = () => {
           onChange={handleChange}
         />
 
-        <label htmlFor='date'>Date:</label>
-        <Input
-          placeholder={nowRu}
-          type='date'
-          name='date'
-          value={formData.date}
-          onChange={handleChange}
-        />
+        <div>
+          <label htmlFor='date'>Date:</label>
+          <Button
+            size='s'
+            className={styles.addPhotoButton}
+            onClick={handleAddDate}
+          >
+            +
+          </Button>
+          {formData.date && (
+            <Input
+              type='date'
+              name='date'
+              value={formData.date}
+              onChange={handleChange}
+            />
+          )}
+        </div>
 
         <FieldPhotos
           value={formData.photos}
