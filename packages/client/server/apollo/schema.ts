@@ -82,7 +82,7 @@ export const apolloSchema = `#graphql
         posts: [Post]
         user(id: ID!): User
         users: [User]
-        cdnPhotos(limit: Int, skip: Int): [CDNPhoto]
+        cdnPhotos(published: Boolean, limit: Int, skip: Int): [CDNPhoto]
     }
 
     type Mutation {

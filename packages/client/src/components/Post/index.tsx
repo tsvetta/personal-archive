@@ -86,9 +86,12 @@ const Post = ({ data }: PostProps) => {
         )}
       </header>
       {hasPhotos &&
-        data.photos.map((photo: PhotoData) => (
-          <Photo key={`photo_${photo._id}`} date={data.date} {...photo} />
-        ))}
+        data.photos.map(
+          (photo: PhotoData) =>
+            photo && (
+              <Photo key={`photo_${photo._id}`} date={data.date} {...photo} />
+            )
+        )}
 
       <div className={styles.footer}>
         <AccessLevels accessLevel={data.accessLevel} />

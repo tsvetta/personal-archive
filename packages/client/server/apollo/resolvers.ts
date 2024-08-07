@@ -46,8 +46,11 @@ export const resolvers = {
   },
 
   Query: {
-    cdnPhotos: async (_: any, args: any = { limit: 50, skip: 0 }) => {
-      const bbfile = await BBFile.find({ published: true })
+    cdnPhotos: async (
+      _: any,
+      args: any = { published: false, limit: 50, skip: 0 }
+    ) => {
+      const bbfile = await BBFile.find({ published: args.published })
         .limit(args.limit)
         .skip(args.skip)
         .exec();

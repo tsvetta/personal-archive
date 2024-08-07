@@ -296,7 +296,7 @@ const PostFormPage = () => {
               refetchQueries: [
                 {
                   query: getBBCDNPhotos,
-                  variables: { limit: 20, skip: 0 },
+                  variables: { published: false, limit: 20, skip: 0 },
                 },
               ],
             });

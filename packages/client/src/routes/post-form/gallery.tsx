@@ -18,7 +18,11 @@ const Gallery = (props: GalleryProps) => {
   const [publishPhoto] = useMutation(setPhotoPublished);
   const [pagination, setPagination] = useState({ limit: 20, skip: 0 });
   const [loadData, { data, error, loading }] = useLazyQuery(getBBCDNPhotos, {
-    variables: { limit: pagination.limit, skip: pagination.skip },
+    variables: {
+      published: false,
+      limit: pagination.limit,
+      skip: pagination.skip,
+    },
   });
   const [cdnPhotos, setCdnPhotos] = useState(data?.cdnPhotos || []);
 
@@ -54,7 +58,11 @@ const Gallery = (props: GalleryProps) => {
       refetchQueries: [
         {
           query: getBBCDNPhotos,
-          variables: { limit: pagination.limit, skip: pagination.skip },
+          variables: {
+            published: true,
+            limit: pagination.limit,
+            skip: pagination.skip,
+          },
         },
       ],
     });
