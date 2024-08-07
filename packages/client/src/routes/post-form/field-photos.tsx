@@ -37,7 +37,7 @@ const FieldPhotos = (props: FieldPhotosProps) => {
     >
       <legend>Photos:</legend>
       {props.value.map((photo: Photo) => {
-        const photoId = photo.id || photo._id;
+        const photoId = photo._id;
         const validationState = props.validation.find((p) => p.id === photoId);
 
         return (

@@ -81,8 +81,9 @@ const mapFormData = (formData: CreatePostFormData) => ({
   title: formData.title || undefined,
   date: formData.date,
   photos: formData.photos.map((photo) => ({
-    _id: photo.id || photo._id,
-    src: photo.src,
+    file: {
+      _id: photo._id,
+    },
     description: photo.description,
   })),
   tags: formData.tags.map((tag) => tag._id),
@@ -150,7 +151,7 @@ const PostFormPage = () => {
       const { value } = e.target;
 
       const updatedPhotos = formData.photos.map((photo) => {
-        const photoId = photo.id || photo._id; // TODO remove duplication
+        const photoId = photo._id;
 
         if (changedId === photoId) {
           return {
@@ -224,8 +225,7 @@ const PostFormPage = () => {
       photos: [
         ...formData.photos,
         {
-          id: Math.random().toString(),
-          _id: Math.random().toString(), // TODO remove duplication
+          _id: Math.random().toString(),
           src: '',
           description: '',
         },
@@ -236,7 +236,7 @@ const PostFormPage = () => {
   const handleDeletePhoto = useCallback(
     (deleteId: string) => () => {
       const photosWithoutDeleted = formData.photos.filter(
-        (photo) => photo.id !== deleteId
+        (photo) => photo._id !== deleteId
       );
 
       setFormData((prevData) => ({
@@ -293,7 +293,7 @@ const PostFormPage = () => {
 
           if (isPhotoFromGallery && photo.src) {
             await publishPhoto({
-              variables: { id: photo.id },
+              variables: { id: photo._id },
               refetchQueries: [
                 {
                   query: getBBCDNPhotos,
@@ -316,7 +316,7 @@ const PostFormPage = () => {
       setFormData((prevData) => {
         const photosWithoutLast =
           prevData.photos.length <= 1 ? [] : prevData.photos.slice(0, -1);
-        const photoLast = prevData.photos.slice(-1);
+        const photoLast = prevData.photos.slice(-1)[0];
 
         return {
           ...prevData,
@@ -324,7 +324,6 @@ const PostFormPage = () => {
             ...photosWithoutLast,
             {
               ...photoLast,
-              id: photo._id,
               _id: photo._id,
               src: photo.fileUrl,
               fromGallery: true,

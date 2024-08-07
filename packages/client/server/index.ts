@@ -112,6 +112,19 @@ app
     return res.send(JSON.stringify(updatedPosts[0]));
   })
 
+  .use('/unpublish-all-photos', async (req: Request, res: Response) => {
+    const response = await BBFile.updateMany(
+      {
+        published: true,
+      },
+      {
+        $set: { published: false },
+      }
+    );
+
+    return res.send(JSON.stringify(response));
+  })
+
   // Serve HTML
   .use('*', async (req: Request, res: Response) => {
     try {

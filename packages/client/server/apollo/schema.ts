@@ -30,9 +30,13 @@ export const apolloSchema = `#graphql
         file: CDNPhoto
     }
 
+    input FileInput {
+        _id: ID!
+    }
+
     input PhotoInput {
-        _id: ID
-        src: String!
+        file: FileInput
+        src: String
         description: String
     }
 

@@ -1,4 +1,4 @@
-import { AccessLevels, Photo, Privacy } from '../../../server/apollo/types.js';
+import { AccessLevels, Photo } from '../../../server/apollo/types.js';
 import { CreatePostFormData } from './index.js';
 import { TagData } from '../../components/Tags/index.js';
 import {
@@ -23,9 +23,9 @@ export type ValidationState = {
 const validatePhotos = (photos: Photo[]) => {
   return photos.map((photo) =>
     Boolean(photo.src)
-      ? { id: photo.id, state: FieldValidationStateType.SUCCESS }
+      ? { id: photo._id, state: FieldValidationStateType.SUCCESS }
       : {
-          id: photo.id,
+          id: photo._id,
           state: FieldValidationStateType.ERROR,
           errorMessage: 'Поле не должно быть пустым',
         }

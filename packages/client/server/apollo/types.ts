@@ -6,7 +6,6 @@ export type TagInput = {
 };
 
 export type Photo = {
-  id: string;
   _id: string;
   src: string;
   description?: string;

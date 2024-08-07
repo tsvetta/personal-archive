@@ -3,16 +3,25 @@ import commonStyles from '../../common.module.css';
 
 export type PhotoData = {
   _id: Required<Key>;
-  src: Required<string>;
-  date: Required<Date>;
+  src?: string;
+  fileUrl?: string;
+  date?: Date;
   description?: string;
   title?: string;
   alt?: string;
   width?: number;
 };
 
-const Photo = ({ src, description, date, title, alt, width }: PhotoData) => {
-  const localDate = new Date(date).toLocaleDateString('ru-RU');
+const Photo = ({
+  src,
+  fileUrl,
+  description,
+  date,
+  title,
+  alt,
+  width,
+}: PhotoData) => {
+  const localDate = date && new Date(date).toLocaleDateString('ru-RU');
   const titleText = title || localDate;
   const altText = alt || localDate;
 
@@ -21,7 +30,7 @@ const Photo = ({ src, description, date, title, alt, width }: PhotoData) => {
   return (
     <figure className={commonStyles.figure}>
       <img
-        src={src}
+        src={fileUrl || src}
         alt={altText}
         title={titleText}
         width={width || DEFAULT_WIDTH}

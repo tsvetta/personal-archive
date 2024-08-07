@@ -17,9 +17,13 @@ import commonStyles from '../../common.module.css';
 import styles from './index.module.css';
 
 export type PhotoData = {
-  _id: Required<Key>;
-  src: Required<string>;
-  description: string;
+  file?: {
+    _id: Key;
+    fileUrl: string;
+    filePreview: string;
+  };
+  src?: string;
+  description?: string;
 };
 
 export type PostData = {
@@ -89,7 +93,11 @@ const Post = ({ data }: PostProps) => {
         data.photos.map(
           (photo: PhotoData) =>
             photo && (
-              <Photo key={`photo_${photo._id}`} date={data.date} {...photo} />
+              <Photo
+                key={`photo_${photo.file?._id || photo.src}`}
+                date={data.date}
+                {...photo?.file}
+              />
             )
         )}
 
