@@ -1,10 +1,7 @@
-import { Key } from 'react';
 import commonStyles from '../../common.module.css';
 
 export type PhotoData = {
-  _id: Required<Key>;
   src?: string;
-  fileUrl?: string;
   date?: Date;
   description?: string;
   title?: string;
@@ -12,15 +9,7 @@ export type PhotoData = {
   width?: number;
 };
 
-const Photo = ({
-  src,
-  fileUrl,
-  description,
-  date,
-  title,
-  alt,
-  width,
-}: PhotoData) => {
+const Photo = ({ src, description, date, title, alt, width }: PhotoData) => {
   const localDate = date && new Date(date).toLocaleDateString('ru-RU');
   const titleText = title || localDate;
   const altText = alt || localDate;
@@ -30,7 +19,7 @@ const Photo = ({
   return (
     <figure className={commonStyles.figure}>
       <img
-        src={fileUrl || src}
+        src={src}
         alt={altText}
         title={titleText}
         width={width || DEFAULT_WIDTH}

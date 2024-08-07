@@ -96,7 +96,8 @@ const Post = ({ data }: PostProps) => {
               <Photo
                 key={`photo_${photo.file?._id || photo.src}`}
                 date={data.date}
-                {...photo?.file}
+                description={photo.description}
+                src={photo.file?.fileUrl || photo.src}
               />
             )
         )}
