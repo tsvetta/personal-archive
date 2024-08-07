@@ -70,23 +70,24 @@ const PostSchema = new Schema({
 
 // тут делает unpublish фоток
 PostSchema.pre('findOneAndDelete', async function (next) {
-  // try {
-  //   const options = this.getFilter();
-  //   const post = await Post.findById(options._id);
-  //   const postPhotos = post?.photos;
-  //   if (postPhotos?.length) {
-  //     postPhotos.forEach(async (photo) => {
-  //       const photoFromBB = await BBFile.findById(photo._id);
-  //       console.log('photo id', photo._id, photoFromBB);
-  //     });
-  //   }
-  //   // if (posts.length > 0) {
-  //   throw new Error('Невозможно удалить пост');
-  //   // }
-  //   next();
-  // } catch (error: any) {
-  //   next(error);
-  // }
+  try {
+    const options = this.getFilter();
+    const post = await Post.findById(options._id);
+    console.log('findOneAndDelete', post);
+    //   const postPhotos = post?.photos;
+    //   if (postPhotos?.length) {
+    //     postPhotos.forEach(async (photo) => {
+    //       const photoFromBB = await BBFile.findById(photo._id);
+    //       console.log('photo id', photo._id, photoFromBB);
+    //     });
+    //   }
+    //   // if (posts.length > 0) {
+    //   throw new Error('Невозможно удалить пост');
+    //   // }
+    next();
+  } catch (error: any) {
+    next(error);
+  }
 });
 
 export const Post = mongoose.model('Post', PostSchema);

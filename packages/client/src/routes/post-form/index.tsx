@@ -81,6 +81,7 @@ const mapFormData = (formData: CreatePostFormData) => ({
   title: formData.title || undefined,
   date: formData.date,
   photos: formData.photos.map((photo) => ({
+    _id: photo.id || photo._id,
     src: photo.src,
     description: photo.description,
   })),

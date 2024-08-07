@@ -41,18 +41,23 @@
     background-color: white;
 
     &:hover {
-        background-color: royalblue;
+        color: white;
+        background: linear-gradient(90deg, royalblue, transparent calc(100% - 20px));
     }
 }
 
 .deleteTagButton {
-    display: flex;
-    height: 26px;
-    padding: 0px 9px;
-    align-items: center;
+    padding: 0;
+    margin-top: 3px;
+    margin-right: 2px;
+    height: 18px;
+    width: 18px;
+    border-radius: 2px;
+    text-align: center;
 
     &:hover + .suggestionButton {
-        background-color: royalblue;
+        color: white;
+        background: linear-gradient(90deg, royalblue, transparent calc(100% - 20px));
     }
 }
 
