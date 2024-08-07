@@ -103,13 +103,15 @@ export const resolvers = {
     },
 
     updatePost: async (_: any, args: { id: String; data: PostInput }) => {
-      const updatedPost = await Post.findByIdAndUpdate(args.id, args.data);
+      const updatedPost = await Post.findByIdAndUpdate(args.id, args.data, {
+        new: true,
+      }).exec();
 
       return updatedPost;
     },
 
     deletePost: async (_: any, args: { id: String }) => {
-      await Post.findOneAndDelete({ _id: args.id });
+      await Post.findOneAndDelete({ _id: args.id }).exec();
 
       return Post.find({});
     },

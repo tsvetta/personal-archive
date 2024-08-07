@@ -73,17 +73,26 @@ PostSchema.pre('findOneAndDelete', async function (next) {
   try {
     const options = this.getFilter();
     const post = await Post.findById(options._id);
-    console.log('findOneAndDelete', post);
-    //   const postPhotos = post?.photos;
-    //   if (postPhotos?.length) {
-    //     postPhotos.forEach(async (photo) => {
-    //       const photoFromBB = await BBFile.findById(photo._id);
-    //       console.log('photo id', photo._id, photoFromBB);
-    //     });
-    //   }
-    //   // if (posts.length > 0) {
-    //   throw new Error('Невозможно удалить пост');
-    //   // }
+    const postPhotos = post?.photos;
+
+    if (postPhotos?.length) {
+      postPhotos.forEach(async (photo) => {
+        if (!photo.file) {
+          return;
+        }
+
+        const photoFromBB = await BBFile.findByIdAndUpdate(
+          photo.file._id,
+          {
+            published: false,
+          },
+          { new: true }
+        );
+
+        console.log('Unpublished:', photoFromBB?._id);
+      });
+    }
+
     next();
   } catch (error: any) {
     next(error);
