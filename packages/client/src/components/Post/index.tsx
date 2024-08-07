@@ -58,8 +58,8 @@ const AccessLevels = ({ accessLevel }: { accessLevel: AccessLevelsType }) => {
 
 const Post = ({ data }: PostProps) => {
   const { user } = useAuth();
-  const date = data.date && new Date(data.date).toDateString();
-  const title = data.title || date || '';
+  const date = data.date && new Date(data.date).toLocaleDateString('ru-RU');
+  const title = data.title || date;
   const hasPhotos = data.photos && data.photos.length > 0;
   const hasTags = data.tags && data.tags.length > 0;
 
@@ -72,7 +72,7 @@ const Post = ({ data }: PostProps) => {
   return (
     <section className={commonStyles.section}>
       <header className={styles.header}>
-        <h3 className={commonStyles.sectionTitle}>{title}</h3>
+        {title && <h3 className={commonStyles.sectionTitle}>{title}</h3>}
 
         {user?.accessLevel === AccessLevelsEnum.TSVETTA && (
           <div className={styles.manager}>
