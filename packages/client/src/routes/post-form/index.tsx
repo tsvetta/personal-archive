@@ -92,8 +92,9 @@ const mapFormData = (formData: CreatePostFormData) => ({
 });
 
 const PostFormPage = () => {
-  // is Edit page
   const { id: urlId } = useParams();
+  const isEditPage = Boolean(urlId);
+
   const { data: postData } = useQuery(getPost, {
     variables: { id: urlId },
     skip: !urlId,
@@ -119,9 +120,6 @@ const PostFormPage = () => {
   const [fieldsValidation, setFieldsValidation] = useState<ValidationState>(
     validateForm(formData, true)
   );
-
-  const isEditPage = Boolean(urlId);
-  const isPhotosOpened = formData.photos.length > 0;
 
   // when route chacnges?
   useEffect(() => {
@@ -316,7 +314,8 @@ const PostFormPage = () => {
       setFormData((prevData) => {
         const photosWithoutLast =
           prevData.photos.length <= 1 ? [] : prevData.photos.slice(0, -1);
-        const photoLast = prevData.photos.slice(-1)[0];
+        const photoLast =
+          prevData.photos.length === 0 ? {} : prevData.photos.slice(-1)[0];
 
         return {
           ...prevData,
@@ -402,7 +401,7 @@ const PostFormPage = () => {
           onAddPhoto={handleAddPhoto}
           onDeletePhoto={handleDeletePhoto}
           validation={fieldsValidation.photos}
-          showGallery={!isEditPage && isPhotosOpened}
+          showGallery={!isEditPage}
           onGalleryPhotoClick={handleGalleryPhotoClick}
         />
 
