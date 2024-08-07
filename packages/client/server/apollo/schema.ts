@@ -16,13 +16,22 @@ export const apolloSchema = `#graphql
         posts: [Post]
     }
 
+    type CDNPhoto {
+        _id: ID!
+        fileUrl: String!
+        filePreview: String!
+        published: Boolean!
+    }
+
     type Photo {
         _id: ID!
-        src: String!
+        src: String
         description: String
+        file: CDNPhoto
     }
 
     input PhotoInput {
+        _id: ID
         src: String!
         description: String
     }
@@ -64,13 +73,6 @@ export const apolloSchema = `#graphql
         role: Privacy
         accessLevel: Int!
         refreshToken: String
-    }
-
-    type CDNPhoto {
-        _id: ID!
-        fileUrl: String!
-        filePreview: String!
-        published: Boolean!
     }
     
     type Query {

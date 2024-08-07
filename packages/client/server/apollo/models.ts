@@ -2,6 +2,14 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 const ObjectId = Schema.Types.ObjectId;
 
+const BBFileSchema = new Schema({
+  fileUrl: { type: String, required: true },
+  filePreview: { type: String, required: true },
+  published: { type: Boolean, required: true },
+});
+
+export const BBFile = mongoose.model('BBFile', BBFileSchema);
+
 const TagSchema = new Schema({
   name: {
     type: String,
@@ -33,9 +41,11 @@ TagSchema.pre('findOneAndDelete', async function (next) {
 export const Tag = mongoose.model('Tag', TagSchema);
 
 const PhotoSchema = new Schema({
-  src: { type: String, required: true },
   description: { type: String },
+  file: { type: ObjectId, ref: 'BBFile' },
 });
+
+export const Photo = mongoose.model('Photo', PhotoSchema);
 
 const PostSchema = new Schema({
   date: {
@@ -56,6 +66,27 @@ const PostSchema = new Schema({
     min: [0, 'Access level should be between 0 and 4'],
     max: [4, 'Access level should be between 0 and 4'],
   },
+});
+
+// тут делает unpublish фоток
+PostSchema.pre('findOneAndDelete', async function (next) {
+  // try {
+  //   const options = this.getFilter();
+  //   const post = await Post.findById(options._id);
+  //   const postPhotos = post?.photos;
+  //   if (postPhotos?.length) {
+  //     postPhotos.forEach(async (photo) => {
+  //       const photoFromBB = await BBFile.findById(photo._id);
+  //       console.log('photo id', photo._id, photoFromBB);
+  //     });
+  //   }
+  //   // if (posts.length > 0) {
+  //   throw new Error('Невозможно удалить пост');
+  //   // }
+  //   next();
+  // } catch (error: any) {
+  //   next(error);
+  // }
 });
 
 export const Post = mongoose.model('Post', PostSchema);
@@ -89,11 +120,3 @@ const UserSchema = new Schema({
 });
 
 export const User = mongoose.model('User', UserSchema);
-
-const BBFilesSchema = new Schema({
-  fileUrl: { type: String, required: true },
-  filePreview: { type: String, required: true },
-  published: { type: Boolean, required: true },
-});
-
-export const BBFiles = mongoose.model('BBFiles', BBFilesSchema);

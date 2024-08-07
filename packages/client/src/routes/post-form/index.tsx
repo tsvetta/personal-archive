@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 
 import { cx } from '../../utils/cx.js';
-import { getDateFormatted, nowRu } from '../../utils/date-formatted.js';
+import { getDateFormatted } from '../../utils/date-formatted.js';
 
 import { TagData } from '../../components/Tags/index.js';
 import Input from '../../components/Input/index.js';

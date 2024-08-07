@@ -1,7 +1,7 @@
 import { GraphQLScalarType, Kind } from 'graphql';
 
 import { PostInput, TagInput, CreateUserInput } from './types.js';
-import { Tag, Post, User, BBFiles } from './models.js';
+import { Tag, Post, User, BBFile } from './models.js';
 
 import { postTags } from './resolvers/Posts/tags.js';
 import { postsQuery } from './resolvers/queries/posts.js';
@@ -47,12 +47,12 @@ export const resolvers = {
 
   Query: {
     cdnPhotos: async (_: any, args: any = { limit: 50, skip: 0 }) => {
-      const bbfiles = await BBFiles.find({ published: false })
+      const bbfile = await BBFile.find({ published: true })
         .limit(args.limit)
         .skip(args.skip)
         .exec();
 
-      return bbfiles;
+      return bbfile;
     },
     tag: async (_: any, args: any) => {
       return await Tag.findById(args.id).exec();
@@ -63,7 +63,10 @@ export const resolvers = {
     },
 
     post: async (_: any, args: any) => {
-      return await Post.findById(args.id).exec();
+      return await Post.findById(args.id)
+        .populate('tags')
+        .populate('photos.file')
+        .exec();
     },
 
     posts: postsQuery,
@@ -103,7 +106,7 @@ export const resolvers = {
     },
 
     deletePost: async (_: any, args: { id: String }) => {
-      await Post.findByIdAndDelete(args.id);
+      await Post.findOneAndDelete({ _id: args.id });
 
       return Post.find({});
     },

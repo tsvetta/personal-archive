@@ -16,7 +16,7 @@ import { UniversalCookies } from '../src/utils/cookies.js';
 import { connectMongoDB, saveJsonToNewCollection } from './mongo.js';
 import { createViteServer } from './vite-server.js';
 import { getBBCDNPhotos } from './backblaze-b2.js';
-import { BBFiles } from './apollo/models.js';
+import { BBFile, Photo, Post } from './apollo/models.js';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const port = process.env.PORT || 5173;
@@ -59,7 +59,48 @@ app
 
     return res.send(JSON.stringify(archiveFiles));
   })
+
   .use('*', userFromCookiesMiddleware) // req.user
+
+  // чтобы смаппить фото из постов и фото из BB
+  .use('/transform-posts-photos', async (req: Request, res: Response) => {
+    const postsFromBD = await Post.find();
+
+    const mapPostsFromBD = async (post: any) => {
+      const mapPhotosFromPost = async (photo: any) => {
+        const sameBBFile = await BBFile.findOne({ fileUrl: photo.src });
+
+        if (sameBBFile && sameBBFile._id !== photo._id) {
+          const updatedPhoto = new Photo({
+            src: photo.src,
+            description: photo.description,
+            _id: sameBBFile._id,
+          });
+
+          return updatedPhoto;
+        } else {
+          return photo;
+        }
+      };
+
+      const photosWithUpdatedIds = await Promise.all(
+        post?.photos.map(mapPhotosFromPost)
+      );
+
+      const updatedPost = await Post.findOneAndUpdate(
+        { _id: post._id },
+        { photos: photosWithUpdatedIds },
+        { new: true }
+      );
+
+      return updatedPost;
+    };
+
+    const updatedPosts = await Promise.all(postsFromBD.map(mapPostsFromBD));
+
+    return res.send(JSON.stringify(updatedPosts));
+  })
+
   // Serve HTML
   .use('*', async (req: Request, res: Response) => {
     try {

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from 'graphql-tag';
 
 export const getPosts = gql`
   query Posts {
@@ -11,8 +11,11 @@ export const getPosts = gql`
       }
       photos {
         _id
-        src
         description
+        file {
+          fileUrl
+          filePreview
+        }
       }
       title
       text
@@ -32,8 +35,11 @@ export const getPost = gql`
       }
       photos {
         _id
-        src
         description
+        file {
+          fileUrl
+          filePreview
+        }
       }
       title
       text
