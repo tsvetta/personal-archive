@@ -145,6 +145,7 @@ app
           (await import('../dist/server/entry-server.js')).render(req, res);
       }
 
+      // @ts-ignore
       const userId = req.user?.userId || null;
       const rendered = await renderFunction(url, ssrManifest, {
         headerCookie: req.header('Cookie'), // for Auth

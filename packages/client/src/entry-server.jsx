@@ -21,7 +21,7 @@ export async function render(
         <ApolloProvider client={apolloClient}>
           <StaticRouter location={url}>
             <AuthProvider userId={userId}>
-              <App env='server' />
+              <App />
             </AuthProvider>
           </StaticRouter>
         </ApolloProvider>

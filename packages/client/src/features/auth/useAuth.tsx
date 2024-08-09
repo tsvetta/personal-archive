@@ -1,4 +1,4 @@
-import { ReactElement, createContext, useContext } from 'react';
+import { createContext, useContext } from 'react';
 import { useQuery, ApolloError } from '@apollo/client';
 
 import { User } from '../../../server/apollo/types.js';
@@ -21,7 +21,7 @@ export const AuthProvider = ({
   children,
 }: {
   userId?: string;
-  children: ReactElement;
+  children: React.ReactNode;
 }) => {
   const { loading, error, data } = useQuery(getUser, {
     variables: { id: userId },

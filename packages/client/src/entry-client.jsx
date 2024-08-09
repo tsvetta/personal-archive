@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+
 import { CookiesProvider } from 'react-cookie';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 
 import { createApolloClient } from './apollo-client';
 import { AuthProvider } from './features/auth/useAuth';
+
 import App from './App';
 import './index.css';
 

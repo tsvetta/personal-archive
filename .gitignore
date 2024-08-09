@@ -1,5 +1,6 @@
 mongo-pass
 .env
+.env*
 
 # Logs
 logs
