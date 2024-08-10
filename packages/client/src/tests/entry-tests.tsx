@@ -6,8 +6,8 @@ import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 
 // @ts-ignore
-import { createApolloClient } from './apollo-client.js';
-import { AuthProvider } from './features/auth/useAuth.js';
+import { createApolloClient } from '../apollo-client.js';
+import { AuthProvider } from '../features/auth/useAuth.js';
 
 const apolloClient = createApolloClient();
 

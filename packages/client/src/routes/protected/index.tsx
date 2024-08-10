@@ -11,8 +11,11 @@ type ProtectedPageProps = {
 const ProtectedPage = (props: ProtectedPageProps) => {
   const { user, loading, error } = useAuth();
   const notAllowed = user && props.accessLevel > user.accessLevel;
-
   const notAuthorized = !loading && !user;
+
+  if (loading) {
+    return 'Loading page...';
+  }
 
   if (error) {
     console.error('\n Protected route error:', error);
