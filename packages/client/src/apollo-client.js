@@ -1,9 +1,9 @@
-import fetch from 'isomorphic-fetch';
+import isomorphicFetch from 'isomorphic-fetch';
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
-
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 
-export const createApolloClient = ({ headerCookie = '' } = {}) => {
+// fetch подменяем в тестах на fetchMock
+export const createApolloClient = ({ fetch, headerCookie = '' } = {}) => {
   if (process.env.NODE_ENV !== 'production') {
     loadDevMessages();
     loadErrorMessages();
@@ -15,7 +15,7 @@ export const createApolloClient = ({ headerCookie = '' } = {}) => {
     headers: {
       cookie: headerCookie, // for Auth
     },
-    fetch,
+    fetch: fetch ? fetch : isomorphicFetch,
   });
 
   const client = new ApolloClient({
