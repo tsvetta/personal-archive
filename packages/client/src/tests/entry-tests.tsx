@@ -16,6 +16,8 @@ type AppProps = {
   cookie?: string;
 };
 
+export type TestContext = Awaited<ReturnType<typeof createTestContext>>;
+
 export const createTestContext = () => {
   cleanup();
   window.history.pushState({}, 'Home', '/');

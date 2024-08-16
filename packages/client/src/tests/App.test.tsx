@@ -1,13 +1,13 @@
 import { act, screen, waitFor } from '@testing-library/react';
 import { describe, test, expect, suite, beforeAll } from 'vitest';
 
-import { createTestContext } from './entry-tests.js';
+import { createTestContext, TestContext } from './entry-tests.js';
 import { mockPostQuery, mockUserQuery } from './__mocks__/graphql/index.js';
 import App from '../App.js';
 
 describe('App', () => {
   suite('No user logged in', async () => {
-    let t: any;
+    let t: TestContext;
 
     beforeAll(async () => {
       t = createTestContext();
@@ -43,7 +43,7 @@ describe('App', () => {
 
   suite('User logged in as TSVETTA', () => {
     const userId = '123qwe123qwe123qwe';
-    let t: any;
+    let t: TestContext;
 
     beforeAll(async () => {
       t = createTestContext();
