@@ -1,6 +1,7 @@
 import React from 'react';
 import { render as rtlRender } from '@testing-library/react';
 import FetchMock from 'fetch-mock';
+import { cleanup } from '@testing-library/react';
 
 import { CookiesProvider } from 'react-cookie';
 import { ApolloProvider } from '@apollo/client';
@@ -16,6 +17,9 @@ type AppProps = {
 };
 
 export const createTestContext = () => {
+  cleanup();
+  window.history.pushState({}, 'Home', '/');
+
   const fetchMock = FetchMock.sandbox();
   const fetch = fetchMock as typeof globalThis.fetch;
   const apolloClient = createApolloClient({ fetch });

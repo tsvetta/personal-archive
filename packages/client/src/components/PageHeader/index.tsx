@@ -10,7 +10,7 @@ function PageHeader({ title }: PageHeaderProps) {
   const { user } = useAuth();
 
   return (
-    <div className={styles.pageHeader}>
+    <header className={styles.pageHeader}>
       <h1 className={styles.pageTitle}>
         <Link to='/' className={styles.titleLink}>
           {title}
@@ -31,7 +31,7 @@ function PageHeader({ title }: PageHeaderProps) {
           </li>
         </ul>
       </nav>
-    </div>
+    </header>
   );
 }
 

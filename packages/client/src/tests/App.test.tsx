@@ -1,53 +1,93 @@
 import { act, screen, waitFor } from '@testing-library/react';
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, suite, beforeAll } from 'vitest';
 
 import { createTestContext } from './entry-tests.js';
 import { mockPostQuery, mockUserQuery } from './__mocks__/graphql/index.js';
 import App from '../App.js';
 
 describe('App', () => {
-  test('renders successfully: no user logged in', async () => {
-    const t = createTestContext();
+  suite('No user logged in', async () => {
+    let t: any;
 
-    expect(window.location.href).toBe('http://localhost:3000/');
+    beforeAll(async () => {
+      t = createTestContext();
 
-    await act(async () => {
-      t.renderApp(<App />);
-    });
-
-    const titleElement: HTMLElement = screen.getByText(/tsvetta archive/i);
-    expect(titleElement).not.toBeNull();
-
-    expect(window.location.href).toBe('http://localhost:3000/login');
-  });
-
-  test('renders successfully: user logged in, role TSVETTA', async () => {
-    const t = createTestContext();
-    const userId = '668aa8e309d8ad3d9f837d57';
-
-    mockUserQuery(t);
-    mockPostQuery(t);
-
-    await act(async () => {
-      t.renderApp(<App />, {
-        userId,
-        cookie: 'auth_token=123;refresh_token=456',
+      await act(() => {
+        t.renderApp(<App />);
+        expect(window.location.href).toBe('http://localhost:3000/');
       });
     });
-    expect(document.cookie).toBe('auth_token=123;refresh_token=456');
 
-    await waitFor(() =>
-      expect(
-        screen.getByText(/User: tsvetta, role: TSVETTA/i)
-      ).toBeInTheDocument()
-    );
+    test('Title visible', () => {
+      const titleElement: HTMLElement = screen.getByText(/tsvetta archive/i);
+      expect(titleElement).not.toBeNull();
+    });
 
-    await waitFor(() =>
-      expect(
-        screen.getByText(/Ахалтекинская порода лошадей./i)
-      ).toBeInTheDocument()
-    );
+    test('No username in header', async () => {
+      const userElement: HTMLElement | null = await screen.queryByText(
+        'User: tsvetta, role: TSVETTA'
+      );
+      expect(userElement).toBeNull();
+    });
 
-    expect(window.location.href).toBe('http://localhost:3000/');
+    test('API: query User not called', () => {
+      expect(t.fetchMock.called('queryUser')).toBe(false);
+    });
+
+    test('Redirect to /login', async () => {
+      await waitFor(() => {
+        expect(window.location.href).toBe('http://localhost:3000/login');
+      });
+    });
+  });
+
+  suite('User logged in as TSVETTA', () => {
+    const userId = '123qwe123qwe123qwe';
+    let t: any;
+
+    beforeAll(async () => {
+      t = createTestContext();
+
+      mockUserQuery(t);
+      mockPostQuery(t);
+
+      await act(() => {
+        t.renderApp(<App />, {
+          userId,
+          cookie: 'auth_token=123;refresh_token=456',
+        });
+
+        expect(window.location.href).toBe('http://localhost:3000/');
+        expect(document.cookie).toBe('auth_token=123;refresh_token=456');
+      });
+    });
+
+    test('API calls', async () => {
+      expect(t.fetchMock.called('queryUser')).toBe(true);
+      expect(t.fetchMock.called('queryPost')).toBe(true);
+    });
+
+    test('Username and role in header', async () => {
+      expect(screen.getByText(/User: tsvetta, role: TSVETTA/i)).toBeVisible();
+    });
+
+    test('Edit button visible', () => {
+      expect(screen.getByText(/Редактировать/i)).toBeVisible();
+    });
+
+    test('Delete button visible', () => {
+      expect(screen.getByText(/Удалить/i)).toBeVisible();
+    });
+
+    test('Post rendered correctly', () => {
+      expect(screen.getByText(/08.08.2024/i)).toBeVisible();
+      expect(screen.getByText(/Ахалтекинская порода лошадей./i)).toBeVisible();
+      expect(screen.getByText(/Доступ: Всем/i)).toBeVisible();
+      expect(screen.getByText(/Лошади/i)).toBeVisible();
+    });
+
+    test('No redirect because of authorization', async () => {
+      expect(window.location.href).toBe('http://localhost:3000/');
+    });
   });
 });
