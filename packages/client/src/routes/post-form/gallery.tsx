@@ -14,6 +14,7 @@ type GalleryProps = {
   onPhotoClick: (photo: any) => void;
 };
 
+// TODO Toggle to published
 const Gallery = (props: GalleryProps) => {
   const [publishPhoto] = useMutation(setPhotoPublished);
   const [pagination, setPagination] = useState({ limit: 20, skip: 0 });
