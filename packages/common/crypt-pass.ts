@@ -24,6 +24,8 @@ export const getHashedPassword = async (password: string) => {
   return hash;
 };
 
+// getHashedPassword('pass_all');
+
 export const verifyPassword = async (hash: string, password: string) => {
   let isMatched = undefined;
 
