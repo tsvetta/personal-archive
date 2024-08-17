@@ -83,11 +83,13 @@ const Gallery = (props: GalleryProps) => {
               src={f.filePreview}
               className={styles.galleryPhoto}
               onClick={handlePhotoClick(f)}
+              title={f.fileUrl}
             />
             <button
               type='button'
               className={styles.setPublishedButton}
               onClick={setPublished(f._id)}
+              title='Publish and remove from list'
             >
               x
             </button>
