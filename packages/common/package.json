@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "generate-previews": "tsx generate-previews.ts"
+    "process-images": "tsx convert-to-webp-and-generate-previews.ts"
   },
   "dependencies": {
     "argon2": "^0.40.3",
-    "sharp": "^0.33.4",
+    "sharp": "^0.33.5",
     "tsx": "^4.16.5"
   },
   "devDependencies": {
