@@ -8,6 +8,53 @@ const inputFolder = path.join(homeDirectory, 'Downloads', 'archive');
 const outputFolder = path.join(homeDirectory, 'Downloads', 'archive');
 const thumbnailSuffix = '_thumb'; // Суффикс для имени мини-превью
 
+const convertToWebp = async (directory: string, file: string) => {
+  const fullPath = path.join(directory, file);
+  const fileExt = path.extname(file).toLowerCase();
+  const fileName = path.basename(file, fileExt).replace('.JPG', ''); // Имя файла без расширения
+  const originalFilePathWebp = path.join(directory, `${fileName}.webp`);
+  const isWebp = fileExt === '.webp';
+
+  if (!isWebp && !fs.existsSync(originalFilePathWebp)) {
+    await sharp(fullPath).toFormat('webp').toFile(originalFilePathWebp);
+    console.log(`Converted ${fullPath} to WebP format successfully.`);
+  }
+};
+
+const generatePreview = async (directory: string, file: string) => {
+  const fullPath = path.join(directory, file);
+  const fileExt = path.extname(file).toLowerCase();
+  const fileName = path.basename(file, fileExt).replace('.JPG', '');
+  const isPreview = fileName.includes(thumbnailSuffix);
+
+  const previewFilePath = path.join(
+    directory,
+    `${fileName}${thumbnailSuffix}.webp`
+  );
+
+  if (!isPreview && !fs.existsSync(previewFilePath)) {
+    await sharp(fullPath).resize(100, 100).toFile(previewFilePath);
+    console.log(`\nThumbnail for ${fullPath} created successfully.`);
+  }
+};
+
+const deleteOriginalFile = async (directory: string, file: string) => {
+  const fullPath = path.join(directory, file);
+  const fileExt = path.extname(file).toLowerCase();
+  const isWebp = fileExt === '.webp';
+
+  if (!isWebp) {
+    fs.unlinkSync(fullPath);
+    console.log(`Delete ${fullPath}.`);
+  }
+
+  // Удаление оригинального файла, если в названии есть .JPG
+  if (fullPath.includes('.JPG')) {
+    fs.unlinkSync(fullPath);
+    console.log(`Delete ${fullPath}.`);
+  }
+};
+
 // Функция для рекурсивного обхода всех папок и файлов
 async function processDirectory(directory: string) {
   const files = fs.readdirSync(directory);
@@ -19,43 +66,11 @@ async function processDirectory(directory: string) {
 
     if (stat.isDirectory()) {
       await processDirectory(fullPath);
-      // обработка только картинок
     } else if (['.jpg', '.jpeg', '.png', '.webp'].includes(fileExt)) {
-      const fileName = path.basename(file, fileExt).replace('.JPG', ''); // Имя файла без расширения
-      const originalFilePathWebp = path.join(directory, `${fileName}.webp`);
-
-      const isPreview = fileName.includes(thumbnailSuffix);
-      const isWebp = fileExt === '.webp';
-
-      const previewFilePath = path.join(
-        directory,
-        `${fileName}${thumbnailSuffix}.webp`
-      );
-
       try {
-        // Конвертация в WebP, если такого webp еще нет
-        if (!isWebp && !fs.existsSync(originalFilePathWebp)) {
-          await sharp(fullPath).toFormat('webp').toFile(originalFilePathWebp);
-          console.log(`Converted ${fullPath} to WebP format successfully.`);
-        }
-
-        // Cоздание превью, если такого превью еще нет
-        if (!isPreview && !fs.existsSync(previewFilePath)) {
-          await sharp(fullPath).resize(100, 100).toFile(previewFilePath);
-          console.log(`\nThumbnail for ${fullPath} created successfully.`);
-        }
-
-        // Удаление файла, если это не webp
-        if (!isWebp) {
-          fs.unlinkSync(fullPath);
-          console.log(`Delete ${fullPath}.`);
-        }
-
-        // Удаление оригинального файла, если в названии есть .JPG
-        if (fullPath.includes('.JPG')) {
-          fs.unlinkSync(fullPath);
-          console.log(`Delete ${fullPath}.`);
-        }
+        await convertToWebp(directory, file);
+        await generatePreview(directory, file);
+        await deleteOriginalFile(directory, file);
       } catch (error) {
         console.error(`Error processing file ${file}:`, error);
       }
