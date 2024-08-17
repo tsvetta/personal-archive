@@ -16,8 +16,8 @@ import { validateLoginForm } from './form-validation.js';
 import { useAuth } from '../../features/auth/useAuth.js';
 
 export type LoginFormValidationState = {
-  username: FieldValidation;
-  password: FieldValidation;
+  username?: FieldValidation;
+  password?: FieldValidation;
   isValid?: boolean;
   formError?: string;
 };
@@ -55,11 +55,11 @@ const LoginPage = () => {
     const preSubmitValidationState = validateLoginForm(formData);
     setFieldsValidation(preSubmitValidationState);
 
-    try {
-      if (!preSubmitValidationState.isValid) {
-        throw new Error('Login: Validation fail!');
-      }
+    if (!preSubmitValidationState.isValid) {
+      return;
+    }
 
+    try {
       const { data } = await loginUser({
         variables: {
           data: { username: formData.username, password: formData.password },
@@ -70,7 +70,7 @@ const LoginPage = () => {
       refetchUser(data.loginUser._id);
       navigate('/');
     } catch (error: any) {
-      console.error('Error submitting form:', error.message);
+      setFieldsValidation({ isValid: false, formError: error.message });
     }
   };
 

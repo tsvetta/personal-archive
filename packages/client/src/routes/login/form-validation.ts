@@ -49,8 +49,8 @@ export const validateLoginForm = (
     password: validatePassword(formData.password),
   };
 
-  const isUsernameValid = validations.username.errorMessage === undefined;
-  const isPasswordValid = validations.password.errorMessage === undefined;
+  const isUsernameValid = validations.username?.errorMessage === undefined;
+  const isPasswordValid = validations.password?.errorMessage === undefined;
   const isEmptyForm = !formData.username && !formData.password;
 
   const isValid = isUsernameValid && isPasswordValid && !isEmptyForm;
