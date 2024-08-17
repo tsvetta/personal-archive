@@ -66,7 +66,6 @@ const LoginPage = () => {
         },
       });
 
-      // TODO сделать чтобы был просто refetch через graphql?
       refetchUser(data.loginUser._id);
       navigate('/');
     } catch (error: any) {
