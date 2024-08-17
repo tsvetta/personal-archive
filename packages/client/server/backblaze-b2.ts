@@ -33,10 +33,15 @@ export const getBBCDNPhotos = (
 
         const filePath = f.fileName.split('.')[0];
         const fileExt = f.fileName.split('.')[1];
+        const isImage = ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(
+          fileExt.toLowerCase()
+        );
 
         acc.push({
           fileUrl: `${bbCDNUrl}/${f.fileName}`,
-          filePreview: `${bbCDNUrl}/${filePath}_thumb.${fileExt}`,
+          filePreview: isImage
+            ? `${bbCDNUrl}/${filePath}_thumb.${fileExt}`
+            : undefined,
           published: false,
         });
 
