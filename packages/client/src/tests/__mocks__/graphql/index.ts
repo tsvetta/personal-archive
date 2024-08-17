@@ -1,3 +1,5 @@
+import { TestContext } from '../../entry-tests.js';
+
 const isCorrectApiUrl = (url: string) => {
   return url === 'http://localhost:5173/graphql';
 };
@@ -16,7 +18,7 @@ const mockMatcher = (query: string) => (url: string, opts: any) => {
   return false;
 };
 
-export const mockUserQuery = (t: any) => {
+export const mockUserQuery = (t: TestContext) => {
   t.fetchMock.mock(
     mockMatcher('query User'),
     (_: string, opts: any) => {
@@ -31,17 +33,40 @@ export const mockUserQuery = (t: any) => {
               username: 'tsvetta',
               role: 'TSVETTA',
               accessLevel: 4,
-              refreshToken: '123123123',
+              refreshToken: 'refresh123123qweqwe',
             },
           },
         },
       };
     },
-    'queryUser'
+    { name: 'queryUser' }
   );
 };
 
-export const mockPostQuery = (t: any) => {
+export const mockLoginUserMutation = (t: TestContext) => {
+  t.fetchMock.mock(
+    mockMatcher('mutation LoginUser'),
+    (_: string, __: any) => {
+      return {
+        status: 200,
+        body: {
+          data: {
+            loginUser: {
+              _id: 'id_123123qweqwe123123hkjsdfhsdfk',
+              username: 'tsvetta',
+              role: 'TSVETTA',
+              accessLevel: 4,
+              refreshToken: 'refresh123123qweqwe',
+            },
+          },
+        },
+      };
+    },
+    { name: 'mutationLoginUser' }
+  );
+};
+
+export const mockPostQuery = (t: TestContext) => {
   t.fetchMock.mock(
     mockMatcher('query Post'),
     {
@@ -82,6 +107,6 @@ export const mockPostQuery = (t: any) => {
         },
       },
     },
-    'queryPost'
+    { name: 'queryPost' }
   );
 };

@@ -16,7 +16,7 @@ type AppProps = {
   cookie?: string;
 };
 
-export type TestContext = Awaited<ReturnType<typeof createTestContext>>;
+export type TestContext = ReturnType<typeof createTestContext>;
 
 export const createTestContext = () => {
   cleanup();

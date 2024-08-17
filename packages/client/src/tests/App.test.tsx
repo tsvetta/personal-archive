@@ -14,7 +14,7 @@ describe('App', () => {
 
       await act(() => {
         t.renderApp(<App />);
-        expect(window.location.href).toBe('http://localhost:3000/');
+        expect(window.location.pathname).toBe('/');
       });
     });
 
@@ -36,7 +36,7 @@ describe('App', () => {
 
     test('Redirect to /login', async () => {
       await waitFor(() => {
-        expect(window.location.href).toBe('http://localhost:3000/login');
+        expect(window.location.pathname).toBe('/login');
       });
     });
   });
@@ -57,7 +57,7 @@ describe('App', () => {
           cookie: 'auth_token=123;refresh_token=456',
         });
 
-        expect(window.location.href).toBe('http://localhost:3000/');
+        expect(window.location.pathname).toBe('/');
         expect(document.cookie).toBe('auth_token=123;refresh_token=456');
       });
     });
@@ -87,7 +87,7 @@ describe('App', () => {
     });
 
     test('No redirect because of authorization', async () => {
-      expect(window.location.href).toBe('http://localhost:3000/');
+      expect(window.location.pathname).toBe('/');
     });
   });
 });

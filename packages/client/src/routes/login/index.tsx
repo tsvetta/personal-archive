@@ -1,4 +1,5 @@
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
 import { cx } from '../../utils/cx.js';
@@ -12,6 +13,7 @@ import formStyles from '../../components/Form/index.module.css';
 
 import { loginUser as loginUserQuery } from '../../../server/apollo/queries.js';
 import { validateLoginForm } from './form-validation.js';
+import { useAuth } from '../../features/auth/useAuth.js';
 
 export type LoginFormValidationState = {
   username: FieldValidation;
@@ -26,6 +28,8 @@ export type LoginFormData = {
 };
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const { refetchUser } = useAuth();
   const [formData, setFormData] = useState<LoginFormData>({
     username: '',
     password: '',
@@ -56,14 +60,15 @@ const LoginPage = () => {
         throw new Error('Login: Validation fail!');
       }
 
-      await loginUser({
+      const { data } = await loginUser({
         variables: {
           data: { username: formData.username, password: formData.password },
         },
       });
 
-      // TODO: разобраться, как обновлять AuthProvider после успешного логина
-      location.href = '/';
+      // TODO сделать чтобы был просто refetch через graphql?
+      refetchUser(data.loginUser._id);
+      navigate('/');
     } catch (error: any) {
       console.error('Error submitting form:', error.message);
     }
