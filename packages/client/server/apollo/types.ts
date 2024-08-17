@@ -7,7 +7,11 @@ export type TagInput = {
 
 export type Photo = {
   _id: string;
-  src: string;
+  src?: string;
+  file?: {
+    fileUrl: string;
+    filePreview?: string;
+  };
   description?: string;
   fromGallery?: boolean;
 };

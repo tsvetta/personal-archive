@@ -30,6 +30,7 @@ import {
   submitEditPostForm,
   setPhotoPublished,
   getBBCDNPhotos,
+  getPosts,
 } from '../../../server/apollo/queries.js';
 import { AccessLevels, Photo, Privacy } from '../../../server/apollo/types.js';
 
@@ -265,7 +266,11 @@ const PostFormPage = () => {
               id: urlId,
               data: preparedData,
             },
-            refetchQueries: ['Posts'],
+            refetchQueries: [
+              {
+                query: getPosts,
+              },
+            ],
           });
 
           // редирект на страницу поста?
@@ -281,7 +286,11 @@ const PostFormPage = () => {
         variables: {
           data: preparedData,
         },
-        refetchQueries: ['Posts'],
+        refetchQueries: [
+          {
+            query: getPosts,
+          },
+        ],
       });
 
       const hasPhotos = formData.photos.length > 0;
