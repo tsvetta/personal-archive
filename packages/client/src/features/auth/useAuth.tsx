@@ -9,9 +9,6 @@ interface AuthContextType {
   loading?: boolean;
   error?: ApolloError;
   refetchUser: (uid: string) => void;
-  // refetchAuth: (variables?: {
-  //   id: string;
-  // }) => Promise<ApolloQueryResult<User> | null>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -19,7 +16,6 @@ const AuthContext = createContext<AuthContextType>({
   loading: false,
   error: undefined,
   refetchUser: () => {},
-  // refetchAuth: () => Promise.resolve(null),
 });
 
 export const AuthProvider = (props: {
@@ -28,12 +24,7 @@ export const AuthProvider = (props: {
 }) => {
   const [userId, setUserId] = useState(props.userId);
 
-  const {
-    loading,
-    error,
-    data,
-    // refetch: refetchAuth,
-  } = useQuery(getUser, {
+  const { loading, error, data } = useQuery(getUser, {
     variables: { id: userId },
     skip: !userId,
   });
