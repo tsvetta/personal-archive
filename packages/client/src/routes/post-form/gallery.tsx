@@ -60,7 +60,7 @@ const Gallery = (props: GalleryProps) => {
         {
           query: getBBCDNPhotos,
           variables: {
-            published: true,
+            published: false,
             limit: pagination.limit,
             skip: pagination.skip,
           },

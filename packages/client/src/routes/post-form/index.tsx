@@ -290,6 +290,14 @@ const PostFormPage = () => {
           {
             query: getPosts,
           },
+          {
+            query: getBBCDNPhotos,
+            variables: {
+              published: false,
+              limit: 20,
+              skip: 0,
+            },
+          },
         ],
       });
 
