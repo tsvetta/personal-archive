@@ -104,6 +104,13 @@ const Post = ({ data }: PostProps) => {
             )
         )}
 
+      {data.text && (
+        <p
+          className={styles.text}
+          dangerouslySetInnerHTML={{ __html: data.text }}
+        ></p>
+      )}
+
       <div className={styles.footer}>
         <div className={styles.footerLeft}>
           {date && <div className={styles.date}>{date}</div>}
