@@ -22,7 +22,7 @@ export type ValidationState = {
 // TODO: regexp for url
 const validatePhotos = (photos: Photo[]) => {
   return photos.map((photo) =>
-    Boolean(photo.src)
+    Boolean(photo.file?.fileUrl) || Boolean(photo.src)
       ? { id: photo._id, state: FieldValidationStateType.SUCCESS }
       : {
           id: photo._id,

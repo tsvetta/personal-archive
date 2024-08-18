@@ -99,6 +99,32 @@ PostSchema.pre('findOneAndDelete', async function (next) {
   }
 });
 
+PostSchema.pre('save', async function (next) {
+  try {
+    const { photos } = this;
+
+    photos?.forEach(async (photo) => {
+      if (!photo.file) {
+        return;
+      }
+
+      const photoFromBB = await BBFile.findByIdAndUpdate(
+        photo.file,
+        {
+          published: true,
+        },
+        { new: true }
+      );
+
+      console.log('Published photo:', photoFromBB?._id);
+    });
+
+    next();
+  } catch (error: any) {
+    next(error);
+  }
+});
+
 export const Post = mongoose.model('Post', PostSchema);
 
 const UserSchema = new Schema({

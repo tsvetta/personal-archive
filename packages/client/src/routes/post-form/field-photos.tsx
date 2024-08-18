@@ -48,7 +48,7 @@ const FieldPhotos = (props: FieldPhotosProps) => {
                 type='text'
                 name={`photo_${photoId}`}
                 onChange={props.onChange(photoId, 'src')}
-                value={photo.src}
+                value={photo?.file?.fileUrl || photo.src}
                 validation={validationState}
               />
               <Input

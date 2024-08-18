@@ -320,7 +320,7 @@ const PostFormPage = () => {
 
   const handleGalleryPhotoClick = useCallback(
     (photo: any) => {
-      setFormData((prevData) => {
+      setFormData((prevData: CreatePostFormData) => {
         const photosWithoutLast =
           prevData.photos.length <= 1 ? [] : prevData.photos.slice(0, -1);
         const photoLast =
@@ -333,7 +333,10 @@ const PostFormPage = () => {
             {
               ...photoLast,
               _id: photo._id,
-              src: photo.fileUrl,
+              file: {
+                fileUrl: photo.fileUrl,
+                filePreview: photo.filePreview,
+              },
               fromGallery: true,
             },
           ],
