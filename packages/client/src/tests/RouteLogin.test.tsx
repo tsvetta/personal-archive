@@ -14,7 +14,7 @@ describe('Login Page', () => {
     let t: TestContext;
 
     beforeAll(async () => {
-      t = createTestContext();
+      t = await createTestContext();
 
       mockLoginUserMutation(t);
       mockUserQuery(t);

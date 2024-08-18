@@ -10,7 +10,7 @@ describe('App', () => {
     let t: TestContext;
 
     beforeAll(async () => {
-      t = createTestContext();
+      t = await createTestContext();
 
       await act(async () => {
         t.renderApp(<App />);
@@ -46,7 +46,7 @@ describe('App', () => {
     let t: TestContext;
 
     beforeAll(async () => {
-      t = createTestContext();
+      t = await createTestContext();
 
       mockUserQuery(t);
       mockPostQuery(t);
