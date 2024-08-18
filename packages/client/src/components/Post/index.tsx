@@ -17,6 +17,7 @@ import commonStyles from '../../common.module.css';
 import styles from './index.module.css';
 
 export type PhotoData = {
+  _id: Key;
   file?: {
     _id: Key;
     fileUrl: string;
@@ -94,7 +95,7 @@ const Post = ({ data }: PostProps) => {
           (photo: PhotoData) =>
             photo && (
               <Photo
-                key={`photo_${photo.file?._id || photo.src}`}
+                key={`photo_${photo._id || photo.src}`}
                 date={data.date}
                 description={photo.description}
                 src={photo.file?.fileUrl || photo.src}

@@ -9,6 +9,7 @@ export type Photo = {
   _id: string;
   src?: string;
   file?: {
+    _id: Types.ObjectId;
     fileUrl: string;
     filePreview?: string;
   };

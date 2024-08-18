@@ -81,9 +81,9 @@ const deafultFormData: CreatePostFormData = {
 const mapFormData = (formData: CreatePostFormData) => ({
   title: formData.title || undefined,
   date: formData.date,
-  photos: formData.photos.map((photo) => ({
+  photos: formData.photos.map((photo: Photo) => ({
     file: {
-      _id: photo._id,
+      _id: photo.file?._id || photo._id,
     },
     description: photo.description,
   })),
@@ -334,6 +334,7 @@ const PostFormPage = () => {
               ...photoLast,
               _id: photo._id,
               file: {
+                _id: photo._id,
                 fileUrl: photo.fileUrl,
                 filePreview: photo.filePreview,
               },

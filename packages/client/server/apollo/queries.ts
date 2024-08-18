@@ -13,6 +13,7 @@ export const getPosts = gql`
         _id
         description
         file {
+          _id
           fileUrl
           filePreview
         }
@@ -37,6 +38,7 @@ export const getPost = gql`
         _id
         description
         file {
+          _id
           fileUrl
           filePreview
         }
