@@ -27,9 +27,18 @@
     gap: var(--default-gap);
 }
 
-.titleLink {
+.titleLink,
+.menuLink {
     text-decoration: none;
     color: black;
+
+    &:visited {
+        color: black;
+    }
+
+    &:hover {
+        color: #b4b4e6;
+    }
 }
 
 .user {

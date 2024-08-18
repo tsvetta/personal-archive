@@ -24,10 +24,14 @@ function PageHeader({ title }: PageHeaderProps) {
       <nav className={styles.pageMenu}>
         <ul className={styles.pageNav}>
           <li className={styles.navItem}>
-            <Link to='/login'>Login</Link>
+            <Link to='/login' className={styles.menuLink}>
+              Login
+            </Link>
           </li>
           <li className={styles.navItem}>
-            <Link to='/create-post'>Create Post</Link>
+            <Link to='/create-post' className={styles.menuLink}>
+              Create Post
+            </Link>
           </li>
         </ul>
       </nav>

@@ -25,7 +25,11 @@ const Photo = ({ src, description, date, title, alt, width }: PhotoData) => {
         width={width || DEFAULT_WIDTH}
         className={commonStyles.img}
       />
-      <figcaption>{description}</figcaption>
+      {description && (
+        <figcaption
+          dangerouslySetInnerHTML={{ __html: description }}
+        ></figcaption>
+      )}
     </figure>
   );
 };

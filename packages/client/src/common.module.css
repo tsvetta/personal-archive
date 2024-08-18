@@ -1,5 +1,27 @@
 @import url('./common-style-vars.css');
 
+a {
+    color: #d1d1d1;
+    transition: color 200ms ease;
+
+    &:visited,
+    &:active {
+        color: #d1d1d1;
+    }
+
+    &:hover {
+        color: #b4b4e6;
+    }
+}
+
+button {
+    transition: background-color 200ms ease;
+
+    &:hover {
+        background-color: #b4b4e6;
+    }
+}
+
 label {
     display: block;
     margin-bottom: 5px;
@@ -60,6 +82,11 @@ legend {
     color: white;
     border-radius: 5px;
     font-size: 10px;
+    transition: background-color 200ms ease;
+
+    &:hover {
+        background-color:#b4b4e6;
+    }
 }
 
 .tag a,
