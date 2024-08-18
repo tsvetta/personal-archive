@@ -89,6 +89,7 @@ export const mockPostQuery = (t: TestContext) => {
                   _id: '345345345345',
                   description: 'Ахалтекинская порода лошадей.',
                   file: {
+                    _id: '67676767676',
                     fileUrl:
                       'https://tsvetta.s3.us-west-004.backblazeb2.com/archive/misc/Akhal-Teke_horse.JPG',
                     filePreview:

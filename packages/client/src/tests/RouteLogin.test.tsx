@@ -20,7 +20,7 @@ describe('Login Page', () => {
       mockUserQuery(t);
       mockPostQuery(t);
 
-      await act(() => {
+      await act(async () => {
         t.renderApp(<App />);
         expect(window.location.pathname).toBe('/');
       });

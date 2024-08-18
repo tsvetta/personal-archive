@@ -12,7 +12,7 @@ describe('App', () => {
     beforeAll(async () => {
       t = createTestContext();
 
-      await act(() => {
+      await act(async () => {
         t.renderApp(<App />);
         expect(window.location.pathname).toBe('/');
       });
@@ -51,23 +51,23 @@ describe('App', () => {
       mockUserQuery(t);
       mockPostQuery(t);
 
-      await act(() => {
+      await act(async () => {
         t.renderApp(<App />, {
           userId,
           cookie: 'auth_token=123;refresh_token=456',
         });
-
-        expect(window.location.pathname).toBe('/');
-        expect(document.cookie).toBe('auth_token=123;refresh_token=456');
       });
+
+      expect(window.location.pathname).toBe('/');
+      expect(document.cookie).toBe('auth_token=123;refresh_token=456');
     });
 
-    test('API calls', async () => {
+    test('API calls', () => {
       expect(t.fetchMock.called('queryUser')).toBe(true);
       expect(t.fetchMock.called('queryPost')).toBe(true);
     });
 
-    test('Username and role in header', async () => {
+    test('Username and role in header', () => {
       expect(screen.getByText(/User: tsvetta, role: TSVETTA/i)).toBeVisible();
     });
 
@@ -86,7 +86,7 @@ describe('App', () => {
       expect(screen.getByText(/Лошади/i)).toBeVisible();
     });
 
-    test('No redirect because of authorization', async () => {
+    test('No redirect because of authorization', () => {
       expect(window.location.pathname).toBe('/');
     });
   });
