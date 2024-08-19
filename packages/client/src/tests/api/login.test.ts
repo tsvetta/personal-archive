@@ -4,7 +4,7 @@ import { print } from 'graphql';
 import { suite } from 'vitest';
 
 import { getHashedPassword } from '@archive/common/crypt-pass.js';
-import { loginUser } from '@archive/client/server/apollo/queries.js';
+import { getUser, loginUser } from '@archive/client/server/apollo/queries.js';
 import { User } from '@archive/client/server/apollo/models.js';
 import { createTestContext, TestContext } from '../entry-tests.js';
 
@@ -30,6 +30,8 @@ const checkTokenCookie = (tokenCookie: string, userId: string) => {
 describe('Authorization', () => {
   suite('Successful authorization', () => {
     let t: TestContext;
+    let newUserId: string;
+    let newUserRefreshToken: string;
 
     beforeAll(async () => {
       t = await createTestContext();
@@ -43,7 +45,9 @@ describe('Authorization', () => {
         accessLevel: 4,
       });
 
-      await user.save();
+      const newUser = await user.save();
+
+      newUserId = newUser._id.toString();
     });
 
     test('Login', async () => {
@@ -59,7 +63,7 @@ describe('Authorization', () => {
 
       expect(response.status).toBe(200);
 
-      expect(response.body.data.loginUser).toHaveProperty('_id');
+      expect(response.body.data.loginUser).toHaveProperty('_id', newUserId);
       expect(response.body.data.loginUser).toHaveProperty(
         'username',
         'tsvetta'
@@ -68,13 +72,35 @@ describe('Authorization', () => {
       expect(response.body.data.loginUser).toHaveProperty('accessLevel', 4);
       expect(response.body.data.loginUser).toHaveProperty('refreshToken');
 
-      const { _id } = response.body.data.loginUser;
+      newUserRefreshToken = response.body.data.loginUser.refreshToken;
 
       const setAuthTokenCookie = response.headers['set-cookie'][0];
-      checkTokenCookie(setAuthTokenCookie, _id);
+      checkTokenCookie(setAuthTokenCookie, newUserId);
 
       const setRefreshTokenCookie = response.headers['set-cookie'][1];
-      checkTokenCookie(setRefreshTokenCookie, _id);
+      checkTokenCookie(setRefreshTokenCookie, newUserId);
+    });
+
+    test('Get user', async () => {
+      const response = await request(t.app)
+        .post('/graphql')
+        .send({
+          operationName: 'User',
+          query: print(getUser),
+          variables: {
+            id: newUserId,
+          },
+        });
+
+      expect(response.status).toBe(200);
+
+      const { user } = response.body.data;
+
+      expect(user).toHaveProperty('_id', newUserId);
+      expect(user).toHaveProperty('username', 'tsvetta');
+      expect(user).toHaveProperty('role', 'TSVETTA');
+      expect(user).toHaveProperty('accessLevel', 4);
+      expect(user).toHaveProperty('refreshToken', newUserRefreshToken);
     });
   });
 });
