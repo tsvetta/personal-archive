@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 import { ApolloServer } from '@apollo/server';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import { expressMiddleware as apolloExpressMiddlewar } from '@apollo/server/express4';
+import { expressMiddleware as apolloExpressMiddleware } from '@apollo/server/express4';
 
 import { ApolloContext } from './context.js';
 import { apolloSchema } from './schema.js';
@@ -35,7 +35,8 @@ const apolloContext = async ({
 }: {
   req: Request;
 }): Promise<ApolloContext> => {
-  const cookies = req.universalCookies?.getAll() || {};
+  const cookies = req.universalCookies?.cookies || {};
+
   let authToken = cookies.auth_token?.toString() || '';
   let refreshToken = cookies.refresh_token?.toString() || '';
 
@@ -93,7 +94,8 @@ const apolloContext = async ({
 
 export const createApolloExpressMiddleware = (
   apolloServer: ApolloServer<ApolloContext>
-) =>
-  apolloExpressMiddlewar(apolloServer, {
+) => {
+  return apolloExpressMiddleware(apolloServer, {
     context: apolloContext,
   });
+};

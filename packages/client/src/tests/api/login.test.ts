@@ -25,6 +25,8 @@ const checkTokenCookie = (tokenCookie: string, userId: string) => {
   expect(tokenDecoded).toHaveProperty('username', 'tsvetta');
   expect(tokenDecoded).toHaveProperty('role', 'TSVETTA');
   expect(tokenDecoded).toHaveProperty('accessLevel', 4);
+
+  return token;
 };
 
 describe('Authorization', () => {
@@ -32,12 +34,11 @@ describe('Authorization', () => {
     let t: TestContext;
     let newUserId: string;
     let newUserRefreshToken: string;
+    let newUserAuthToken: string | null;
 
     beforeAll(async () => {
       t = await createTestContext();
-    });
 
-    test('Create new user', async () => {
       const user = new User({
         username: 'tsvetta',
         password: await getHashedPassword('test123123'),
@@ -75,7 +76,7 @@ describe('Authorization', () => {
       newUserRefreshToken = response.body.data.loginUser.refreshToken;
 
       const setAuthTokenCookie = response.headers['set-cookie'][0];
-      checkTokenCookie(setAuthTokenCookie, newUserId);
+      newUserAuthToken = checkTokenCookie(setAuthTokenCookie, newUserId);
 
       const setRefreshTokenCookie = response.headers['set-cookie'][1];
       checkTokenCookie(setRefreshTokenCookie, newUserId);
@@ -84,6 +85,10 @@ describe('Authorization', () => {
     test('Get user', async () => {
       const response = await request(t.app)
         .post('/graphql')
+        .set(
+          'Cookie',
+          `auth_token=${newUserAuthToken};refresh_token=${newUserRefreshToken}`
+        )
         .send({
           operationName: 'User',
           query: print(getUser),
@@ -101,6 +106,22 @@ describe('Authorization', () => {
       expect(user).toHaveProperty('role', 'TSVETTA');
       expect(user).toHaveProperty('accessLevel', 4);
       expect(user).toHaveProperty('refreshToken', newUserRefreshToken);
+    });
+
+    test('Unauthorized access to User query', async () => {
+      const response = await request(t.app)
+        .post('/graphql')
+        .send({
+          operationName: 'User',
+          query: print(getUser),
+          variables: {
+            id: newUserId,
+          },
+        });
+
+      expect(response.body.errors).toBeDefined();
+      expect(response.body.errors[0].message).toBe('Unauthorized');
+      expect(response.body.errors[0].extensions.code).toBe(401);
     });
   });
 });

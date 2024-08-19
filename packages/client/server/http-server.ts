@@ -32,18 +32,19 @@ declare global {
 
 export const createApp = async ({ enableStaticServer = true } = {}) => {
   const app = express();
+
+  app.use(cookiesMiddleware());
+
   const httpServer = http.createServer(app);
   const apolloServer = createApolloServer(httpServer);
   await apolloServer.start();
   const vite = enableStaticServer && (await createViteServer(app));
 
-  app
-    .use(cookiesMiddleware())
-    .use(
-      '/graphql',
-      express.json(),
-      createApolloExpressMiddleware(apolloServer)
-    );
+  app.use(
+    '/graphql',
+    express.json(),
+    createApolloExpressMiddleware(apolloServer)
+  );
 
   // Cached production assets
   const templateHtml = isProduction

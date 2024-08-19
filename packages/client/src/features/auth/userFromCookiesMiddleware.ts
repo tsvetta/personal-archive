@@ -7,7 +7,7 @@ export const userFromCookiesMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { auth_token = '' } = req.universalCookies?.getAll() || {};
+  const { auth_token = '' } = req.universalCookies?.cookies || {};
   let user;
 
   if (auth_token) {

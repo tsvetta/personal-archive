@@ -8,6 +8,8 @@ import { postsQuery } from './resolvers/queries/posts.js';
 import { loginUser } from './resolvers/mutations/login-user.js';
 import { deleteTag } from './resolvers/mutations/delete-tag.js';
 import { setPhotoPublished } from './resolvers/mutations/set-photo-published.js';
+import { ApolloContext } from './context.js';
+import { AuthorizationError } from './errors.js';
 
 // Вспомогательная функция для парсинга литералов AST
 const parseLiteral = (ast: any) => {
@@ -74,7 +76,11 @@ export const resolvers = {
 
     posts: postsQuery,
 
-    user: async (_: any, args: any) => {
+    user: async (_: any, args: any, { user }: ApolloContext) => {
+      if (!user) {
+        throw new AuthorizationError('Unauthorized');
+      }
+
       return await User.findById(args.id).lean().exec();
     },
 
