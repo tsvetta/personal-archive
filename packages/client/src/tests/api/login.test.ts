@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import request from 'supertest';
 import { print } from 'graphql';
 import { suite } from 'vitest';
@@ -7,30 +6,10 @@ import { getHashedPassword } from '@archive/common/crypt-pass.js';
 import { getUser, loginUser } from '@archive/client/server/apollo/queries.js';
 import { User } from '@archive/client/server/apollo/models.js';
 import { createTestContext, TestContext } from '../entry-tests.js';
-
-// auth_token=xxx.xxx.xxx; Max-Age=2592000; Path=/; Expires=Wed, 18 Sep 2024 09:02:14 GMT; HttpOnly; SameSite=Strict
-const setJWTTokenCookieRegex =
-  /(auth_token|refresh_token)=[\w-]+\.[\w-]+\.[\w-]+; Max-Age=\d+; Path=\/; Expires=.+; HttpOnly; SameSite=Strict/;
-
-const checkTokenCookie = (tokenCookie: string, userId: string) => {
-  expect(tokenCookie).toMatch(setJWTTokenCookieRegex);
-
-  const tokenMatch = tokenCookie.match(
-    /(auth_token|refresh_token)=([\w-]+\.[\w-]+\.[\w-]+)/
-  );
-  const token = tokenMatch && tokenMatch[2];
-  const tokenDecoded = jwt.decode(token || '');
-
-  expect(tokenDecoded).toHaveProperty('userId', userId);
-  expect(tokenDecoded).toHaveProperty('username', 'tsvetta');
-  expect(tokenDecoded).toHaveProperty('role', 'TSVETTA');
-  expect(tokenDecoded).toHaveProperty('accessLevel', 4);
-
-  return token;
-};
+import { checkTokenCookie } from '../helpers/check-token-cookie.js';
 
 describe('Authorization', () => {
-  suite('Successful authorization', () => {
+  suite('Success', () => {
     let t: TestContext;
     let newUserId: string;
     let newUserRefreshToken: string;

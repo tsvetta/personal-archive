@@ -90,7 +90,11 @@ export const resolvers = {
   },
 
   Mutation: {
-    addTag: async (_: any, { name }: TagInput) => {
+    addTag: async (_: any, { name }: TagInput, { user }: ApolloContext) => {
+      if (!user) {
+        throw new AuthorizationError('Unauthorized');
+      }
+
       const newTag = new Tag({ name });
 
       await newTag.save();
@@ -100,7 +104,15 @@ export const resolvers = {
 
     deleteTag,
 
-    addPost: async (_: any, args: { data: PostInput }) => {
+    addPost: async (
+      _: any,
+      args: { data: PostInput },
+      { user }: ApolloContext
+    ) => {
+      if (!user) {
+        throw new AuthorizationError('Unauthorized');
+      }
+
       const newPost = new Post(args.data);
 
       await newPost.save();
