@@ -1,14 +1,15 @@
+// import 'dotenv/config';
 import React from 'react';
-import { render as rtlRender } from '@testing-library/react';
-import FetchMock from 'fetch-mock';
-import { cleanup } from '@testing-library/react';
-
-import { CookiesProvider } from 'react-cookie';
-import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
+import FetchMock from 'fetch-mock';
+import { CookiesProvider } from 'react-cookie';
+import { render as rtlRender } from '@testing-library/react';
+import { cleanup } from '@testing-library/react';
+import { ApolloProvider } from '@apollo/client';
 
 // @ts-ignore
 import { createApolloClient } from '../apollo-client.js';
+import { createApp } from '../../server/http-server.js';
 import { AuthProvider } from '../features/auth/useAuth.js';
 
 type AppProps = {
@@ -20,7 +21,10 @@ export type TestContext = Awaited<ReturnType<typeof createTestContext>>;
 
 export const createTestContext = async () => {
   cleanup();
-  window.history.pushState({}, 'Home', '/');
+
+  if (typeof window !== 'undefined') {
+    window.history.pushState({}, 'Home', '/');
+  }
 
   const fetchMock = FetchMock.sandbox();
   const fetch = fetchMock as typeof globalThis.fetch;
@@ -52,5 +56,7 @@ export const createTestContext = async () => {
 
   fetchMock.reset();
 
-  return { renderApp, fetchMock };
+  const { app } = await createApp({ enableStaticServer: false });
+
+  return { renderApp, fetchMock, app };
 };

@@ -6,7 +6,7 @@ import { mockPostQuery, mockUserQuery } from './__mocks__/graphql/index.js';
 import App from '../App.js';
 
 describe('App', () => {
-  suite('No user logged in', async () => {
+  suite('No user logged in', () => {
     let t: TestContext;
 
     beforeAll(async () => {

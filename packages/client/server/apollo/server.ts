@@ -19,16 +19,15 @@ import {
 
 const secret = process.env.SECRET_KEY || '';
 
-// const formatApolloServerEror = async (err: GraphQLFormattedError) => {};
-
 export const createApolloServer = (
   httpServer: http.Server
 ): ApolloServer<ApolloContext> =>
   new ApolloServer<ApolloContext>({
     typeDefs: apolloSchema,
     resolvers,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })], // plugin ensure server gracefully shuts down
-    // formatError: formatApolloServerEror,
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }), // plugin ensure server gracefully shuts down
+    ],
   });
 
 const apolloContext = async ({

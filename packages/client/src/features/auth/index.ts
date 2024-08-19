@@ -76,8 +76,14 @@ export const deleteAuthTokens = async (
 ) => {
   const session = await mongoose.startSession();
 
-  universalCookies?.remove('auth_token', { ...cookieOptions, maxAge: 0 });
-  universalCookies?.remove('refresh_token', { ...cookieOptions, maxAge: 0 });
+  // Because headers duplication (set-cookie)
+  if (universalCookies?.cookies['auth_token']) {
+    universalCookies?.remove('auth_token', { ...cookieOptions, maxAge: 0 });
+  }
+
+  if (universalCookies?.cookies['refresh_token']) {
+    universalCookies?.remove('refresh_token', { ...cookieOptions, maxAge: 0 });
+  }
 
   if (userId) {
     const userFromDB = await User.findById(userId).session(session);
