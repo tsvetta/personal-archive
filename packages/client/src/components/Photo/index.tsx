@@ -1,3 +1,4 @@
+import styles from './index.module.css';
 import commonStyles from '../../common.module.css';
 
 export type PhotoData = {
@@ -14,10 +15,10 @@ const Photo = ({ src, description, date, title, alt, width }: PhotoData) => {
   const titleText = title || localDate;
   const altText = alt || localDate;
 
-  const DEFAULT_WIDTH = 150;
+  const DEFAULT_WIDTH = 400;
 
   return (
-    <figure className={commonStyles.figure}>
+    <figure className={styles.figure}>
       <img
         src={src}
         alt={altText}
@@ -27,6 +28,7 @@ const Photo = ({ src, description, date, title, alt, width }: PhotoData) => {
       />
       {description && (
         <figcaption
+          className={styles.imgDescription}
           dangerouslySetInnerHTML={{ __html: description }}
         ></figcaption>
       )}

@@ -1,12 +1,12 @@
 @import url('./common-style-vars.css');
 
 a {
-    color: #d1d1d1;
+    color: #505050;
     transition: color 200ms ease;
 
     &:visited,
     &:active {
-        color: #d1d1d1;
+        color: #505050;
     }
 
     &:hover {
@@ -40,25 +40,17 @@ legend {
 }
 
 .section {
+    position: relative;
     display: block;
     max-width: var(--max-width);
     margin: 0 var(--default-gap) 10px;
     padding: 15px 18px;
-    background-color: #3d3d4a;
-    color: #d1d1d1;
+    background-color: #f8f8f8;
+    color: #505050;
 }
 
 .sectionTitle {
     margin-bottom: 10px;
-}
-
-.figure {
-    display: flex;
-    gap: var(--default-gap);
-
-    & + .figure {
-        margin-top: 15px;
-    }
 }
 
 .img {
