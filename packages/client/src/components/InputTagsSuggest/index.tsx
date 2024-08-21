@@ -32,7 +32,7 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
     return isInputted && notInEnteredValues;
   });
 
-  const handleInputClick = () => {
+  const handleInputFocus = () => {
     toggleSuggest(!isSuggestOpened);
   };
 
@@ -64,14 +64,18 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
     const approveKeyCode = 32; // space, enter
     const cancelKeyCode = 27; // esc
 
+    toggleSuggest(true);
+
     if (approveKeyCode === e.keyCode) {
       setInput('');
 
       props.onTagCreate(input.trim());
+      toggleSuggest(false);
     }
 
     if (cancelKeyCode === e.keyCode) {
       setInput('');
+      toggleSuggest(false);
     }
   };
 
@@ -84,11 +88,11 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
         placeholder={props.placeholder}
         validation={props.validation}
         onChange={handleInputChange}
-        onClick={handleInputClick}
+        onFocus={handleInputFocus}
         onKeyDown={handleInputKeyDown}
       />
 
-      <ul className={suggestionClasses}>
+      <ul className={suggestionClasses} data-testid='tags-suggestion-list'>
         {suggestedData.length === 0 && (
           <li className={styles.itemEmpty}>Click Space to create a new Tag</li>
         )}
@@ -121,9 +125,9 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
         })}
       </ul>
 
-      <ul className={styles.selectedTags}>
+      <div className={styles.selectedTags}>
         <Tags isButtons tags={props.value} onClick={handleSelectedTagClick} />
-      </ul>
+      </div>
     </div>
   );
 };

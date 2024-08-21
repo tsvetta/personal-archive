@@ -1,5 +1,6 @@
 import {
   ChangeEventHandler,
+  FocusEventHandler,
   HTMLInputTypeAttribute,
   KeyboardEventHandler,
   MouseEventHandler,
@@ -21,10 +22,12 @@ type InputProps = {
   value: string;
   defaultValue?: string;
   className?: string;
+  testId?: string;
   onChange?: ChangeEventHandler;
   onClick?: MouseEventHandler;
   onKeyUp?: KeyboardEventHandler;
   onKeyDown?: KeyboardEventHandler;
+  onFocus?: FocusEventHandler;
 };
 
 const Input = (props: InputProps) => {
@@ -47,10 +50,12 @@ const Input = (props: InputProps) => {
     autoComplete: props.autoComplete,
     value: props.value,
     defaultValue: props.defaultValue,
+    'data-testid': props.testId,
     onChange: props.onChange,
     onClick: props.onClick,
     onKeyUp: props.onKeyUp,
     onKeyDown: props.onKeyDown,
+    onFocus: props.onFocus,
   };
 
   let inputNode = <input type={props.type} {...inputProps} />;
@@ -75,7 +80,6 @@ const Input = (props: InputProps) => {
 export default Input;
 
 Input.defaultProps = {
-  placeholder: 'Placeholder',
   type: 'text',
   name: undefined,
   id: undefined,
@@ -88,4 +92,5 @@ Input.defaultProps = {
   onClick: () => {},
   onKeyUp: () => {},
   onKeyDown: () => {},
+  onFocus: () => {},
 };

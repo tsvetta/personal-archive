@@ -122,7 +122,7 @@ const PostFormPage = () => {
     validateForm(formData, true)
   );
 
-  // when route chacnges?
+  // when route changes
   useEffect(() => {
     if (postData?.post) {
       setFormData({
@@ -193,7 +193,7 @@ const PostFormPage = () => {
 
         setFormData((prevData) => ({
           ...prevData,
-          tags: [...formData.tags, data.addTag],
+          tags: [...prevData.tags, data.addTag],
         }));
       } catch (error: any) {
         console.error('Error saving tag:', error.message);
@@ -393,6 +393,7 @@ const PostFormPage = () => {
               size='s'
               className={styles.addPhotoButton}
               onClick={handleAddDate}
+              testId={'add-date-button'}
             >
               +
             </Button>
@@ -405,6 +406,7 @@ const PostFormPage = () => {
                 value={formData.date}
                 className={styles.dateFieldInput}
                 onChange={handleChange}
+                testId='date-input'
               />
               <Button
                 view='danger'
@@ -458,6 +460,7 @@ const PostFormPage = () => {
           value={formData.accessLevel}
           validation={fieldsValidation.accessLevel}
           onChange={handleChange}
+          testId='access-level-select'
         />
 
         <Button type='submit' className={styles.submitFormButton}>

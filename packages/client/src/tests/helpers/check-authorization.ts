@@ -1,6 +1,6 @@
 import { Response } from 'supertest';
 
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { expect } from 'vitest';
 
 export const checkUnauthorizedResopnse = (response: Response) => {
@@ -29,4 +29,8 @@ export const authorizeUser = async () => {
   expect(passwordInput).toHaveValue('test123123');
 
   fireEvent.click(submitButton);
+
+  await waitFor(() => {
+    expect(window.location.pathname).toBe('/');
+  });
 };

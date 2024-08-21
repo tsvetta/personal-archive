@@ -38,12 +38,6 @@ describe('Login Page', () => {
       await authorizeUser();
     });
 
-    test('After submit: go to home page /', async () => {
-      await waitFor(() => {
-        expect(window.location.pathname).toBe('/');
-      });
-    });
-
     test('Username and role in header', async () => {
       await waitFor(() => {
         expect(screen.getByText(/User: tsvetta, role: TSVETTA/i)).toBeVisible();

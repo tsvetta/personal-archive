@@ -9,6 +9,7 @@ type ButtonProps = {
   view?: 'danger';
   children?: ReactNode;
   className?: string;
+  testId?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 };
 
@@ -21,7 +22,12 @@ const Button = (props: ButtonProps) => {
   ]);
 
   return (
-    <button className={classes} type={props.type} onClick={props.onClick}>
+    <button
+      className={classes}
+      type={props.type}
+      onClick={props.onClick}
+      data-testid={props.testId}
+    >
       {props.children}
     </button>
   );

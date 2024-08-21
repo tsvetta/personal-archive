@@ -83,6 +83,7 @@ const FieldPhotos = (props: FieldPhotosProps) => {
         size='s'
         className={styles.addPhotoButton}
         onClick={props.onAddPhoto}
+        testId={'add-photo-button'}
       >
         +
       </Button>

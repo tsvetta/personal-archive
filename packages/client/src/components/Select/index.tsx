@@ -23,6 +23,7 @@ type SelectProps = {
   name?: string;
   id?: string;
   value: string | number;
+  testId?: string;
   onChange?: ChangeEventHandler;
   onClick?: MouseEventHandler;
   onKeyUp?: KeyboardEventHandler;
@@ -46,6 +47,7 @@ const Select = (props: SelectProps) => {
         onChange={props.onChange}
         name={props.name}
         id={props.id}
+        data-testid={props.testId}
       >
         {props.options.map((option: SelectOption) => {
           return option ? (
