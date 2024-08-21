@@ -2,7 +2,7 @@
 
 .pageHeader {
     display: flex;
-    max-width: var(--max-width);
+    
     margin: 0 var(--default-gap) 10px;
     justify-content: space-between;
     align-items: center;

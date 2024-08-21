@@ -388,13 +388,15 @@ const PostFormPage = () => {
 
         <div>
           <label htmlFor='date'>Date:</label>
-          <Button
-            size='s'
-            className={styles.addPhotoButton}
-            onClick={handleAddDate}
-          >
-            +
-          </Button>
+          {!formData.date && (
+            <Button
+              size='s'
+              className={styles.addPhotoButton}
+              onClick={handleAddDate}
+            >
+              +
+            </Button>
+          )}
           {formData.date && (
             <div className={styles.dateFieldWrapper}>
               <Input

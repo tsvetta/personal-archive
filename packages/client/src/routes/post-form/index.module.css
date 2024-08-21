@@ -28,14 +28,18 @@
     width: 100%;
 }
 
-.preview {
-    & img {
-        height: 126px;
-        max-height: 300px;
-        transition: height 0.5s ease;
+.previewImage {
+    display: block;
+    height: 0;
+    max-height: 300px;
+    transition: height 0.5s ease;
+
+    &[src] {
+        height: 125px;
+        margin-bottom: 10px;
     }
 
-    & img:hover {
+    &:hover {
         height: 300px;
     }
 }
@@ -116,7 +120,7 @@
     flex-wrap: wrap;
     align-items: center;
     gap: 2px;
-    width: 934px;
+    width: 815px;
     overflow-y: scroll;
     max-height: 500px;
 }

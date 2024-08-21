@@ -60,7 +60,11 @@ const FieldPhotos = (props: FieldPhotosProps) => {
               />
 
               <div className={styles.preview}>
-                <img src={photo?.file?.fileUrl} alt='Preview' />
+                <img
+                  src={photo?.file?.fileUrl}
+                  alt='Preview'
+                  className={styles.previewImage}
+                />
               </div>
             </div>
             <Button

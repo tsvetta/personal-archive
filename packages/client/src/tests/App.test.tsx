@@ -1,4 +1,4 @@
-import { act, fireEvent, screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import { describe, test, expect, suite, beforeAll } from 'vitest';
 
 import { createTestContext, TestContext } from './entry-tests.js';
