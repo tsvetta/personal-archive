@@ -4,7 +4,7 @@ import argon2 from 'argon2';
 export const generateSecretKey = () => {
   const secretKey = crypto.randomBytes(32).toString('hex');
 
-  console.log('Generated secret key:', secretKey);
+  // console.log('Generated secret key:', secretKey);
 
   return secretKey;
 };
@@ -15,8 +15,8 @@ export const getHashedPassword = async (password: string) => {
   try {
     hash = await argon2.hash(password);
 
-    console.log('Pass:', password);
-    console.log('Generated hash:', hash);
+    // console.log('Pass:', password);
+    // console.log('Generated hash:', hash);
   } catch (err) {
     console.error(err);
   }

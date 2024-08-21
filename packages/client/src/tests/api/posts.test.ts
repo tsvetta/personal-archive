@@ -2,17 +2,17 @@ import request from 'supertest';
 import { print } from 'graphql';
 import { suite } from 'vitest';
 
-import { getHashedPassword } from '@archive/common/crypt-pass.js';
 import {
   getPosts,
   submitCreatePostForm,
   loginUser,
   addTag,
 } from '@archive/client/server/apollo/queries.js';
-import { User } from '@archive/client/server/apollo/models.js';
 import { Tag } from '@archive/client/server/apollo/types.js';
 import { createTestContext, TestContext } from '../entry-tests.js';
 import { checkTokenCookie } from '../helpers/check-token-cookie.js';
+import { createTestUser } from '../helpers/create-test-data/index.js';
+import { checkUnauthorizedResopnse } from '../helpers/check-authorization.js';
 
 describe('Posts', () => {
   suite('Get all posts: success', () => {
@@ -23,17 +23,7 @@ describe('Posts', () => {
 
     beforeAll(async () => {
       t = await createTestContext();
-
-      const user = new User({
-        username: 'tsvetta',
-        password: await getHashedPassword('test123123'),
-        role: 'TSVETTA',
-        accessLevel: 4,
-      });
-
-      const newUser = await user.save();
-
-      newUserId = newUser._id.toString();
+      newUserId = await createTestUser();
     });
 
     test('Login', async () => {
@@ -150,9 +140,7 @@ describe('Posts', () => {
           query: print(getPosts),
         });
 
-      expect(response.body.errors).toBeDefined();
-      expect(response.body.errors[0].message).toBe('Unauthorized');
-      expect(response.body.errors[0].extensions.code).toBe(401);
+      checkUnauthorizedResopnse(response);
     });
 
     test('Unauthorized: create tag', async () => {
@@ -165,9 +153,7 @@ describe('Posts', () => {
           },
         });
 
-      expect(response.body.errors).toBeDefined();
-      expect(response.body.errors[0].message).toBe('Unauthorized');
-      expect(response.body.errors[0].extensions.code).toBe(401);
+      checkUnauthorizedResopnse(response);
     });
 
     test('Unauthorized: create post', async () => {
@@ -187,9 +173,7 @@ describe('Posts', () => {
           },
         });
 
-      expect(response.body.errors).toBeDefined();
-      expect(response.body.errors[0].message).toBe('Unauthorized');
-      expect(response.body.errors[0].extensions.code).toBe(401);
+      checkUnauthorizedResopnse(response);
     });
   });
 });

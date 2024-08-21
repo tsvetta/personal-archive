@@ -18,3 +18,4 @@ export function createCleanupUtils() {
 }
 
 export const cleanupAfterEach = createCleanupUtils();
+export const cleanupAfterAll = createCleanupUtils();

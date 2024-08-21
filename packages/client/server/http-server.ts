@@ -145,8 +145,9 @@ export const createApp = async ({ enableStaticServer = true } = {}) => {
             .render;
         } else {
           template = templateHtml;
-          renderFunction = // @ts-ignore
-            (await import('../dist/server/entry-server.js')).render(req, res);
+          renderFunction = (
+            await import('../dist/server/entry-server.js' as any)
+          ).render;
         }
 
         // @ts-ignore
@@ -176,7 +177,10 @@ export const createApp = async ({ enableStaticServer = true } = {}) => {
           .set({ 'Content-Type': 'text/html' })
           .send(html);
       } catch (e: any) {
-        vite?.ssrFixStacktrace(e);
+        if (vite && vite.ssrFixStacktrace) {
+          vite.ssrFixStacktrace(e);
+        }
+
         console.log(e.stack);
         res.status(500).end(e.stack);
       }

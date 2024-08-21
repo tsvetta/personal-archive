@@ -69,6 +69,7 @@ const LoginPage = () => {
       refetchUser(data.loginUser._id);
       navigate('/');
     } catch (error: any) {
+      console.log('Login submit error:', error);
       setFieldsValidation({ isValid: false, formError: error.message });
     }
   };

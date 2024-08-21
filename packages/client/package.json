@@ -30,6 +30,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "fetch-mock": "^11.1.0",
+    "get-port": "^7.1.0",
     "identity-obj-proxy": "^3.0.0",
     "jest-environment-jsdom": "^29.7.0",
     "mongodb-memory-server": "^10.0.0",
