@@ -72,6 +72,7 @@ export type CreatePostFormData = {
 
 const deafultFormData: CreatePostFormData = {
   title: '',
+  date: undefined,
   photos: [],
   tags: [],
   accessLevel: undefined,
@@ -82,9 +83,12 @@ const mapFormData = (formData: CreatePostFormData) => ({
   title: formData.title || undefined,
   date: formData.date,
   photos: formData.photos.map((photo: Photo) => ({
-    file: {
-      _id: photo.file?._id || photo._id,
-    },
+    file: photo.file?._id
+      ? {
+          _id: photo.file?._id,
+        }
+      : undefined,
+    src: photo.src,
     description: photo.description,
   })),
   tags: formData.tags.map((tag) => tag._id),
@@ -321,6 +325,7 @@ const PostFormPage = () => {
       }
 
       setFormData(deafultFormData);
+      setFieldsValidation(validateForm(deafultFormData, true));
     } catch (error: any) {
       console.error('Error submitting form:', error.message);
     }

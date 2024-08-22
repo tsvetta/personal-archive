@@ -126,7 +126,12 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
       </ul>
 
       <div className={styles.selectedTags}>
-        <Tags isButtons tags={props.value} onClick={handleSelectedTagClick} />
+        <Tags
+          testId='add-tags-suggest'
+          isButtons
+          tags={props.value}
+          onClick={handleSelectedTagClick}
+        />
       </div>
     </div>
   );
