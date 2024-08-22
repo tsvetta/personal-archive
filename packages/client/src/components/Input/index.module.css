@@ -21,7 +21,8 @@
     color: tomato;
     font-size: 10px;
     position: absolute;
-    bottom: 3px;
+    top: -13px;
+    right: 0;
 }
 
 .success {
