@@ -233,7 +233,7 @@ describe('Create Post Page', () => {
     });
   });
 
-  suite('Create post: check photos from DB', async () => {
+  suite('Create post: photos from DB', async () => {
     let t: TestContext;
 
     beforeAll(async () => {
@@ -251,10 +251,12 @@ describe('Create Post Page', () => {
       expect(window.location.pathname).toBe('/create-post');
     });
 
-    test('Fill Photos', async () => {
+    let galleryPhotosWrapper: HTMLElement;
+
+    test('Load and show first 20 photos from CDN in gallery', async () => {
       const gallery = await screen.findByTestId('post-form-gallery');
       expect(gallery).toBeVisible();
-      const galleryPhotosWrapper = await screen.findByTestId(
+      galleryPhotosWrapper = await screen.findByTestId(
         'gallery-photos-wrapper'
       );
       expect(galleryPhotosWrapper).toBeEmptyDOMElement();
@@ -263,21 +265,31 @@ describe('Create Post Page', () => {
         expect(galleryPhotosWrapper).not.toBeEmptyDOMElement();
         expect(galleryPhotosWrapper.childElementCount).toBe(20);
       });
+    });
 
+    test('Click "load more" photos', async () => {
       const loadPhotosButton = await screen.findByTestId('gallery-load-more');
       fireEvent.click(loadPhotosButton);
 
       await waitFor(() => {
         expect(galleryPhotosWrapper.childElementCount).toBe(30);
       });
+    });
 
-      let photoURLInput = screen.queryByPlaceholderText('Photo URL');
+    let photoURLInput: HTMLElement | null;
+    let photoDescriptionInput: HTMLElement | null;
+    let preview: HTMLElement | null;
+    let firstPhoto: ChildNode | null | undefined;
+
+    test('Click on 1st photo, add to input', async () => {
+      photoURLInput = screen.queryByPlaceholderText('Photo URL');
       expect(photoURLInput).toBeNull();
-      let photoDescriptionInput =
+
+      photoDescriptionInput =
         screen.queryByPlaceholderText('Photo Description');
       expect(photoDescriptionInput).toBeNull();
 
-      const firstPhoto = galleryPhotosWrapper.firstChild?.firstChild; // .photoWrapper > img
+      firstPhoto = galleryPhotosWrapper.firstChild?.firstChild; // .photoWrapper > img
       firstPhoto && fireEvent.click(firstPhoto);
 
       await waitFor(async () => {
@@ -290,10 +302,12 @@ describe('Create Post Page', () => {
         expect(photoDescriptionInput).not.toBeNull();
       });
 
-      let preview = await screen.findByTestId(`post-form-photo-preview_0`);
+      preview = await screen.findByTestId(`post-form-photo-preview_0`);
       expect(preview).toBeVisible();
       expect(preview).toHaveAttribute('src', 'http://qwe.rt/tyu_0.png');
+    });
 
+    test('Click on last photo (replace 1st photo URL)', async () => {
       const lastPhoto = galleryPhotosWrapper.lastChild?.firstChild; // .photoWrapper > img
       lastPhoto && fireEvent.click(lastPhoto);
 
@@ -310,7 +324,9 @@ describe('Create Post Page', () => {
         expect(preview).toBeVisible();
         expect(preview).toHaveAttribute('src', 'http://qwe.rt/tyu_29.png');
       });
+    });
 
+    test('Add second photo', async () => {
       const addPhotoButton: HTMLElement = await screen.findByTestId(
         'add-photo-button'
       );
@@ -350,31 +366,36 @@ describe('Create Post Page', () => {
       expect(window.location.pathname).toBe('/create-post');
     });
 
-    test('Fill Tags', async () => {
+    let tagSuggestButton: HTMLElement;
+    let selectedTag: HTMLElement;
+
+    test('Load 3 tags, show them in suggest', async () => {
       const tagsInput = await screen.findByPlaceholderText('Input tags here');
       fireEvent.focus(tagsInput);
 
       const suggestionList = await screen.findByTestId('tags-suggestion-list');
       expect(suggestionList.className).toMatch(/open/);
 
-      const catsTagSuggestButton = await screen.findByTestId(
-        'tags-suggest-tag_0'
-      );
+      tagSuggestButton = await screen.findByTestId('tags-suggest-tag_0');
 
-      expect(catsTagSuggestButton).toHaveTextContent('cats');
+      expect(tagSuggestButton).toHaveTextContent('cats');
       expect(await screen.findByTestId('tags-suggest-tag_1')).toHaveTextContent(
         'dogs'
       );
       expect(await screen.findByTestId('tags-suggest-tag_2')).toHaveTextContent(
         'mice'
       );
+    });
 
-      fireEvent.click(catsTagSuggestButton);
+    test('Select tag', async () => {
+      fireEvent.click(tagSuggestButton);
 
-      const catsSelectedTag = await screen.findByTestId('tag-button_0');
-      expect(catsSelectedTag).toHaveTextContent('cats');
+      selectedTag = await screen.findByTestId('tag-button_0');
+      expect(selectedTag).toHaveTextContent('cats');
+    });
 
-      fireEvent.click(catsSelectedTag);
+    test('Unselect tag', async () => {
+      fireEvent.click(selectedTag);
 
       expect(screen.queryByTestId('tag-button_0')).toBeNull();
     });
