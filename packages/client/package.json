@@ -13,7 +13,6 @@
     "test:ui": "vitest --ui"
   },
   "devDependencies": {
-    "@sinonjs/fake-timers": "^11.2.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",
