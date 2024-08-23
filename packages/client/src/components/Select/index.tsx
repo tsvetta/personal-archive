@@ -15,7 +15,7 @@ export type SelectOption =
       value: string | number;
       name: string;
     }
-  | undefined;
+  | '';
 
 type SelectProps = {
   options: SelectOption[];

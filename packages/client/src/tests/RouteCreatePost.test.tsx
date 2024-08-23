@@ -206,7 +206,7 @@ describe('Create Post Page', () => {
       expect(ta).toHaveValue('');
 
       const als = await screen.findByTestId('access-level-select');
-      expect(als).toHaveValue(undefined);
+      expect(als).toHaveValue('');
       expect(als.className).not.toMatch(/error/);
       expect(als.className).not.toMatch(/success/);
     });

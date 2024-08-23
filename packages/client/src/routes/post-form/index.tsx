@@ -38,7 +38,7 @@ import FieldPhotos from './field-photos.js';
 import { ValidationState, validateForm } from './form-validation.js';
 
 const selectOptions: SelectOption[] = [
-  undefined,
+  '',
   {
     value: 0,
     name: Privacy.ALL,
@@ -66,7 +66,7 @@ export type CreatePostFormData = {
   date?: string;
   photos: Photo[];
   tags: TagData[];
-  accessLevel?: AccessLevels;
+  accessLevel?: AccessLevels | '';
   text?: string;
 };
 
@@ -75,7 +75,7 @@ const deafultFormData: CreatePostFormData = {
   date: undefined,
   photos: [],
   tags: [],
-  accessLevel: undefined,
+  accessLevel: '',
   text: '',
 };
 
@@ -389,6 +389,7 @@ const PostFormPage = () => {
           name='title'
           value={formData.title || ''}
           onChange={handleChange}
+          autoComplete='off'
         />
 
         <div>

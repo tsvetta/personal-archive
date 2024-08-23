@@ -15,6 +15,7 @@ import { FieldValidation, FieldValidationStateType } from '../Form/types.js';
 type InputProps = {
   placeholder?: string;
   type?: HTMLInputTypeAttribute;
+  role?: string;
   name?: string;
   id?: string;
   autoComplete?: string;
@@ -46,6 +47,7 @@ const Input = (props: InputProps) => {
     className: cx(inputStyles),
     name: props.name,
     id: props.id,
+    role: props.role,
     placeholder: props.placeholder,
     autoComplete: props.autoComplete,
     value: props.value,
