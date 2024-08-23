@@ -6,25 +6,19 @@
   "scripts": {
     "s3rm": "aws s3 rm s3://tsvetta/archive/ --exclude='*' --include='*/**/.DS_Store' --recursive --endpoint-url=https://s3.us-west-004.backblazeb2.com",
     "s3syncAll": "aws s3 sync ~/Downloads/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --cache-control 'public, max-age=31536000, immutable' --exclude='*.DS_Store'",
-    "s3syncAllAndDelete": "aws s3 sync ~/Downloads/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --cache-control 'public, max-age=31536000, immutable' --exclude='*.DS_Store' --delete",
+    "s3syncAllAndDeleteIfNotLocal": "aws s3 sync ~/Downloads/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --cache-control 'public, max-age=31536000, immutable' --exclude='*.DS_Store' --delete --dryrun",
     "s3ls": "aws s3 ls --endpoint-url=https://s3.us-west-004.backblazeb2.com s3://tsvetta/archive/",
     "s3lsCount": "aws s3 ls s3://tsvetta/archive/ --recursive --endpoint-url=https://s3.us-west-004.backblazeb2.com | wc -l",
     "s3LastFile": "aws s3 ls s3://tsvetta/archive/ --recursive --endpoint-url=https://s3.us-west-004.backblazeb2.com | sort | tail -n 1",
-    "s3addCacheHeader": "aws s3 cp s3://tsvetta/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --recursive --metadata-directive REPLACE --cache-control 'public, max-age=31536000, immutable'",
-    "s3removeIfNotLocal": "aws s3 sync ~/Downloads/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --exclude='*.DS_Store' --delete --dryrun"
+    "s3addCacheHeader": "aws s3 cp s3://tsvetta/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --recursive --metadata-directive REPLACE --cache-control 'public, max-age=31536000, immutable'"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.11",
     "@types/node": "^20.10.4",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
     "eslint": "^8.55.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.1.1",
-    "ts-node": "^10.9.2",
-    "tsx": "^4.16.2",
     "typescript": "^5.3.3"
   }
 }
