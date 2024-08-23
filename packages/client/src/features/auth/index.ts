@@ -20,54 +20,56 @@ export const createAuthTokens = async (
 ) => {
   const session = await mongoose.startSession();
 
-  const userFromDB = await User.findById(userId).session(session);
-
-  // нет такого юзера
-  if (!userFromDB) {
-    return;
-  }
-
-  const authToken = jwt.sign(
-    {
-      userId: userFromDB._id,
-      username: userFromDB.username,
-      role: userFromDB.role,
-      accessLevel: userFromDB.accessLevel,
-    },
-    process.env.SECRET_KEY || '',
-    { expiresIn: '15m' }
-  );
-
-  const refreshToken = jwt.sign(
-    {
-      userId: userFromDB._id,
-      username: userFromDB.username,
-      role: userFromDB.role,
-      accessLevel: userFromDB.accessLevel,
-    },
-    process.env.SECRET_KEY || '',
-    { expiresIn: '1d' }
-  );
-
-  universalCookies?.set('auth_token', authToken, cookieOptions);
-  universalCookies?.set('refresh_token', refreshToken, cookieOptions);
-
-  // записываем новый токен в БД
   try {
-    await User.findByIdAndUpdate(
-      userId,
-      { $set: { refreshToken } },
-      { new: true }
-    )
-      .session(session)
-      .exec();
-  } catch (e: any) {
-    console.error(e.message);
+    const tokens = await session.withTransaction(async () => {
+      const userFromDB = await User.findById(userId).session(session);
+
+      // нет такого юзера
+      if (!userFromDB) {
+        return;
+      }
+
+      const authToken = jwt.sign(
+        {
+          userId: userFromDB._id,
+          username: userFromDB.username,
+          role: userFromDB.role,
+          accessLevel: userFromDB.accessLevel,
+        },
+        process.env.SECRET_KEY || '',
+        { expiresIn: '15m' }
+      );
+
+      const refreshToken = jwt.sign(
+        {
+          userId: userFromDB._id,
+          username: userFromDB.username,
+          role: userFromDB.role,
+          accessLevel: userFromDB.accessLevel,
+        },
+        process.env.SECRET_KEY || '',
+        { expiresIn: '1d' }
+      );
+
+      universalCookies?.set('auth_token', authToken, cookieOptions);
+      universalCookies?.set('refresh_token', refreshToken, cookieOptions);
+
+      // записываем новый токен в БД
+      await User.findByIdAndUpdate(
+        userId,
+        { $set: { refreshToken } },
+        { new: true }
+      )
+        .session(session)
+        .exec();
+
+      return { authToken, refreshToken };
+    });
+
+    return tokens;
+  } finally {
+    await session.endSession();
   }
-
-  session.endSession();
-
-  return { authToken, refreshToken };
 };
 
 export const deleteAuthTokens = async (

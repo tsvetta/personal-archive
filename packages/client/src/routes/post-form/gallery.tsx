@@ -35,10 +35,11 @@ const Gallery = (props: GalleryProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const scrollPhotos = () => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTo({
-        top: scrollRef.current.scrollHeight, // Прокрутка до самого низа
-        behavior: 'smooth', // Используйте 'smooth' для плавной прокрутки
-      });
+      typeof scrollRef.current.scrollTo === 'function' &&
+        scrollRef.current.scrollTo({
+          top: scrollRef.current.scrollHeight, // Прокрутка до самого низа
+          behavior: 'smooth', // Используйте 'smooth' для плавной прокрутки
+        });
     }
   };
 
