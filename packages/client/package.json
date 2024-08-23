@@ -13,6 +13,7 @@
     "test:ui": "vitest --ui"
   },
   "devDependencies": {
+    "@sinonjs/fake-timers": "^11.2.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",
@@ -24,6 +25,7 @@
     "@types/passport-jwt": "^4.0.1",
     "@types/react": "^18.2.42",
     "@types/react-dom": "^18.2.17",
+    "@types/sinonjs__fake-timers": "^8.1.5",
     "@types/supertest": "^6.0.2",
     "@vitejs/plugin-react": "^4.2.1",
     "@vitest/ui": "^2.0.5",
@@ -31,7 +33,6 @@
     "dotenv": "^16.4.5",
     "fetch-mock": "^11.1.0",
     "get-port": "^7.1.0",
-    "identity-obj-proxy": "^3.0.0",
     "jest-environment-jsdom": "^29.7.0",
     "mongodb-memory-server": "^10.0.0",
     "supertest": "^7.0.0",

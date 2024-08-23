@@ -1,5 +1,6 @@
 import { act, fireEvent, screen, waitFor } from '@testing-library/react';
-import { describe, test, expect, suite, beforeAll } from 'vitest';
+import { describe, test, expect, suite, beforeAll, afterAll } from 'vitest';
+import FakeTimers, { InstalledClock } from '@sinonjs/fake-timers';
 
 import {
   //   createTestBBFile,
@@ -12,6 +13,19 @@ import App from '../App.js';
 import { authorizeUser } from './helpers/check-authorization.js';
 
 describe('Create Post Page', () => {
+  let clock: InstalledClock;
+
+  beforeAll(() => {
+    clock = FakeTimers.install({
+      now: new Date(2024, 7, 22).getTime(), // 2024-08-22
+      toFake: ['Date'],
+    });
+  });
+
+  afterAll(() => {
+    clock.uninstall();
+  });
+
   suite('Create post - empty DB: success', async () => {
     let t: TestContext;
 
@@ -78,7 +92,7 @@ describe('Create Post Page', () => {
       expect(addDateButton).not.toBeVisible();
 
       const dateInput: HTMLElement = await screen.findByTestId('date-input');
-      expect(dateInput).toHaveValue('2024-08-22'); // TODAY
+      expect(dateInput).toHaveValue('2024-08-22'); // Date.now === 2024-08-22
       fireEvent.change(dateInput, { target: { value: '2024-08-20' } });
       expect(dateInput).toHaveValue('2024-08-20');
     });
