@@ -18,13 +18,14 @@ export type TagsData = {
 const Tags = ({ tags, isButtons, testId, onClick }: TagsData) => {
   return (
     <ul className={commonStyles.tags} data-testid={testId}>
-      {tags.map((tag: TagData) => (
+      {tags.map((tag: TagData, idx: number) => (
         <li key={`tag_${tag._id}`} className={commonStyles.tag}>
           {isButtons ? (
             <button
               type='button'
               onClick={onClick(tag)}
               className={commonStyles.tagButton}
+              data-testid={`tag-button_${idx}`}
             >
               {tag.name}
             </button>

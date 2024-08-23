@@ -11,6 +11,7 @@ import Button from '../../components/Button/index.js';
 import styles from './index.module.css';
 
 type GalleryProps = {
+  testId?: string;
   onPhotoClick: (photo: any) => void;
 };
 
@@ -74,9 +75,13 @@ const Gallery = (props: GalleryProps) => {
   };
 
   return (
-    <div className={styles.gallery}>
+    <div className={styles.gallery} data-testid={props.testId}>
       {error && <p>{error.message}</p>}
-      <div className={styles.photosWrapper} ref={scrollRef}>
+      <div
+        className={styles.photosWrapper}
+        data-testid='gallery-photos-wrapper'
+        ref={scrollRef}
+      >
         {cdnPhotos?.map((f: any) => (
           <div className={styles.photoWrapper} key={f.fileUrl}>
             <img
@@ -98,7 +103,11 @@ const Gallery = (props: GalleryProps) => {
       </div>
 
       <div className={styles.buttonWrapper}>
-        <Button onClick={loadMorePhotos} className={styles.loadButton}>
+        <Button
+          onClick={loadMorePhotos}
+          className={styles.loadButton}
+          testId='gallery-load-more'
+        >
           Загрузить ещё
         </Button>
         {loading && <p>Photos loading...</p>}

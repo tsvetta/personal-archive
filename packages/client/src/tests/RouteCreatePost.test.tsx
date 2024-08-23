@@ -3,8 +3,8 @@ import { describe, test, expect, suite, beforeAll, afterAll } from 'vitest';
 import FakeTimers, { InstalledClock } from '@sinonjs/fake-timers';
 
 import {
-  //   createTestBBFile,
-  //   createTestTag,
+  createTestTag,
+  createTestBBFiles,
   createTestUser,
 } from './helpers/create-test-data/index.js';
 import { createTestContext, TestContext } from './entry-tests.js';
@@ -98,6 +98,13 @@ describe('Create Post Page', () => {
     });
 
     test('Fill Photos', async () => {
+      const gallery = await screen.findByTestId('post-form-gallery');
+      expect(gallery).toBeVisible();
+      const galleryPhotosWrapper = await screen.findByTestId(
+        'gallery-photos-wrapper'
+      );
+      expect(galleryPhotosWrapper).toBeEmptyDOMElement();
+
       const saveButon = await screen.findByText('Save');
       const addPhotoButton: HTMLElement = await screen.findByTestId(
         'add-photo-button'
@@ -223,6 +230,153 @@ describe('Create Post Page', () => {
       expect(als).toHaveValue('');
       expect(als.className).not.toMatch(/error/);
       expect(als.className).not.toMatch(/success/);
+    });
+  });
+
+  suite('Create post: check photos from DB', async () => {
+    let t: TestContext;
+
+    beforeAll(async () => {
+      t = await createTestContext();
+      await createTestBBFiles(30);
+
+      await act(async () => {
+        t.renderApp(<App />);
+      });
+
+      await authorizeUser();
+
+      const createPostLink = await screen.getByText('Create Post');
+      fireEvent.click(createPostLink);
+      expect(window.location.pathname).toBe('/create-post');
+    });
+
+    test('Fill Photos', async () => {
+      const gallery = await screen.findByTestId('post-form-gallery');
+      expect(gallery).toBeVisible();
+      const galleryPhotosWrapper = await screen.findByTestId(
+        'gallery-photos-wrapper'
+      );
+      expect(galleryPhotosWrapper).toBeEmptyDOMElement();
+
+      await waitFor(() => {
+        expect(galleryPhotosWrapper).not.toBeEmptyDOMElement();
+        expect(galleryPhotosWrapper.childElementCount).toBe(20);
+      });
+
+      const loadPhotosButton = await screen.findByTestId('gallery-load-more');
+      fireEvent.click(loadPhotosButton);
+
+      await waitFor(() => {
+        expect(galleryPhotosWrapper.childElementCount).toBe(30);
+      });
+
+      let photoURLInput = screen.queryByPlaceholderText('Photo URL');
+      expect(photoURLInput).toBeNull();
+      let photoDescriptionInput =
+        screen.queryByPlaceholderText('Photo Description');
+      expect(photoDescriptionInput).toBeNull();
+
+      const firstPhoto = galleryPhotosWrapper.firstChild?.firstChild; // .photoWrapper > img
+      firstPhoto && fireEvent.click(firstPhoto);
+
+      await waitFor(async () => {
+        photoURLInput = screen.queryByPlaceholderText('Photo URL');
+        expect(photoURLInput).not.toBeNull();
+        expect(photoURLInput).toHaveValue(`http://qwe.rt/tyu_0.png`);
+
+        photoDescriptionInput =
+          screen.queryByPlaceholderText('Photo Description');
+        expect(photoDescriptionInput).not.toBeNull();
+      });
+
+      let preview = await screen.findByTestId(`post-form-photo-preview_0`);
+      expect(preview).toBeVisible();
+      expect(preview).toHaveAttribute('src', 'http://qwe.rt/tyu_0.png');
+
+      const lastPhoto = galleryPhotosWrapper.lastChild?.firstChild; // .photoWrapper > img
+      lastPhoto && fireEvent.click(lastPhoto);
+
+      await waitFor(async () => {
+        photoURLInput = screen.queryByPlaceholderText('Photo URL');
+        expect(photoURLInput).not.toBeNull();
+        expect(photoURLInput).toHaveValue(`http://qwe.rt/tyu_29.png`);
+
+        photoDescriptionInput =
+          screen.queryByPlaceholderText('Photo Description');
+        expect(photoDescriptionInput).not.toBeNull();
+
+        preview = await screen.findByTestId(`post-form-photo-preview_0`);
+        expect(preview).toBeVisible();
+        expect(preview).toHaveAttribute('src', 'http://qwe.rt/tyu_29.png');
+      });
+
+      const addPhotoButton: HTMLElement = await screen.findByTestId(
+        'add-photo-button'
+      );
+      fireEvent.click(addPhotoButton);
+
+      let photoDescriptionInputs = await screen.findAllByPlaceholderText(
+        'Photo Description'
+      );
+      expect(photoDescriptionInputs.length).toBe(2);
+
+      firstPhoto && fireEvent.click(firstPhoto);
+
+      let photoURLInputs = await screen.findAllByPlaceholderText('Photo URL');
+      expect(photoURLInputs.length).toBe(2);
+      expect(photoURLInputs[1]).toHaveValue(`http://qwe.rt/tyu_0.png`);
+    });
+  });
+
+  suite('Create post: check tags from DB', async () => {
+    let t: TestContext;
+
+    beforeAll(async () => {
+      t = await createTestContext();
+
+      await createTestTag('cats');
+      await createTestTag('dogs');
+      await createTestTag('mice');
+
+      await act(async () => {
+        t.renderApp(<App />);
+      });
+
+      await authorizeUser();
+
+      const createPostLink = await screen.getByText('Create Post');
+      fireEvent.click(createPostLink);
+      expect(window.location.pathname).toBe('/create-post');
+    });
+
+    test('Fill Tags', async () => {
+      const tagsInput = await screen.findByPlaceholderText('Input tags here');
+      fireEvent.focus(tagsInput);
+
+      const suggestionList = await screen.findByTestId('tags-suggestion-list');
+      expect(suggestionList.className).toMatch(/open/);
+
+      const catsTagSuggestButton = await screen.findByTestId(
+        'tags-suggest-tag_0'
+      );
+
+      expect(catsTagSuggestButton).toHaveTextContent('cats');
+      expect(await screen.findByTestId('tags-suggest-tag_1')).toHaveTextContent(
+        'dogs'
+      );
+      expect(await screen.findByTestId('tags-suggest-tag_2')).toHaveTextContent(
+        'mice'
+      );
+
+      fireEvent.click(catsTagSuggestButton);
+
+      const catsSelectedTag = await screen.findByTestId('tag-button_0');
+      expect(catsSelectedTag).toHaveTextContent('cats');
+
+      fireEvent.click(catsSelectedTag);
+
+      expect(screen.queryByTestId('tag-button_0')).toBeNull();
     });
   });
 });

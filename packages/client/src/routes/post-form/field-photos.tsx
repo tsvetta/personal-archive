@@ -36,7 +36,7 @@ const FieldPhotos = (props: FieldPhotosProps) => {
       ])}
     >
       <legend>Photos:</legend>
-      {props.value.map((photo: Photo) => {
+      {props.value.map((photo: Photo, idx: number) => {
         const photoId = photo._id;
         const validationState = props.validation.find((p) => p.id === photoId);
 
@@ -61,6 +61,7 @@ const FieldPhotos = (props: FieldPhotosProps) => {
 
               <div className={styles.preview}>
                 <img
+                  data-testid={`post-form-photo-preview_${idx}`}
                   src={photo?.file?.fileUrl}
                   alt='Preview'
                   className={styles.previewImage}
@@ -89,7 +90,10 @@ const FieldPhotos = (props: FieldPhotosProps) => {
       </Button>
 
       {props.showGallery && (
-        <Gallery onPhotoClick={props.onGalleryPhotoClick} />
+        <Gallery
+          testId='post-form-gallery'
+          onPhotoClick={props.onGalleryPhotoClick}
+        />
       )}
     </fieldset>
   );

@@ -97,7 +97,7 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
           <li className={styles.itemEmpty}>Click Space to create a new Tag</li>
         )}
 
-        {suggestedData.map((suggestion) => {
+        {suggestedData.map((suggestion, idx) => {
           const hasLinkedPosts = Boolean(suggestion.posts?.length);
 
           return (
@@ -117,6 +117,7 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
                 type='button'
                 className={styles.suggestionButton}
                 onClick={handleTagClick(suggestion)}
+                data-testid={`tags-suggest-tag_${idx}`}
               >
                 {suggestion.name}
               </button>

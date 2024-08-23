@@ -1,6 +1,6 @@
 import { createTestUser } from './create-test-user.js';
 import { createTestTag } from './create-test-tag.js';
 import { createTestPost } from './create-test-post.js';
-import { createTestBBFile } from './create-test-bb-file.js';
+import { createTestBBFiles } from './create-test-bb-files.js';
 
-export { createTestUser, createTestTag, createTestPost, createTestBBFile };
+export { createTestUser, createTestTag, createTestPost, createTestBBFiles };
