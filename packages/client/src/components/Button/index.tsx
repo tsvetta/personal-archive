@@ -1,7 +1,7 @@
 import { MouseEventHandler, ReactNode } from 'react';
 
 import styles from './index.module.css';
-import { cx } from '../../utils/cx';
+import { cx } from '../../utils/cx.js';
 
 type ButtonProps = {
   type: 'submit' | 'reset' | 'button' | undefined;
