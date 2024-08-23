@@ -5,12 +5,12 @@
   ],
   "scripts": {
     "s3rm": "aws s3 rm s3://tsvetta/archive/ --exclude='*' --include='*/**/.DS_Store' --recursive --endpoint-url=https://s3.us-west-004.backblazeb2.com",
-    "s3syncAll": "aws s3 sync ~/Downloads/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --cache-control 'max-age=31536000' --exclude='*.DS_Store'",
-    "s3syncAllAndDelete": "aws s3 sync ~/Downloads/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --cache-control 'max-age=31536000' --exclude='*.DS_Store' --delete",
+    "s3syncAll": "aws s3 sync ~/Downloads/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --cache-control 'public, max-age=31536000, immutable' --exclude='*.DS_Store'",
+    "s3syncAllAndDelete": "aws s3 sync ~/Downloads/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --cache-control 'public, max-age=31536000, immutable' --exclude='*.DS_Store' --delete",
     "s3ls": "aws s3 ls --endpoint-url=https://s3.us-west-004.backblazeb2.com s3://tsvetta/archive/",
     "s3lsCount": "aws s3 ls s3://tsvetta/archive/ --recursive --endpoint-url=https://s3.us-west-004.backblazeb2.com | wc -l",
     "s3LastFile": "aws s3 ls s3://tsvetta/archive/ --recursive --endpoint-url=https://s3.us-west-004.backblazeb2.com | sort | tail -n 1",
-    "s3addCacheHeader": "aws s3 cp s3://tsvetta/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --recursive --metadata-directive REPLACE --cache-control 'max-age=31536000'",
+    "s3addCacheHeader": "aws s3 cp s3://tsvetta/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --recursive --metadata-directive REPLACE --cache-control 'public, max-age=31536000, immutable'",
     "s3removeIfNotLocal": "aws s3 sync ~/Downloads/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --exclude='*.DS_Store' --delete --dryrun"
   },
   "devDependencies": {
