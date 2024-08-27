@@ -6,6 +6,7 @@ import Photo from '../Photo/index.js';
 import Tags, { TagData } from '../Tags/index.js';
 import Button from '../Button/index.js';
 
+import { cx } from '../../utils/cx.js';
 import {
   AccessLevelsEnum,
   AccessLevels as AccessLevelsType,
@@ -69,9 +70,11 @@ const Post = ({ data }: PostProps) => {
     deletePost({ variables: { id }, refetchQueries: ['Posts'] });
   };
 
+  const headerClasses = cx([styles.header, !data.title && styles.noTitle]);
+
   return (
     <section className={commonStyles.section}>
-      <header className={styles.header}>
+      <header className={headerClasses}>
         {data.title && (
           <h3 className={commonStyles.sectionTitle}>{data.title}</h3>
         )}
