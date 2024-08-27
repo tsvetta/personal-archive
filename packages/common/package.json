@@ -5,10 +5,16 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "process-images": "tsx convert-to-webp-and-generate-previews.ts"
+    "process-images": "tsx convert-to-webp-and-generate-previews.ts",
+    "upload-files": "tsx s3/upload-files-to-bb.ts",
+    "delete-missing-files": "tsx s3/delete-missing-files.ts",
+    "syncAndDelete": "tsx s3/sync-and-delete.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.637.0",
+    "@aws-sdk/lib-storage": "^3.637.0",
     "argon2": "^0.40.3",
+    "dotenv": "^16.4.5",
     "sharp": "^0.33.5",
     "tsx": "^4.16.5"
   },
