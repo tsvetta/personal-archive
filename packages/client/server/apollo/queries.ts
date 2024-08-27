@@ -74,6 +74,12 @@ export const loginUser = gql`
   }
 `;
 
+export const logoutUser = gql`
+  mutation LogoutUser {
+    logoutUser
+  }
+`;
+
 export const getTags = gql`
   query Tags {
     tags {

@@ -6,6 +6,7 @@ import { Tag, Post, User, BBFile } from './models.js';
 import { postTags } from './resolvers/Posts/tags.js';
 import { postsQuery } from './resolvers/queries/posts.js';
 import { loginUser } from './resolvers/mutations/login-user.js';
+import { logoutUser } from './resolvers/mutations/logout-user.js';
 import { deleteTag } from './resolvers/mutations/delete-tag.js';
 import { setPhotoPublished } from './resolvers/mutations/set-photo-published.js';
 import { ApolloContext } from './context.js';
@@ -135,6 +136,7 @@ export const resolvers = {
     },
 
     loginUser,
+    logoutUser,
 
     addUser: async (_: any, args: { data: CreateUserInput }) => {
       const newUser = new User(args.data);

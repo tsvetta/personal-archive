@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../features/auth/useAuth.js';
 import styles from './index.module.css';
+import Button from '../Button/index.js';
 
 type PageHeaderProps = {
   title: string;
 };
 
 function PageHeader({ title }: PageHeaderProps) {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <header className={styles.pageHeader}>
@@ -24,9 +25,11 @@ function PageHeader({ title }: PageHeaderProps) {
       <nav className={styles.pageMenu}>
         <ul className={styles.pageNav}>
           <li className={styles.navItem}>
-            <Link to='/login' className={styles.menuLink}>
-              Login
-            </Link>
+            {user && (
+              <Button onClick={logout} view='link' className={styles.menuLink}>
+                Logout
+              </Button>
+            )}
           </li>
           <li className={styles.navItem}>
             <Link to='/create-post' className={styles.menuLink}>

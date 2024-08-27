@@ -6,10 +6,11 @@ import { cx } from '../../utils/cx.js';
 type ButtonProps = {
   type: 'submit' | 'reset' | 'button' | undefined;
   size?: 's';
-  view?: 'danger';
+  view?: 'danger' | 'link';
   children?: ReactNode;
   className?: string;
   testId?: string;
+  title?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 };
 
@@ -19,6 +20,7 @@ const Button = (props: ButtonProps) => {
     styles.button,
     props.size === 's' && styles.size_s,
     props.view === 'danger' && styles.view_danger,
+    props.view === 'link' && styles.view_link,
   ]);
 
   return (
@@ -27,6 +29,7 @@ const Button = (props: ButtonProps) => {
       type={props.type}
       onClick={props.onClick}
       data-testid={props.testId}
+      title={props.title}
     >
       {props.children}
     </button>

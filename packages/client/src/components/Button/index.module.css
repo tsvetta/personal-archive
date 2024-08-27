@@ -28,3 +28,20 @@
 .view_danger {
     background-color: tomato;
 }
+
+.view_link {
+    background-color: transparent;
+    color: inherit;
+    transition: color 200ms ease;
+    padding: 0;
+
+    &:visited,
+    &:active {
+        color: #505050;
+    }
+
+    &:hover {
+        color: #b4b4e6;
+        background-color: transparent;
+    }
+}

@@ -1,14 +1,16 @@
 import { createContext, useContext, useState } from 'react';
-import { useQuery, ApolloError } from '@apollo/client';
+import { useQuery, ApolloError, useMutation } from '@apollo/client';
 
 import { User } from '../../../server/apollo/types.js';
 import { getUser } from '../../../server/apollo/queries.js';
+import { logoutUser as logoutUserQ } from '../../../server/apollo/queries.js';
 
 interface AuthContextType {
   user?: User;
   loading?: boolean;
   error?: ApolloError;
   refetchUser: (uid: string) => void;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -16,6 +18,7 @@ const AuthContext = createContext<AuthContextType>({
   loading: false,
   error: undefined,
   refetchUser: () => {},
+  logout: () => {},
 });
 
 export const AuthProvider = (props: {
@@ -34,8 +37,16 @@ export const AuthProvider = (props: {
     setUserId(uid);
   };
 
+  const [logoutUser] = useMutation(logoutUserQ);
+
+  const logout = async () => {
+    await logoutUser();
+
+    setUserId(undefined);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, error, refetchUser }}>
+    <AuthContext.Provider value={{ user, loading, error, refetchUser, logout }}>
       {props.children}
     </AuthContext.Provider>
   );

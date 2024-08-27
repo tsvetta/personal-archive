@@ -98,6 +98,7 @@ export const apolloSchema = `#graphql
 
         addUser(data: CreateUserInput!): User
         loginUser(data: LoginInput!): User
+        logoutUser: String
 
         setPhotoPublished(id: ID!): CDNPhoto
     }
