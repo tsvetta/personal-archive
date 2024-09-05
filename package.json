@@ -7,7 +7,7 @@
     "node": ">=16.14.2"
   },
   "scripts": {
-    "start": "cd ./client && yarn run build && yarn run preview",
+    "start": "cd ./packages/client && yarn run build && yarn run preview",
     "s3rm": "aws s3 rm s3://tsvetta/archive/ --exclude='*' --include='*/**/.DS_Store' --recursive --endpoint-url=https://s3.us-west-004.backblazeb2.com",
     "s3syncAll": "aws s3 sync ~/Downloads/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --cache-control 'public, max-age=31536000, immutable' --exclude='*.DS_Store'",
     "s3syncAllAndDeleteIfNotLocal": "aws s3 sync ~/Downloads/archive/ s3://tsvetta/archive/ --endpoint-url=https://s3.us-west-004.backblazeb2.com --cache-control 'public, max-age=31536000, immutable' --exclude='*.DS_Store' --delete --dryrun",
