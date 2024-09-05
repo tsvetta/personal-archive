@@ -63,6 +63,7 @@ const Post = ({ data }: PostProps) => {
   const date = data.date && new Date(data.date).toLocaleDateString('ru-RU');
   const hasPhotos = data.photos && data.photos.length > 0;
   const hasTags = data.tags && data.tags.length > 0;
+  const isAdmin = user?.accessLevel === AccessLevelsEnum.TSVETTA;
 
   const [deletePost, deletePostState] = useMutation(deletePostMutation);
 
@@ -70,7 +71,10 @@ const Post = ({ data }: PostProps) => {
     deletePost({ variables: { id }, refetchQueries: ['Posts'] });
   };
 
-  const headerClasses = cx([styles.header, !data.title && styles.noTitle]);
+  const headerClasses = cx([
+    styles.header,
+    isAdmin && !data.title && styles.noTitle,
+  ]);
 
   return (
     <section className={commonStyles.section}>
@@ -79,7 +83,7 @@ const Post = ({ data }: PostProps) => {
           <h3 className={commonStyles.sectionTitle}>{data.title}</h3>
         )}
 
-        {user?.accessLevel === AccessLevelsEnum.TSVETTA && (
+        {isAdmin && (
           <div className={styles.manager}>
             <Link className={styles.editLink} to={`/post/${data._id}/edit`}>
               Редактировать

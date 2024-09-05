@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
+
 import { useAuth } from '../../features/auth/useAuth.js';
 import styles from './index.module.css';
 import Button from '../Button/index.js';
+import { AccessLevelsEnum } from '@archive/client/server/apollo/types.js';
 
 type PageHeaderProps = {
   title: string;
@@ -10,7 +12,7 @@ type PageHeaderProps = {
 function PageHeader({ title }: PageHeaderProps) {
   const { user, logout } = useAuth();
 
-  const isAdmin = user?.accessLevel === 4;
+  const isAdmin = user?.accessLevel === AccessLevelsEnum.TSVETTA;
 
   return (
     <header className={styles.pageHeader}>
