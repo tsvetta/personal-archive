@@ -23,7 +23,7 @@ export const createViteServer = async (app: express.Express) => {
     const sirv = (await import('sirv')).default;
 
     app.use(compression());
-    app.use(base, sirv('../dist/client', { extensions: [] }));
+    app.use(base, sirv('../client/dist/client', { extensions: [] }));
   }
 
   return vite;

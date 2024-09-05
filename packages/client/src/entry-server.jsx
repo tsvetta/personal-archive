@@ -33,12 +33,12 @@ export async function render(
     const content = await renderToStringWithData(AppWithRouter);
     const initialState = apolloClient.extract();
 
-    // ssrManifest для получения правильных ссылок на ассеты
+    // ssrManifest для получения ссылок на ассеты
     const scripts = [];
     const styles = [];
 
     if (ssrManifest) {
-      for (const entry of ssrManifest[url]) {
+      for (const entry of ssrManifest) {
         if (entry.endsWith('.js')) {
           scripts.push(`<script type="module" src="${entry}"></script>`);
         } else if (entry.endsWith('.css')) {
