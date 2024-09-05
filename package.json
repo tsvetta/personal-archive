@@ -4,7 +4,7 @@
     "packages/*"
   ],
   "engines": {
-    "node": ">=20.14.0 <21"
+    "node": "16.14.2"
   },
   "scripts": {
     "start": "",
