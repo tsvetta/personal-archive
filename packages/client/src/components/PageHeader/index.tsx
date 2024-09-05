@@ -10,6 +10,8 @@ type PageHeaderProps = {
 function PageHeader({ title }: PageHeaderProps) {
   const { user, logout } = useAuth();
 
+  const isAdmin = user?.accessLevel === 4;
+
   return (
     <header className={styles.pageHeader}>
       <h1 className={styles.pageTitle}>
@@ -31,11 +33,13 @@ function PageHeader({ title }: PageHeaderProps) {
               </Button>
             )}
           </li>
-          <li className={styles.navItem}>
-            <Link to='/create-post' className={styles.menuLink}>
-              Create Post
-            </Link>
-          </li>
+          {isAdmin && (
+            <li className={styles.navItem}>
+              <Link to='/create-post' className={styles.menuLink}>
+                Create Post
+              </Link>
+            </li>
+          )}
         </ul>
       </nav>
     </header>
