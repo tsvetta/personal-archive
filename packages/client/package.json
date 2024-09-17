@@ -60,6 +60,6 @@
     "sirv": "^2.0.4",
     "universal-cookie-express": "^7.1.4",
     "@vitejs/plugin-react": "^4.2.1",
-    "vite": "^5.3.1"
+    "vite": "^5.3.6"
   }
 }
