@@ -64,6 +64,7 @@ const Post = ({ data }: PostProps) => {
   const hasPhotos = data.photos && data.photos.length > 0;
   const hasTags = data.tags && data.tags.length > 0;
   const isAdmin = user?.accessLevel === AccessLevelsEnum.TSVETTA;
+  const showFooterInfo = isAdmin || date;
 
   const [deletePost, deletePostState] = useMutation(deletePostMutation);
 
@@ -119,10 +120,12 @@ const Post = ({ data }: PostProps) => {
       )}
 
       <div className={styles.footer}>
-        <div className={styles.footerLeft}>
-          {date && <div className={styles.date}>{date}</div>}
-          <AccessLevels accessLevel={data.accessLevel} />
-        </div>
+        {showFooterInfo && (
+          <div className={styles.footerLeft}>
+            {date && <div className={styles.date}>{date}</div>}
+            {isAdmin && <AccessLevels accessLevel={data.accessLevel} />}
+          </div>
+        )}
 
         {hasTags && (
           <div className={styles.tags}>

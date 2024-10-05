@@ -5,14 +5,4 @@
     & + .figure {
         margin-top: 15px;
     }
-
-    &:nth-child(2) {
-        .imgDescription {
-            padding-top: 25px;
-        }
-    }
-}
-
-.imgDescription {
-    padding-top: 10px;
 }

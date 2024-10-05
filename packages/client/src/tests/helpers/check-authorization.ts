@@ -33,4 +33,8 @@ export const authorizeUser = async () => {
   await waitFor(() => {
     expect(window.location.pathname).toBe('/');
   });
+
+  await waitFor(() => {
+    expect(screen.getByText(/User: tsvetta, role: TSVETTA/i)).toBeVisible();
+  });
 };
