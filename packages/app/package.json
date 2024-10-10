@@ -1,0 +1,35 @@
+{
+  "name": "@archive/app",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build:entry-browser": "vite build --ssrManifest --outDir dist/browser",
+    "build:entry-node": "vite build --ssr src/entry-server.jsx --outDir dist/node",
+    "build": "yarn run build:entry-browser && yarn run build:entry-node",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "test": "vitest",
+    "test:ui": "vitest --ui"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.4.8",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/react": "^18.2.42",
+    "@types/react-dom": "^18.2.17",
+    "@types/sinonjs__fake-timers": "^8.1.5",
+    "fetch-mock": "^11.1.0",
+    "get-port": "^7.1.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "mongodb-memory-server": "^10.0.0"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.10.7",
+    "@vitejs/plugin-react": "^4.2.1",
+    "isomorphic-fetch": "^3.0.0",
+    "react": "^18.2.0",
+    "react-cookie": "^7.1.4",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.24.0"
+  }
+}

@@ -23,3 +23,9 @@ BB_Key=
 BB_Bucket_Id=
 
 BB_Bucket_name=
+
+```
+cd personal-archive/packages/server
+
+yarn run dev
+```
