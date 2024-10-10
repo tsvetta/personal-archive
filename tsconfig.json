@@ -1,25 +1,27 @@
 {
   "exclude": ["**/node_modules"],
+  "files": [],
+  "references": [
+    { "path": "./packages/common" },
+    { "path": "./packages/server" },
+    { "path": "./packages/app" }
+  ],
   "compilerOptions": {
+    "target": "ESNext",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "jsx": "react-jsx",
     "baseUrl": ".",
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "esModuleInterop": true,
     "useDefineForClassFields": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
-    /* Type Checking */
-    "types": ["node", "vite/client"],
+    "types": ["node", "jest", "vite/client", "vitest/jsdom"],
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
-    "paths": {
-      "@archive/*": ["packages/*"]
-    }
+    "skipLibCheck": true
   }
 }
