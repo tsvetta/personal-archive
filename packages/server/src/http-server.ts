@@ -4,6 +4,7 @@ import express, { Request, Response } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 import http from 'http';
 import cookiesMiddleware from 'universal-cookie-express';
+import { fileURLToPath } from 'node:url';
 
 import {
   createApolloExpressMiddleware,
@@ -17,7 +18,6 @@ import { saveJsonToNewCollection } from './mongo.js';
 import { createViteServer } from './vite-server.js';
 import { getBBCDNPhotos } from './backblaze-b2.js';
 import { BBFile, Photo, Post } from './apollo/models.js';
-import { fileURLToPath } from 'node:url';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const base = process.env.BASE || '/';
@@ -158,6 +158,7 @@ export const createApp = async ({ enableStaticServer = true } = {}) => {
 
           template = await fs.readFile(indexHtmlPath, 'utf-8');
           template = await vite.transformIndexHtml(url, template);
+
           const entryServerPath = fileURLToPath(
             import.meta.resolve('@archive/app/src/entry-server.jsx')
           );
