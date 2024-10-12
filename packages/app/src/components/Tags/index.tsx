@@ -30,7 +30,7 @@ const Tags = ({ tags, isButtons, testId, onClick }: TagsData) => {
               {tag.name}
             </button>
           ) : (
-            <Link to={`/tags/${tag._id}`}>{tag.name}</Link>
+            <Link to={`/tag/${tag._id}`}>{tag.name}</Link>
           )}
         </li>
       ))}

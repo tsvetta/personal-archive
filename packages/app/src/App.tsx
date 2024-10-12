@@ -45,7 +45,7 @@ const App = () => {
               }
             />
             <Route
-              path='/tags/:tagId'
+              path='/tag/:tagId'
               element={
                 <ProtectedPage>
                   <TagPage />
