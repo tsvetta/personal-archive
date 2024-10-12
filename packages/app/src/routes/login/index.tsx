@@ -11,7 +11,7 @@ import { FieldValidation } from '../../components/Form/types.js';
 import styles from './index.module.css';
 import formStyles from '../../components/Form/index.module.css';
 
-import { loginUser as loginUserQuery } from '@archive/server/src/apollo/queries.js';
+import { loginUser as loginUserQuery } from '@archive/app/src/apollo/queries.js';
 import { validateLoginForm } from './form-validation.js';
 import { useAuth } from '../../features/auth/useAuth.js';
 

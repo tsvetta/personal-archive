@@ -6,7 +6,7 @@ import {
   getUser,
   loginUser,
   logoutUser,
-} from '@archive/server/src/apollo/queries.js';
+} from '@archive/app/src/apollo/queries.js';
 import { createTestContext, TestContext } from '../entry-tests.js';
 import { checkTokenCookie } from '../helpers/check-token-cookie.js';
 import { createTestUser } from '../helpers/create-test-data/index.js';

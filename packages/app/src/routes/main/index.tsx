@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 
 import Post, { PostData } from '../../components/Post/index.js';
 
-import { getPosts } from '@archive/server/src/apollo/queries.js';
+import { getPosts } from '@archive/app/src/apollo/queries.js';
 
 const MainPage = () => {
   const { loading, error, data } = useQuery(getPosts);

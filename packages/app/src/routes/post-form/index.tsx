@@ -31,7 +31,7 @@ import {
   setPhotoPublished,
   getBBCDNPhotos,
   getPosts,
-} from '@archive/server/src/apollo/queries.js';
+} from '@archive/app/src/apollo/queries.js';
 import {
   AccessLevels,
   Photo,

@@ -11,7 +11,7 @@ import {
   AccessLevelsEnum,
   AccessLevels as AccessLevelsType,
 } from '@archive/server/src/apollo/types.js';
-import { deletePostMutation } from '@archive/server/src/apollo/queries.js';
+import { deletePostMutation } from '@archive/app/src/apollo/queries.js';
 import { useAuth } from '../../features/auth/useAuth.js';
 
 import commonStyles from '../../common.module.css';

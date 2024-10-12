@@ -4,7 +4,7 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 import {
   getBBCDNPhotos,
   setPhotoPublished,
-} from '@archive/server/src/apollo/queries.js';
+} from '@archive/app/src/apollo/queries.js';
 
 import Button from '../../components/Button/index.js';
 

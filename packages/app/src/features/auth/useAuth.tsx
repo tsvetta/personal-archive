@@ -2,8 +2,8 @@ import { createContext, useContext, useState } from 'react';
 import { useQuery, ApolloError, useMutation } from '@apollo/client';
 
 import { User } from '@archive/server/src/apollo/types.js';
-import { getUser } from '@archive/server/src/apollo/queries.js';
-import { logoutUser as logoutUserQ } from '@archive/server/src/apollo/queries.js';
+import { getUser } from '@archive/app/src/apollo/queries.js';
+import { logoutUser as logoutUserQ } from '@archive/app/src/apollo/queries.js';
 
 interface AuthContextType {
   user?: User;

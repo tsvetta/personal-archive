@@ -83,7 +83,7 @@ export const apolloSchema = `#graphql
         tag(id: ID!): Tag
         tags: [Tag]
         post(id: ID!): Post
-        posts: [Post]
+        posts(tagId: ID): [Post]
         user(id: ID!): User
         users: [User]
         cdnPhotos(published: Boolean, limit: Int, skip: Int): [CDNPhoto]

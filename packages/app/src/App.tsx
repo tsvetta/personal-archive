@@ -9,6 +9,7 @@ import ProtectedPage from './routes/protected/index.js';
 import MainPage from './routes/main/index.js';
 import LoginPage from './routes/login/index.js';
 import PostFormPage from './routes/post-form/index.js';
+import TagPage from './routes/tag/index.js';
 
 const App = () => {
   return (
@@ -43,7 +44,14 @@ const App = () => {
                 </ProtectedPage>
               }
             />
-            {/* <Route path="/tag/:id" element={<MainPage />} /> */}
+            <Route
+              path='/tags/:tagId'
+              element={
+                <ProtectedPage>
+                  <TagPage />
+                </ProtectedPage>
+              }
+            />
             <Route path='*' element={<div>404 Not Found</div>} />
           </Routes>
         </main>

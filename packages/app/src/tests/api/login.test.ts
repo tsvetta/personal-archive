@@ -2,7 +2,7 @@ import request from 'supertest';
 import { print } from 'graphql';
 import { suite } from 'vitest';
 
-import { getUser, loginUser } from '@archive/server/src/apollo/queries.js';
+import { getUser, loginUser } from '@archive/app/src/apollo/queries.js';
 import { createTestContext, TestContext } from '../entry-tests.js';
 import { checkTokenCookie } from '../helpers/check-token-cookie.js';
 import { createTestUser } from '../helpers/create-test-data/index.js';
