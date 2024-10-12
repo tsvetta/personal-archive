@@ -10,7 +10,7 @@ import { ApolloProvider } from '@apollo/client';
 import { createApolloClient } from '../apollo-client.js';
 import { cleanupAfterAll } from './helpers/cleanup.js';
 import { createTestsFetch } from './helpers/tests-fetch.js';
-import { createApp } from '@archive/server/src/http-server.js';
+import { createApp } from '@archive/server/src/http-server/index.js';
 import { AuthProvider } from '../features/auth/useAuth.js';
 
 type AppProps = {

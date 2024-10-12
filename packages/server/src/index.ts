@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { JwtPayload } from 'jsonwebtoken';
-import { createApp } from './http-server.js';
+import { createApp } from './http-server/index.js';
 import { connectMongoDB } from './mongo.js';
 import { UserDataFromToken } from './apollo/types.js';
 import { UniversalCookies } from '@archive/common/cookies.js';
