@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
-
-const dbURI = process.env.MongoURI || '';
+import { dbURI } from '../environment.js';
 
 export const connectMongoDB = () => {
   mongoose.connect(dbURI).catch((err) => {

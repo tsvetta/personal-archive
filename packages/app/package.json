@@ -6,7 +6,6 @@
     "build:entry-browser": "vite build --ssrManifest --outDir dist/browser",
     "build:entry-node": "vite build --ssr src/entry-server.jsx --outDir dist/node",
     "build": "yarn run build:entry-browser && yarn run build:entry-node",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "test": "vitest",
     "test:ui": "vitest --ui"
   },

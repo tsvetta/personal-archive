@@ -9,7 +9,7 @@ import cookiesMiddleware from 'universal-cookie-express';
 import { userFromCookiesMiddleware } from '@archive/app/src/features/auth/userFromCookiesMiddleware.js';
 import { UniversalCookies } from '@archive/app/src/utils/cookies.js';
 
-import { isProduction } from './config/environment.js';
+import { isProduction } from '../../environment.js';
 import { createApolloExpressMiddleware } from '../apollo/server.js';
 import { UserDataFromToken } from '../apollo/types.js';
 import { createViteServer } from '../vite-server.js';

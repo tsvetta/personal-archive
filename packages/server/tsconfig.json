@@ -6,5 +6,5 @@
     "moduleResolution": "NodeNext"
   },
   "references": [{ "path": "../common" }, { "path": "../app" }],
-  "include": ["src"]
+  "include": ["src", "environment.ts"]
 }

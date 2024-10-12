@@ -17,7 +17,7 @@ import {
   deleteAuthTokens,
 } from '@archive/app/src/features/auth/index.js';
 
-const secret = process.env.SECRET_KEY || '';
+import { secret } from '../../environment.js';
 
 export const createApolloServer = (
   httpServer: http.Server

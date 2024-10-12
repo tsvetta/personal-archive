@@ -1,25 +1,26 @@
 import 'dotenv/config';
 import B2 from 'backblaze-b2';
-
-const applicationKeyId = process.env.BB_Id || '';
-const applicationKey = process.env.BB_Key || '';
-const bucketId = process.env.BB_Bucket_Id || '';
-const bbCDNUrl = process.env.CDN_URL || '';
+import {
+  bbApplicationKeyId,
+  bbApplicationKey,
+  bbBucketId,
+  bbCDNUrl,
+} from '../environment.js';
 
 export const getBBCDNPhotos = (
   maxFileCount?: number,
   startFileName?: string
 ) => {
   const b2 = new B2({
-    applicationKeyId,
-    applicationKey,
+    applicationKeyId: bbApplicationKeyId,
+    applicationKey: bbApplicationKey,
   });
 
   return b2
     .authorize()
     .then(() => {
       return b2.listFileNames({
-        bucketId,
+        bucketId: bbBucketId,
         maxFileCount,
         startFileName: '',
       } as any);

@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { JwtPayload } from 'jsonwebtoken';
 
 import { UniversalCookies } from '@archive/common/cookies.js';
-import { port } from './http-server/config/environment.js';
+import { port } from '../environment.js';
 import { createApp } from './http-server/index.js';
 import { connectMongoDB } from './mongo.js';
 import { UserDataFromToken } from './apollo/types.js';

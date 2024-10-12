@@ -2,12 +2,6 @@
   "name": "@archive/server",
   "version": "1.0.0",
   "type": "module",
-  "scripts": {
-    "build:deps": "cd ../app && yarn build",
-    "dev": "tsx watch --ignore '../app/vite.config.ts*' --clear-screen=false src/index.ts",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "tsx src/index.ts"
-  },
   "devDependencies": {
     "@types/backblaze-b2": "^1.5.6",
     "@types/compression": "^1.7.5",

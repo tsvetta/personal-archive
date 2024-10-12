@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { ViteDevServer } from 'vite';
 import { Request, Response } from 'express';
 
-import { base, isProduction } from '../config/environment.js';
+import { base, isProduction } from '../../../environment.js';
 
 export const handleSSR = async (
   req: Request,
