@@ -48,7 +48,7 @@ const FieldPhotos = (props: FieldPhotosProps) => {
                 type='text'
                 name={`photo_${photoId}`}
                 onChange={props.onChange(photoId, 'src')}
-                value={photo?.file?.fileUrl || photo.src || ''}
+                value={photo?.file?.fileUrl || photo.src}
                 validation={validationState}
               />
               <Input
@@ -56,7 +56,7 @@ const FieldPhotos = (props: FieldPhotosProps) => {
                 type='textarea'
                 name={`photo-description_${photoId}`}
                 onChange={props.onChange(photoId, 'description')}
-                value={photo.description || ''}
+                value={photo.description}
               />
 
               <div className={styles.preview}>
@@ -100,7 +100,7 @@ const FieldPhotos = (props: FieldPhotosProps) => {
 };
 
 FieldPhotos.defaultProps = {
-  value: [{ src: '', description: '' }],
+  value: [{ src: undefined, description: undefined }],
   showGallery: false,
 };
 

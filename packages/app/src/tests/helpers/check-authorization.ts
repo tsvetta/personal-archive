@@ -19,9 +19,9 @@ export const authorizeUser = async () => {
   const submitButton: HTMLElement = await screen.findByText('Войти');
 
   usernameInput &&
-    fireEvent.input(usernameInput, { target: { value: 'tsvetta' } });
+    fireEvent.change(usernameInput, { target: { value: 'tsvetta' } });
   passwordInput &&
-    fireEvent.input(passwordInput, {
+    fireEvent.change(passwordInput, {
       target: { value: 'test123123' },
     });
 

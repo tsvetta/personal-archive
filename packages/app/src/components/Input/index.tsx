@@ -63,7 +63,7 @@ const Input = (props: InputProps) => {
   let inputNode = <input type={props.type} {...inputProps} />;
 
   if (isTextarea) {
-    inputNode = <textarea {...inputProps} />;
+    inputNode = <textarea {...inputProps} value={inputProps.value || ''} />;
   }
 
   return (
@@ -88,7 +88,7 @@ Input.defaultProps = {
   validation: {
     state: FieldValidationStateType.DEFAULT,
   },
-  value: '',
+  value: undefined,
   defaultValue: undefined,
   onChange: () => {},
   onClick: () => {},
