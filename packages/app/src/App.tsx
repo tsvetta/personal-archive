@@ -10,6 +10,7 @@ import MainPage from './routes/main/index.js';
 import LoginPage from './routes/login/index.js';
 import PostFormPage from './routes/post-form/index.js';
 import TagPage from './routes/tag/index.js';
+import PostPage from './routes/post/index.js';
 
 const App = () => {
   return (
@@ -35,7 +36,14 @@ const App = () => {
                 </ProtectedPage>
               }
             />
-            {/* <Route path="/post/:id" element={<PostPage />} /> */}
+            <Route
+              path='/post/:id'
+              element={
+                <ProtectedPage>
+                  <PostPage />
+                </ProtectedPage>
+              }
+            />
             <Route
               path='/post/:id/edit'
               element={

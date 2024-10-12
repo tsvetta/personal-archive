@@ -48,6 +48,7 @@ legend {
     padding: 15px 18px;
     background-color: #f8f8f8;
     color: #505050;
+    border: 1px solid transparent;
 }
 
 .sectionTitle {

@@ -40,6 +40,7 @@ export type PostData = {
 
 type PostProps = {
   data: PostData;
+  noLink: boolean;
 };
 
 const AccessLevels = ({ accessLevel }: { accessLevel: AccessLevelsType }) => {
@@ -58,7 +59,7 @@ const AccessLevels = ({ accessLevel }: { accessLevel: AccessLevelsType }) => {
   );
 };
 
-const Post = ({ data }: PostProps) => {
+const Post = ({ data, noLink }: PostProps) => {
   const { user } = useAuth();
   const date = data.date && new Date(data.date).toLocaleDateString('ru-RU');
   const hasPhotos = data.photos && data.photos.length > 0;
@@ -77,7 +78,7 @@ const Post = ({ data }: PostProps) => {
     isAdmin && !data.title && styles.noTitle,
   ]);
 
-  return (
+  const content = (
     <section className={commonStyles.section}>
       <header className={headerClasses}>
         {data.title && (
@@ -135,6 +136,20 @@ const Post = ({ data }: PostProps) => {
       </div>
     </section>
   );
+
+  if (noLink) {
+    return content;
+  }
+
+  return (
+    <Link to={`/post/${data._id}`} className={styles.postLink}>
+      {content}
+    </Link>
+  );
+};
+
+Post.defaultProps = {
+  noLink: false,
 };
 
 export default Post;

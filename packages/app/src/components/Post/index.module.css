@@ -50,3 +50,16 @@
 .text {
     margin-top: 10px;
 }
+
+.postLink {
+    text-decoration: none;
+
+    &:hover {
+        color: inherit;
+
+        section {
+            border: 1px dashed #adadad;
+            transition: border 200ms ease;
+        }
+    }
+}
