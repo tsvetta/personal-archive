@@ -88,7 +88,7 @@ Input.defaultProps = {
   validation: {
     state: FieldValidationStateType.DEFAULT,
   },
-  value: undefined,
+  value: '',
   defaultValue: undefined,
   onChange: () => {},
   onClick: () => {},
