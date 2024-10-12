@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import path from 'node:path';
+import path, { dirname } from 'node:path';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import { ViteDevServer } from 'vite';
@@ -14,10 +14,12 @@ export const createViteServer = async (app: express.Express) => {
   if (!isProduction) {
     const { createServer } = await import('vite');
 
-    const indexHtmlPath = path.resolve(__dirname, '../../app/index.html');
+    const indexHtmlPath = fileURLToPath(
+      import.meta.resolve('@archive/app/index.html')
+    );
 
     vite = await createServer({
-      root: indexHtmlPath,
+      root: dirname(indexHtmlPath),
       server: { middlewareMode: true },
       appType: 'custom',
       base,
@@ -31,7 +33,6 @@ export const createViteServer = async (app: express.Express) => {
     app.use(compression());
 
     const distPath = path.resolve(__dirname, '../../app/dist/browser');
-
     app.use(base, sirv(distPath, { extensions: [] }));
   }
 
