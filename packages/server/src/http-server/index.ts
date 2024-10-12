@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express, { Request, Response } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
@@ -18,7 +19,6 @@ import loadBbToMongo from './routes/loadBbToMongo.js';
 import transformPostPhotos from './routes/transformPostsPhotos.js';
 import unpublishAllPhotos from './routes/unpublishAllPhotos.js';
 import { handleSSR } from './routes/ssrHandler.js';
-import path from 'node:path';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -53,11 +53,11 @@ export const createApp = async ({ enableStaticServer = true } = {}) => {
   // Cached production assets
   const indexHtmlPath = path.resolve(
     __dirname,
-    '../../archive/app/dist/browser/index.html'
+    '../../../app/dist/browser/index.html'
   );
   const ssrManifestPath = path.resolve(
     __dirname,
-    '../../archive/dist/browser/.vite/ssr-manifest.json'
+    '../../../app/dist/browser/.vite/ssr-manifest.json'
   );
 
   const templateHtml = isProduction

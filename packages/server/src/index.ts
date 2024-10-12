@@ -1,11 +1,11 @@
 import 'dotenv/config';
 import { JwtPayload } from 'jsonwebtoken';
+
+import { UniversalCookies } from '@archive/common/cookies.js';
+import { port } from './http-server/config/environment.js';
 import { createApp } from './http-server/index.js';
 import { connectMongoDB } from './mongo.js';
 import { UserDataFromToken } from './apollo/types.js';
-import { UniversalCookies } from '@archive/common/cookies.js';
-
-const port = process.env.PORT || 5173;
 
 declare global {
   namespace Express {

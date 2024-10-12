@@ -21,7 +21,6 @@
     "backblaze-b2": "^1.7.0",
     "compression": "^1.7.4",
     "sirv": "^2.0.4",
-    "tsx": "^4.16.5",
     "universal-cookie-express": "^7.1.4"
   }
 }
