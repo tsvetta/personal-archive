@@ -15,7 +15,7 @@ export type SelectOption =
       value: string | number;
       name: string;
     }
-  | '';
+  | string;
 
 type SelectProps = {
   options: SelectOption[];
@@ -24,6 +24,7 @@ type SelectProps = {
   id?: string;
   value: string | number;
   testId?: string;
+  className?: string;
   onChange?: ChangeEventHandler;
   onClick?: MouseEventHandler;
   onKeyUp?: KeyboardEventHandler;
@@ -39,8 +40,10 @@ const Select = (props: SelectProps) => {
       inputStyles.success,
   ]);
 
+  const styles = cx([formStyles.field, props.className]);
+
   return (
-    <div className={formStyles.field}>
+    <div className={styles}>
       <select
         className={selectStyles}
         value={props.value}
@@ -49,10 +52,12 @@ const Select = (props: SelectProps) => {
         id={props.id}
         data-testid={props.testId}
       >
-        {props.options.map((option: SelectOption) => {
-          return option ? (
-            <option key={option.value} value={option.value}>
-              {option.name}
+        {props.options.map((o: SelectOption) => {
+          return typeof o === 'string' ? (
+            <option value={undefined}>{o}</option>
+          ) : o.name ? (
+            <option key={o.value} value={o.value}>
+              {o.name}
             </option>
           ) : (
             <option key='none' />
@@ -77,6 +82,7 @@ Select.defaultProps = {
   name: undefined,
   id: undefined,
   value: undefined,
+  className: undefined,
   onChange: () => {},
   onClick: () => {},
   onKeyUp: () => {},

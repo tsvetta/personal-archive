@@ -8,9 +8,13 @@
     max-width: 500px;
 }
 
-.addPhotoButton {
-    display: block;
+.addInfoButton {
+    display: inline-block;
     margin-bottom: 8px;
+
+    & + .addInfoButton {
+        margin-left: 5px;
+    }
 }
 
 .deletePhotoButton {
@@ -141,6 +145,10 @@
 
 .dateFieldInput {
     width: 100%;
+
+    & + .dateFieldInput {
+        margin-left: 5px;
+    }
 }
 
 .dateFieldDeleteButton {
