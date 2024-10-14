@@ -4,7 +4,7 @@ const ObjectId = Schema.Types.ObjectId;
 
 const BBFileSchema = new Schema({
   fileUrl: { type: String, required: true },
-  filePreview: { type: String, required: true },
+  filePreview: { type: String },
   published: { type: Boolean, required: true },
 });
 

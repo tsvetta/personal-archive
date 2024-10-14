@@ -19,7 +19,7 @@ export const apolloSchema = `#graphql
     type CDNPhoto {
         _id: ID!
         fileUrl: String!
-        filePreview: String!
+        filePreview: String
         published: Boolean!
     }
 

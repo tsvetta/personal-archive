@@ -22,7 +22,7 @@ export type PhotoData = {
   file?: {
     _id: Key;
     fileUrl: string;
-    filePreview: string;
+    filePreview?: string;
   };
   src?: string;
   description?: string;
