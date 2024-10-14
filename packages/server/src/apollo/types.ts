@@ -30,8 +30,6 @@ export enum Privacy {
   TSVETTA = 'TSVETTA',
 }
 
-export type AccessLevels = 0 | 1 | 2 | 3 | 4;
-
 export enum AccessLevelsEnum {
   ALL = 0,
   FAMILY = 1,
@@ -59,14 +57,14 @@ export type PostInput = {
   photos: Photo[];
   tags: string[];
   text: string;
-  accessLevel: number;
+  accessLevel: AccessLevelsEnum;
 };
 
 export type CreateUserInput = {
   username: string;
   password: string;
   role?: Privacy;
-  accessLevel: AccessLevels;
+  accessLevel: AccessLevelsEnum;
 };
 
 export type User = {
@@ -74,7 +72,7 @@ export type User = {
   username: string;
   password?: string;
   role?: `${Privacy}`;
-  accessLevel: AccessLevels;
+  accessLevel: AccessLevelsEnum;
   refreshToken?: string | null;
 };
 
@@ -82,5 +80,5 @@ export interface UserDataFromToken extends JwtPayload {
   userId: Types.ObjectId;
   username: string;
   role?: Privacy;
-  accessLevel: AccessLevels;
+  accessLevel: AccessLevelsEnum;
 }

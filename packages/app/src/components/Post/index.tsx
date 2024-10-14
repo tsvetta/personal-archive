@@ -9,7 +9,8 @@ import Button from '../Button/index.js';
 import { cx } from '../../utils/cx.js';
 import {
   AccessLevelsEnum,
-  AccessLevels as AccessLevelsType,
+  CustomDate,
+  Season,
 } from '@archive/server/src/apollo/types.js';
 import { deletePostMutation } from '@archive/app/src/apollo/queries.js';
 import { useAuth } from '../../features/auth/useAuth.js';
@@ -29,13 +30,13 @@ export type PhotoData = {
 };
 
 export type PostData = {
-  _id: Required<Key>;
-  date: Required<Date>;
+  _id: Key;
+  date: Date | CustomDate;
   tags: [TagData];
   photos: [PhotoData];
   title: string;
   text: [string];
-  accessLevel: AccessLevelsType;
+  accessLevel: AccessLevelsEnum;
 };
 
 type PostProps = {
@@ -43,7 +44,7 @@ type PostProps = {
   noLink: boolean;
 };
 
-const AccessLevels = ({ accessLevel }: { accessLevel: AccessLevelsType }) => {
+const AccessLevels = ({ accessLevel }: { accessLevel: AccessLevelsEnum }) => {
   const accessLevelTextMap = [
     'Всем',
     'Семье и друзьям',
@@ -59,13 +60,44 @@ const AccessLevels = ({ accessLevel }: { accessLevel: AccessLevelsType }) => {
   );
 };
 
+const parseSeason = (season?: Season) => {
+  if (!season) {
+    return '';
+  }
+
+  switch (season) {
+    case 1:
+      return 'Весна';
+    case 2:
+      return 'Лето';
+    case 3:
+      return 'Осень';
+    case 4:
+      return 'Зима';
+  }
+};
+
 const Post = ({ data, noLink }: PostProps) => {
   const { user } = useAuth();
-  const date = data.date && new Date(data.date).toLocaleDateString('ru-RU');
+
   const hasPhotos = data.photos && data.photos.length > 0;
   const hasTags = data.tags && data.tags.length > 0;
   const isAdmin = user?.accessLevel === AccessLevelsEnum.TSVETTA;
-  const showFooterInfo = isAdmin || date;
+
+  const { date } = data;
+  let dateString = '';
+
+  if (date instanceof Date || typeof date === 'number') {
+    dateString = new Date(date).toLocaleDateString('ru-RU');
+  } else {
+    dateString = `
+    ${parseSeason(date.season)} 
+    ${date.month || ''} 
+    ${date.year}
+    `.trim();
+  }
+
+  const showFooterInfo = isAdmin || dateString;
 
   const [deletePost, deletePostState] = useMutation(deletePostMutation);
 
@@ -106,7 +138,8 @@ const Post = ({ data, noLink }: PostProps) => {
             photo && (
               <Photo
                 key={`photo_${photo._id || photo.src}`}
-                date={data.date}
+                alt={dateString || photo.description || ''}
+                title={dateString || photo.description || ''}
                 description={photo.description}
                 src={photo.file?.fileUrl || photo.src}
               />
@@ -123,7 +156,7 @@ const Post = ({ data, noLink }: PostProps) => {
       <div className={styles.footer}>
         {showFooterInfo && (
           <div className={styles.footerLeft}>
-            {date && <div className={styles.date}>{date}</div>}
+            {dateString && <div className={styles.date}>{dateString}</div>}
             {isAdmin && <AccessLevels accessLevel={data.accessLevel} />}
           </div>
         )}

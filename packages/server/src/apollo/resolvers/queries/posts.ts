@@ -3,10 +3,10 @@ import { FilterQuery } from 'mongoose';
 import { Post } from '../../models.js';
 import { ApolloContext } from '../../context.js';
 import { AuthorizationError } from '../../errors.js';
-import { AccessLevels } from '../../types.js';
+import { AccessLevelsEnum } from '../../types.js';
 
 type FilterType = {
-  accessLevel: AccessLevels;
+  accessLevel: AccessLevelsEnum;
   tags?: string[];
 };
 
