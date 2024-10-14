@@ -161,9 +161,11 @@ export const resolvers = {
     description:
       'Custom Date type that can represent either a timestamp or a custom date format',
     parseValue(value: any) {
-      if (typeof value === 'number') {
-        return new Date(value); // Преобразуем timestamp в дату
-      } else if (typeof value === 'object') {
+      if (['number', 'string'].includes(typeof value)) {
+        return new Date(value); // Преобразуем timestamp или строку в дату
+      }
+
+      if (typeof value === 'object') {
         return value;
       }
 
@@ -171,9 +173,14 @@ export const resolvers = {
     },
 
     serialize(value: any) {
+      if (typeof value === 'number') {
+        return value;
+      }
       if (value instanceof Date) {
         return value.getTime(); // Отправляем timestamp
-      } else if (typeof value === 'object') {
+      }
+
+      if (typeof value === 'object') {
         return value;
       }
 

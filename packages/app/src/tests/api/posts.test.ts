@@ -163,7 +163,7 @@ describe('Posts', () => {
           query: print(submitCreatePostForm),
           variables: {
             data: {
-              date: '',
+              date: { year: 2007 },
               title: '',
               photos: [],
               tags: [],
