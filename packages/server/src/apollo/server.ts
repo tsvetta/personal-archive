@@ -17,7 +17,7 @@ import {
   deleteAuthTokens,
 } from '@archive/app/src/features/auth/index.js';
 
-import { secret } from '../../environment.js';
+import { secret } from '@archive/common/environment.js';
 
 export const createApolloServer = (
   httpServer: http.Server

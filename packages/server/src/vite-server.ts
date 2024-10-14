@@ -4,7 +4,7 @@ import express from 'express';
 import { fileURLToPath } from 'url';
 import { ViteDevServer } from 'vite';
 
-import { isProduction, base } from '../environment.js';
+import { isProduction, base } from '@archive/common/environment.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

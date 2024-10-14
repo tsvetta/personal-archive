@@ -2,6 +2,7 @@ import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 import { CookieOptions } from 'express';
 
+import { isProduction, secret } from '@archive/common/environment.js';
 import { UniversalCookies } from '../../utils/cookies.js';
 import { User } from '@archive/server/src/apollo/models.js';
 
@@ -9,7 +10,7 @@ import mongoose, { Types } from 'mongoose';
 
 const cookieOptions: CookieOptions = {
   httpOnly: true, // Куки доступны только для сервера
-  secure: process.env.NODE_ENV === 'production', // Требуется HTTPS в production
+  secure: isProduction, // Требуется HTTPS в production
   maxAge: 2592000, // 30 d
   sameSite: 'strict', // Ограничение куки для отправки только с того же сайта
 };
@@ -36,7 +37,7 @@ export const createAuthTokens = async (
           role: userFromDB.role,
           accessLevel: userFromDB.accessLevel,
         },
-        process.env.SECRET_KEY || '',
+        secret,
         { expiresIn: '15m' }
       );
 
@@ -47,7 +48,7 @@ export const createAuthTokens = async (
           role: userFromDB.role,
           accessLevel: userFromDB.accessLevel,
         },
-        process.env.SECRET_KEY || '',
+        secret,
         { expiresIn: '1d' }
       );
 

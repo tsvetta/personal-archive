@@ -1,12 +1,12 @@
 import 'dotenv/config';
 
 import { exec } from 'child_process';
+import { bbUrl } from '../environment';
 
-const applicationURL = process.env.BB_URL || '';
 const s3Path = process.env.S3_PATH || '';
 const localFilesPath = process.env.LOCAL_FILES_PATH_ROOT || '';
 
-const command = `aws s3 sync ${localFilesPath} ${s3Path} --endpoint-url=${applicationURL} --cache-control 'public, max-age=31536000, immutable' --exclude='*.DS_Store' --delete`;
+const command = `aws s3 sync ${localFilesPath} ${s3Path} --endpoint-url=${bbUrl} --cache-control 'public, max-age=31536000, immutable' --exclude='*.DS_Store' --delete`;
 
 exec(command, (error, stdout, stderr) => {
   if (error) {

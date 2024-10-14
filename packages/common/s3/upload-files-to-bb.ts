@@ -6,22 +6,20 @@ import path from 'path';
 import { S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 
-const homeDirectory = os.homedir();
+import { bbUrl, bbApplicationKeyId, bbApplicationKey } from '../environment';
 
-const applicationURL = process.env.BB_URL || '';
-const applicationKeyId = process.env.BB_Id || '';
-const applicationKey = process.env.BB_Key || '';
-const BBbucketName = process.env.BB_Bucket_name || '';
+const homeDirectory = os.homedir();
+const bbBucketName = process.env.BB_Bucket_name || '';
 const rootDirName = process.env.ROOT_FILE_DIR_NAME || '';
 const localFilesPath = process.env.LOCAL_FILES_PATH_HOME || '';
 const localFilesDir = path.join(homeDirectory, localFilesPath);
 
 const s3 = new S3Client({
-  endpoint: applicationURL,
+  endpoint: bbUrl,
   region: 'us-west-004',
   credentials: {
-    accessKeyId: applicationKeyId,
-    secretAccessKey: applicationKey,
+    accessKeyId: bbApplicationKeyId,
+    secretAccessKey: bbApplicationKey,
   },
 });
 
@@ -30,7 +28,7 @@ async function uploadFileToBB(filePath: string) {
   const filePathEnd = filePath.split(`/${rootDirName}/`)[1];
 
   const uploadParams = {
-    Bucket: BBbucketName,
+    Bucket: bbBucketName,
     Key: `${rootDirName}/${filePathEnd}`, // почему нет вложенных папок?
     Body: fileStream,
     CacheControl: 'public, max-age=31536000, immutable',

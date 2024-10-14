@@ -10,28 +10,26 @@ import {
   ListObjectsV2CommandOutput,
 } from '@aws-sdk/client-s3';
 
-const homeDirectory = os.homedir();
+import { bbUrl, bbApplicationKeyId, bbApplicationKey } from '../environment';
 
-const applicationURL = process.env.BB_URL || '';
-const applicationKeyId = process.env.BB_Id || '';
-const applicationKey = process.env.BB_Key || '';
-const BBbucketName = process.env.BB_Bucket_name || '';
+const homeDirectory = os.homedir();
+const bbBucketName = process.env.BB_Bucket_name || '';
 const rootDirName = process.env.ROOT_FILE_DIR_NAME || '';
 const localFilesPath = process.env.LOCAL_FILES_PATH_HOME || '';
 const localFilesDir = path.join(homeDirectory, localFilesPath);
 
 const s3 = new S3Client({
-  endpoint: applicationURL,
+  endpoint: bbUrl,
   region: 'us-west-004',
   credentials: {
-    accessKeyId: applicationKeyId,
-    secretAccessKey: applicationKey,
+    accessKeyId: bbApplicationKeyId,
+    secretAccessKey: bbApplicationKey,
   },
 });
 
 async function listS3Files() {
   const params = {
-    Bucket: BBbucketName,
+    Bucket: bbBucketName,
     Prefix: `${rootDirName}/`,
   };
 
@@ -85,7 +83,7 @@ export async function deleteMissingFiles() {
 
     if (filesToDelete.length > 0) {
       const deleteParams = {
-        Bucket: BBbucketName,
+        Bucket: bbBucketName,
         Delete: {
           Objects: filesToDelete.map((file) => ({
             Key: `${rootDirName}/${file}`,

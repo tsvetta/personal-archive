@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import { dbURI } from '../environment.js';
+import { dbURI } from '@archive/common/environment.js';
 
 export const connectMongoDB = () => {
   mongoose.connect(dbURI).catch((err) => {

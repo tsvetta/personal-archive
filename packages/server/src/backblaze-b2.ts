@@ -5,7 +5,7 @@ import {
   bbApplicationKey,
   bbBucketId,
   bbCDNUrl,
-} from '../environment.js';
+} from '@archive/common/environment.js';
 
 export const getBBCDNPhotos = (
   maxFileCount?: number,

@@ -10,3 +10,4 @@ export const bbApplicationKeyId = process.env.BB_Id || '';
 export const bbApplicationKey = process.env.BB_Key || '';
 export const bbBucketId = process.env.BB_Bucket_Id || '';
 export const bbCDNUrl = process.env.CDN_URL || '';
+export const bbUrl = process.env.BB_URL || '';
