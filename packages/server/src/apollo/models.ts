@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
-const ObjectId = Schema.Types.ObjectId;
 
 const BBFileSchema = new Schema({
   fileUrl: { type: String, required: true },
@@ -15,7 +14,7 @@ const TagSchema = new Schema({
     type: String,
     required: true,
   },
-  posts: [{ type: ObjectId, ref: 'Post' }],
+  posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
 });
 
 // Middleware для удаления тега
@@ -42,20 +41,20 @@ export const Tag = mongoose.model('Tag', TagSchema);
 
 const PhotoSchema = new Schema({
   description: { type: String },
-  file: { type: ObjectId, ref: 'BBFile' },
+  file: { type: Schema.Types.ObjectId, ref: 'BBFile' },
 });
 
 export const Photo = mongoose.model('Photo', PhotoSchema);
 
 const PostSchema = new Schema({
   date: {
-    type: Date,
+    type: Schema.Types.Mixed,
   },
   title: {
     type: String,
   },
   photos: [PhotoSchema],
-  tags: [{ type: ObjectId, ref: 'Tag' }],
+  tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
   text: {
     type: String,
   },

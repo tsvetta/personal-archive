@@ -40,8 +40,21 @@ export enum AccessLevelsEnum {
   TSVETTA = 4,
 }
 
+export enum Season {
+  SPRING = 1,
+  SUMMER = 2,
+  AUTUMN = 3,
+  WINTER = 4,
+}
+
+export type CustomDate = {
+  year: number;
+  month?: number;
+  season?: Season;
+};
+
 export type PostInput = {
-  date: Date;
+  date: Date | CustomDate;
   title: string;
   photos: Photo[];
   tags: string[];
