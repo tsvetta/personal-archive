@@ -20,7 +20,7 @@ type InputProps = {
   id?: string;
   autoComplete?: string;
   validation: FieldValidation;
-  value: string;
+  value: string | number;
   defaultValue?: string;
   className?: string;
   testId?: string;

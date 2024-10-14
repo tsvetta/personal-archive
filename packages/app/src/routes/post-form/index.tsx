@@ -34,6 +34,7 @@ import {
 } from '@archive/app/src/apollo/queries.js';
 import {
   AccessLevelsEnum,
+  CustomDate,
   Photo,
   Privacy,
 } from '@archive/server/src/apollo/types.js';
@@ -41,7 +42,7 @@ import {
 import FieldPhotos from './field-photos.js';
 import { ValidationState, validateForm } from './form-validation.js';
 
-const selectOptions: SelectOption[] = [
+const accessOptions: SelectOption[] = [
   '',
   {
     value: 0,
@@ -65,9 +66,81 @@ const selectOptions: SelectOption[] = [
   },
 ];
 
+const monthsOptions: SelectOption[] = [
+  'Месяц',
+  {
+    value: 1,
+    name: 'Январь',
+  },
+  {
+    value: 2,
+    name: 'Февраль',
+  },
+  {
+    value: 3,
+    name: 'Март',
+  },
+  {
+    value: 4,
+    name: 'Апрель',
+  },
+  {
+    value: 5,
+    name: 'Май',
+  },
+  {
+    value: 6,
+    name: 'Июнь',
+  },
+  {
+    value: 7,
+    name: 'Июль',
+  },
+  {
+    value: 8,
+    name: 'Август',
+  },
+  {
+    value: 9,
+    name: 'Сентябрь',
+  },
+  {
+    value: 10,
+    name: 'Октябрь',
+  },
+  {
+    value: 11,
+    name: 'Ноябрь',
+  },
+  {
+    value: 12,
+    name: 'Декабрь',
+  },
+];
+
+const seasonsOptions: SelectOption[] = [
+  'Сезон',
+  {
+    value: 1,
+    name: 'Весна',
+  },
+  {
+    value: 2,
+    name: 'Лето',
+  },
+  {
+    value: 3,
+    name: 'Осень',
+  },
+  {
+    value: 4,
+    name: 'Зима',
+  },
+];
+
 export type CreatePostFormData = {
   title?: string;
-  date?: string;
+  date?: string | CustomDate;
   photos: Photo[];
   tags: TagData[];
   accessLevel?: AccessLevelsEnum | '';
@@ -151,6 +224,26 @@ const PostFormPage = () => {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
     },
     []
+  );
+
+  const handleInaccurateDateChange = useCallback<
+    ChangeEventHandler<HTMLInputElement>
+  >(
+    (e) => {
+      const { name, value } = e.target;
+
+      setFormData((prevData) => ({
+        ...prevData,
+        date:
+          typeof prevData.date === 'object'
+            ? {
+                ...prevData.date,
+                [name]: isNaN(Number(value)) ? undefined : Number(value),
+              }
+            : value,
+      }));
+    },
+    [formData.date]
   );
 
   const handlePhotosChange = useCallback(
@@ -371,12 +464,23 @@ const PostFormPage = () => {
     }));
   };
 
+  const handleAddInaccurateDate = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      date: {
+        year: new Date().getFullYear(),
+      },
+    }));
+  };
+
   const hanldeDeleteDate = () => {
     setFormData((prevData) => ({
       ...prevData,
       date: undefined,
     }));
   };
+
+  const dateString = typeof formData.date === 'string' && formData.date;
 
   return (
     <form
@@ -389,7 +493,7 @@ const PostFormPage = () => {
 
         <label htmlFor='title'>Title:</label>
         <Input
-          placeholder={formData.date || 'Заголовок поста'}
+          placeholder={dateString || 'Заголовок поста'}
           name='title'
           value={formData.title || ''}
           onChange={handleChange}
@@ -401,14 +505,24 @@ const PostFormPage = () => {
           {!formData.date && (
             <Button
               size='s'
-              className={styles.addPhotoButton}
+              className={styles.addInfoButton}
               onClick={handleAddDate}
               testId={'add-date-button'}
             >
-              +
+              Точная дата
             </Button>
           )}
-          {formData.date && (
+          {!formData.date && (
+            <Button
+              size='s'
+              className={styles.addInfoButton}
+              onClick={handleAddInaccurateDate}
+              testId={'add-date-button'}
+            >
+              Примерная дата
+            </Button>
+          )}
+          {typeof formData.date === 'string' && (
             <div className={styles.dateFieldWrapper}>
               <Input
                 type='date'
@@ -418,6 +532,45 @@ const PostFormPage = () => {
                 onChange={handleChange}
                 testId='date-input'
               />
+              <Button
+                view='danger'
+                size='s'
+                onClick={hanldeDeleteDate}
+                className={styles.dateFieldDeleteButton}
+              >
+                x
+              </Button>
+            </div>
+          )}
+          {typeof formData.date === 'object' && formData.date?.year && (
+            <div className={styles.dateFieldWrapper}>
+              <Select
+                name='season'
+                options={seasonsOptions}
+                value={formData.date.season}
+                className={styles.dateFieldInput}
+                onChange={handleInaccurateDateChange}
+                testId='date-select-season'
+              />
+
+              <Select
+                name='month'
+                options={monthsOptions}
+                value={formData.date.month}
+                className={styles.dateFieldInput}
+                onChange={handleInaccurateDateChange}
+                testId='date-select-month'
+              />
+
+              <Input
+                type='number'
+                name='year'
+                value={formData.date.year}
+                className={styles.dateFieldInput}
+                onChange={handleInaccurateDateChange}
+                testId='date-input-year'
+              />
+
               <Button
                 view='danger'
                 size='s'
@@ -466,7 +619,7 @@ const PostFormPage = () => {
         <label htmlFor='accessLevel'>Access Level:</label>
         <Select
           name='accessLevel'
-          options={selectOptions}
+          options={accessOptions}
           value={formData.accessLevel}
           validation={fieldsValidation.accessLevel}
           onChange={handleChange}
