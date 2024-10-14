@@ -65,6 +65,9 @@ const PostSchema = new Schema({
     min: [0, 'Access level should be between 0 and 4'],
     max: [4, 'Access level should be between 0 and 4'],
   },
+  createdAt: {
+    type: Date,
+  },
 });
 
 // тут делает unpublish фоток

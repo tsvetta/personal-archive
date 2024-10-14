@@ -21,6 +21,7 @@ export const getPosts = gql`
       title
       text
       accessLevel
+      createdAt
     }
   }
 `;

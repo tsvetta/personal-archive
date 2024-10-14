@@ -48,6 +48,7 @@ export const apolloSchema = `#graphql
         accessLevel: Int!
         text: String
         title: String
+        createdAt: Date
     }
 
     input PostInput {

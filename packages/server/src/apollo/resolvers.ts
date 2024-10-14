@@ -121,7 +121,7 @@ export const resolvers = {
         throw new AuthorizationError('Unauthorized');
       }
 
-      const newPost = new Post(args.data);
+      const newPost = new Post({ ...args.data, createdAt: Date.now() });
 
       await newPost.save();
 
