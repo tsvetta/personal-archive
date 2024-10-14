@@ -1,5 +1,5 @@
 import { Key } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
 import Photo from '../Photo/index.js';
@@ -78,6 +78,7 @@ const parseSeason = (season?: Season) => {
 };
 
 const Post = ({ data, noLink }: PostProps) => {
+  const navigate = useNavigate();
   const { user } = useAuth();
 
   const hasPhotos = data.photos && data.photos.length > 0;
@@ -89,10 +90,11 @@ const Post = ({ data, noLink }: PostProps) => {
 
   if (date instanceof Date || typeof date === 'number') {
     dateString = new Date(date).toLocaleDateString('ru-RU');
-  } else {
+  } else if (date && typeof date === 'object') {
+    // not null and CustomDate
     dateString = `
-    ${parseSeason(date.season)} 
-    ${date.month || ''} 
+    ${parseSeason(date?.season)} 
+    ${date?.month || ''} 
     ${date.year}
     `.trim();
   }
@@ -100,6 +102,12 @@ const Post = ({ data, noLink }: PostProps) => {
   const showFooterInfo = isAdmin || dateString;
 
   const [deletePost, deletePostState] = useMutation(deletePostMutation);
+
+  const goToPostPage = (id: Key) => (e: any) => {
+    if (!['A', 'BUTTON'].includes(e.target.tagName)) {
+      navigate(`/post/${id}`);
+    }
+  };
 
   const handlePostDelete = (id: Key) => () => {
     deletePost({ variables: { id }, refetchQueries: ['Posts'] });
@@ -110,8 +118,13 @@ const Post = ({ data, noLink }: PostProps) => {
     isAdmin && !data.title && styles.noTitle,
   ]);
 
-  const content = (
-    <section className={commonStyles.section}>
+  const sectionClasses = cx([commonStyles.section, !noLink && styles.postLink]);
+
+  return (
+    <section
+      className={sectionClasses}
+      onClick={noLink ? undefined : goToPostPage(data._id)}
+    >
       <header className={headerClasses}>
         {data.title && (
           <h3 className={commonStyles.sectionTitle}>{data.title}</h3>
@@ -168,16 +181,6 @@ const Post = ({ data, noLink }: PostProps) => {
         )}
       </div>
     </section>
-  );
-
-  if (noLink) {
-    return content;
-  }
-
-  return (
-    <Link to={`/post/${data._id}`} className={styles.postLink}>
-      {content}
-    </Link>
   );
 };
 

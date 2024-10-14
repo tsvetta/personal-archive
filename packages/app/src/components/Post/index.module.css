@@ -53,13 +53,11 @@
 
 .postLink {
     text-decoration: none;
+    cursor: pointer;
 
     &:hover {
         color: inherit;
-
-        section {
-            border: 1px dashed #adadad;
-            transition: border 200ms ease;
-        }
+        border: 1px dashed #adadad;
+        transition: border 200ms ease;
     }
 }
