@@ -507,7 +507,7 @@ const PostFormPage = () => {
               size='s'
               className={styles.addInfoButton}
               onClick={handleAddDate}
-              testId={'add-date-button'}
+              testId='add-date-button'
             >
               Точная дата
             </Button>
@@ -517,7 +517,7 @@ const PostFormPage = () => {
               size='s'
               className={styles.addInfoButton}
               onClick={handleAddInaccurateDate}
-              testId={'add-date-button'}
+              testId='add-inaccurate-date-button'
             >
               Примерная дата
             </Button>

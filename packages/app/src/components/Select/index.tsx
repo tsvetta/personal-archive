@@ -54,7 +54,9 @@ const Select = (props: SelectProps) => {
       >
         {props.options.map((o: SelectOption) => {
           return typeof o === 'string' ? (
-            <option value={undefined}>{o}</option>
+            <option key={o} value={undefined}>
+              {o}
+            </option>
           ) : o.name ? (
             <option key={o.value} value={o.value}>
               {o.name}
