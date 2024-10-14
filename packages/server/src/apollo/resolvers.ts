@@ -1,4 +1,4 @@
-import { GraphQLScalarType, Kind } from 'graphql';
+import { GraphQLScalarType, Kind, ValueNode } from 'graphql';
 
 import { PostInput, TagInput, CreateUserInput } from './types.js';
 import { Tag, Post, User, BBFile } from './models.js';
@@ -35,6 +35,13 @@ const parseLiteral = (ast: any) => {
     default:
       return null;
   }
+};
+
+const getIntValueFromNode = (node: ValueNode): number | undefined => {
+  if (node && node.kind === Kind.INT) {
+    return parseInt(node.value, 10);
+  }
+  return undefined;
 };
 
 export const resolvers = {
@@ -151,18 +158,58 @@ export const resolvers = {
 
   Date: new GraphQLScalarType({
     name: 'Date',
-    description: 'Date custom scalar type',
+    description:
+      'Custom Date type that can represent either a timestamp or a custom date format',
     parseValue(value: any) {
-      return new Date(value); // value from the client
+      if (typeof value === 'number') {
+        return new Date(value); // Преобразуем timestamp в дату
+      } else if (typeof value === 'object') {
+        return value;
+      }
+
+      throw new Error('Date - parseValue: Invalid Date format');
     },
+
     serialize(value: any) {
-      return value.getTime(); // value sent to the client
+      if (value instanceof Date) {
+        return value.getTime(); // Отправляем timestamp
+      } else if (typeof value === 'object') {
+        return value;
+      }
+
+      throw new Error('Date - serialize: Invalid Date format');
     },
+
     parseLiteral(ast) {
       if (ast.kind === Kind.INT) {
-        return new Date(+ast.value); // ast value is always in string format
+        return new Date(parseInt(ast.value, 10)); // Если это число, преобразуем в timestamp
+      } else if (ast.kind === Kind.OBJECT) {
+        const yearField = ast.fields.find(
+          (f) => f.name.value === 'year'
+        )?.value;
+        const monthField = ast.fields.find(
+          (f) => f.name.value === 'month'
+        )?.value;
+        const seasonField = ast.fields.find(
+          (f) => f.name.value === 'season'
+        )?.value;
+
+        const year = yearField ? getIntValueFromNode(yearField) : undefined;
+        const month = monthField ? getIntValueFromNode(monthField) : undefined;
+        const season = seasonField
+          ? getIntValueFromNode(seasonField)
+          : undefined;
+
+        if (year !== undefined) {
+          return {
+            year,
+            month,
+            season,
+          };
+        }
       }
-      return null;
+
+      throw new Error('Date - parseLiteral: Invalid Date format');
     },
   }),
 
@@ -170,7 +217,7 @@ export const resolvers = {
     name: 'JSON',
     description: 'Arbitrary JSON value',
     parseValue(value) {
-      return value; // value from the client input variables
+      return value; // value from the client
     },
     serialize(value) {
       return value; // value sent to the client
