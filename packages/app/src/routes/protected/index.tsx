@@ -1,10 +1,10 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../features/auth/useAuth.js';
 import { ReactNode } from 'react';
-import { AccessLevels } from '@archive/server/src/apollo/types.js';
+import { AccessLevelsEnum } from '@archive/server/src/apollo/types.js';
 
 type ProtectedPageProps = {
-  accessLevel: AccessLevels;
+  accessLevel: AccessLevelsEnum;
   children: ReactNode;
 };
 

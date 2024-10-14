@@ -33,7 +33,7 @@ import {
   getPosts,
 } from '@archive/app/src/apollo/queries.js';
 import {
-  AccessLevels,
+  AccessLevelsEnum,
   Photo,
   Privacy,
 } from '@archive/server/src/apollo/types.js';
@@ -70,7 +70,7 @@ export type CreatePostFormData = {
   date?: string;
   photos: Photo[];
   tags: TagData[];
-  accessLevel?: AccessLevels | '';
+  accessLevel?: AccessLevelsEnum | '';
   text?: string;
 };
 

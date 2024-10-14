@@ -1,4 +1,4 @@
-import { AccessLevels, Photo } from '@archive/server/src/apollo/types.js';
+import { AccessLevelsEnum, Photo } from '@archive/server/src/apollo/types.js';
 import { CreatePostFormData } from './index.js';
 import { TagData } from '../../components/Tags/index.js';
 import {
@@ -32,7 +32,7 @@ const validatePhotos = (photos: Photo[]) => {
   );
 };
 
-const validateAccessLevels = (accessLevel?: AccessLevels | '') => {
+const validateAccessLevels = (accessLevel?: AccessLevelsEnum | '') => {
   if (accessLevel === '') {
     return {
       state: FieldValidationStateType.ERROR,
