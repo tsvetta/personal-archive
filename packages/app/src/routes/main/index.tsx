@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
 
+import { Filters } from '@archive/app/src/features/filters/index.js';
 import Post, { PostData } from '../../components/Post/index.js';
 
 import { getPosts } from '@archive/app/src/apollo/queries.js';

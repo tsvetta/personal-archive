@@ -1,5 +1,6 @@
 import 'dotenv/config';
 
+import path from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -14,6 +15,11 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     preserveSymlinks: true, // for yarn workspaces
+    alias: {
+      '@archive/app': path.resolve(__dirname),
+      '@archive/common': path.resolve(__dirname, '../common'),
+      '@archive/server': path.resolve(__dirname, '../server'),
+    },
   },
   ssr: {
     noExternal: ['@apollo/client'],

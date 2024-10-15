@@ -12,11 +12,11 @@ import { FieldValidation, FieldValidationStateType } from '../Form/types.js';
 type InputTagsSuggestProps = {
   name?: string;
   placeholder?: string;
-  validation: FieldValidation;
+  validation?: FieldValidation;
   data: TagData[];
   value: TagData[];
-  onTagCreate: (name: string) => void;
-  onTagDelete: (id: Key) => void;
+  onTagCreate?: (name: string) => void;
+  onTagDelete?: (id: Key) => void;
   onChange: (clickedTag: TagData) => void;
 };
 
@@ -53,7 +53,7 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
   };
 
   const handleDeleteTag = (clickedTag: TagData) => () => {
-    props.onTagDelete(clickedTag._id);
+    props.onTagDelete && props.onTagDelete(clickedTag._id);
   };
 
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -69,7 +69,7 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
     if (approveKeyCode === e.keyCode) {
       setInput('');
 
-      props.onTagCreate(input.trim());
+      props.onTagCreate && props.onTagCreate(input.trim());
       toggleSuggest(false);
     }
 
@@ -94,7 +94,10 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
 
       <ul className={suggestionClasses} data-testid='tags-suggestion-list'>
         {suggestedData.length === 0 && (
-          <li className={styles.itemEmpty}>Click Space to create a new Tag</li>
+          <li className={styles.itemEmpty}>
+            {props.onTagCreate && 'Click Space to create a new Tag'}
+            {!props.onTagCreate && 'Не найдено'}
+          </li>
         )}
 
         {suggestedData.map((suggestion, idx) => {
@@ -102,7 +105,7 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
 
           return (
             <li key={suggestion._id} className={styles.item}>
-              {hasLinkedPosts ? null : (
+              {hasLinkedPosts || !props.onTagDelete ? null : (
                 <Button
                   view='danger'
                   size='s'
@@ -148,6 +151,7 @@ InputTagsSuggest.defaultProps = {
   },
   value: '',
   data: [],
-  onTagCreate: () => {},
+  onTagCreate: undefined,
+  onTagDelete: undefined,
   onChange: () => {},
 };
