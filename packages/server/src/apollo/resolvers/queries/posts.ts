@@ -1,4 +1,4 @@
-import { FilterQuery } from 'mongoose';
+import { FilterQuery, SortOrder } from 'mongoose';
 
 import { Post } from '../../models.js';
 import { ApolloContext } from '../../context.js';
@@ -10,7 +10,13 @@ type FilterType = {
   tags?: string[];
 };
 
-type PostQueryArgs = { tagId?: string };
+type PostsFilter = {
+  date?: SortOrder;
+  createdAt?: SortOrder;
+  tags?: [string];
+};
+
+type PostQueryArgs = { filter?: PostsFilter };
 
 export const postsQuery = async (
   _: any,
@@ -26,15 +32,15 @@ export const postsQuery = async (
       accessLevel: { $lte: user?.accessLevel },
     };
 
-    // Добавляем фильтрацию по тегам, только если `tagId` передан
-    if (args.tagId) {
-      filter.tags = { $in: args.tagId };
+    // Добавляем фильтрацию по тегам
+    if (args.filter?.tags) {
+      filter.tags = { $in: args.filter.tags };
     }
 
     const filteredByRole = await Post.find(filter)
       .populate('tags')
       .populate('photos.file')
-      .sort({ normalizedDate: 1 })
+      .sort({ normalizedDate: args.filter?.date || -1 })
       .exec();
 
     return filteredByRole.map((post) => post?.toObject({ virtuals: true }));

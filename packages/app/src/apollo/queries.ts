@@ -1,8 +1,8 @@
 import { gql } from 'graphql-tag';
 
 export const getPosts = gql`
-  query Posts($tagId: ID) {
-    posts(tagId: $tagId) {
+  query Posts($filter: PostsFilter) {
+    posts(filter: $filter) {
       _id
       date
       normalizedDate

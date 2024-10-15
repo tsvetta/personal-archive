@@ -80,12 +80,23 @@ export const apolloSchema = `#graphql
         accessLevel: Int!
         refreshToken: String
     }
+
+    enum Sort {
+        asc
+        desc
+    }
+
+    input PostsFilter {
+        date: Sort
+        createdAt: Sort
+        tags: [ID]
+    }
     
     type Query {
         tag(id: ID!): Tag
         tags: [Tag]
         post(id: ID!): Post
-        posts(tagId: ID): [Post]
+        posts(filter: PostsFilter): [Post]
         user(id: ID!): User
         users: [User]
         cdnPhotos(published: Boolean, limit: Int, skip: Int): [CDNPhoto]

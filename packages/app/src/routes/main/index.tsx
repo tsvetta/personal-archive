@@ -5,7 +5,13 @@ import Post, { PostData } from '../../components/Post/index.js';
 import { getPosts } from '@archive/app/src/apollo/queries.js';
 
 const MainPage = () => {
-  const { loading, error, data } = useQuery(getPosts);
+  const { loading, error, data } = useQuery(getPosts, {
+    variables: {
+      filter: {
+        date: 'asc',
+      },
+    },
+  });
 
   if (error) {
     console.error('\n Main page error:', error);

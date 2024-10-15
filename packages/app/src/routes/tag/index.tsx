@@ -8,7 +8,7 @@ const TagPage = () => {
   const { tagId } = useParams();
 
   const { data, error, loading } = useQuery(getPosts, {
-    variables: { tagId },
+    variables: { filter: { tags: [tagId] } },
     skip: !tagId,
   });
 
