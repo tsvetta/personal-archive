@@ -1,6 +1,7 @@
 import { Key } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
+import { parsePostDate } from '@archive/common/dates/parse-post-dates.js';
 
 import Photo from '../Photo/index.js';
 import Tags, { TagData } from '../Tags/index.js';
@@ -10,7 +11,6 @@ import { cx } from '../../utils/cx.js';
 import {
   AccessLevelsEnum,
   CustomDate,
-  Season,
 } from '@archive/server/src/apollo/types.js';
 import { deletePostMutation } from '@archive/app/src/apollo/queries.js';
 import { useAuth } from '../../features/auth/useAuth.js';
@@ -60,45 +60,14 @@ const AccessLevels = ({ accessLevel }: { accessLevel: AccessLevelsEnum }) => {
   );
 };
 
-const parseSeason = (season?: Season) => {
-  if (!season) {
-    return '';
-  }
-
-  switch (season) {
-    case 1:
-      return 'Весна';
-    case 2:
-      return 'Лето';
-    case 3:
-      return 'Осень';
-    case 4:
-      return 'Зима';
-  }
-};
-
 const Post = ({ data, noLink }: PostProps) => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  const dateString = parsePostDate(data.date);
   const hasPhotos = data.photos && data.photos.length > 0;
   const hasTags = data.tags && data.tags.length > 0;
   const isAdmin = user?.accessLevel === AccessLevelsEnum.TSVETTA;
-
-  const { date } = data;
-  let dateString = '';
-
-  if (date instanceof Date || typeof date === 'number') {
-    dateString = new Date(date).toLocaleDateString('ru-RU');
-  } else if (date && typeof date === 'object') {
-    // not null and CustomDate
-    dateString = `
-    ${parseSeason(date?.season)} 
-    ${date?.month || ''} 
-    ${date.year}
-    `.trim();
-  }
-
   const showFooterInfo = isAdmin || dateString;
 
   const [deletePost, deletePostState] = useMutation(deletePostMutation);

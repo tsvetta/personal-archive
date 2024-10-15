@@ -10,13 +10,13 @@ import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 
 import { cx } from '../../utils/cx.js';
-import { getDateFormatted } from '../../utils/date-formatted.js';
+import { getDateFormatted } from '@archive/common/dates/date-formatted.js';
 
 import { TagData } from '../../components/Tags/index.js';
 import Input from '../../components/Input/index.js';
 import Button from '../../components/Button/index.js';
 import InputTagsSuggest from '../../components/InputTagsSuggest/index.js';
-import Select, { SelectOption } from '../../components/Select/index.js';
+import Select from '../../components/Select/index.js';
 
 import formStyles from '../../components/Form/index.module.css';
 import styles from './index.module.css';
@@ -32,7 +32,7 @@ import {
   getBBCDNPhotos,
   getPosts,
 } from '@archive/app/src/apollo/queries.js';
-import { Photo, Privacy } from '@archive/server/src/apollo/types.js';
+import { CustomDate, Photo } from '@archive/server/src/apollo/types.js';
 
 import FieldPhotos from './field-photos.js';
 import {
@@ -40,102 +40,7 @@ import {
   ValidationState,
   validateForm,
 } from './form-validation.js';
-
-const accessOptions: SelectOption[] = [
-  '',
-  {
-    value: 0,
-    name: Privacy.ALL,
-  },
-  {
-    value: 1,
-    name: Privacy.FAMILY,
-  },
-  {
-    value: 2,
-    name: Privacy.FRIENDS,
-  },
-  {
-    value: 3,
-    name: Privacy.CLOSE_FRIENDS,
-  },
-  {
-    value: 4,
-    name: Privacy.TSVETTA,
-  },
-];
-
-const monthsOptions: SelectOption[] = [
-  'Месяц',
-  {
-    value: 1,
-    name: 'Январь',
-  },
-  {
-    value: 2,
-    name: 'Февраль',
-  },
-  {
-    value: 3,
-    name: 'Март',
-  },
-  {
-    value: 4,
-    name: 'Апрель',
-  },
-  {
-    value: 5,
-    name: 'Май',
-  },
-  {
-    value: 6,
-    name: 'Июнь',
-  },
-  {
-    value: 7,
-    name: 'Июль',
-  },
-  {
-    value: 8,
-    name: 'Август',
-  },
-  {
-    value: 9,
-    name: 'Сентябрь',
-  },
-  {
-    value: 10,
-    name: 'Октябрь',
-  },
-  {
-    value: 11,
-    name: 'Ноябрь',
-  },
-  {
-    value: 12,
-    name: 'Декабрь',
-  },
-];
-
-const seasonsOptions: SelectOption[] = [
-  'Сезон',
-  {
-    value: 1,
-    name: 'Весна',
-  },
-  {
-    value: 2,
-    name: 'Лето',
-  },
-  {
-    value: 3,
-    name: 'Осень',
-  },
-  {
-    value: 4,
-    name: 'Зима',
-  },
-];
+import { accessOptions, monthsOptions, seasonsOptions } from './form-data.js';
 
 const deafultFormData: CreatePostFormData = {
   title: '',
@@ -163,6 +68,16 @@ const mapFormData = (formData: CreatePostFormData) => ({
   text: formData.text || undefined,
 });
 
+const getInitialDateFromData = (date: number | Date | CustomDate) => {
+  if (!date) return undefined;
+
+  if (date instanceof Date || typeof date === 'number') {
+    return getDateFormatted(date);
+  }
+
+  return date;
+};
+
 const PostFormPage = () => {
   const { id: urlId } = useParams();
   const isEditPage = Boolean(urlId);
@@ -182,11 +97,16 @@ const PostFormPage = () => {
   const nowFormatted = getDateFormatted();
 
   const initialFormData = postData
-    ? { ...postData.post, date: getDateFormatted(postData.post.date) } // is Edit page
+    ? {
+        // isEditPage
+        ...postData.post,
+        date: getInitialDateFromData(postData.post.date),
+      }
     : {
         date: nowFormatted,
         ...deafultFormData,
       };
+
   const [formData, setFormData] = useState<CreatePostFormData>(initialFormData);
 
   const [fieldsValidation, setFieldsValidation] = useState<ValidationState>(
@@ -198,7 +118,7 @@ const PostFormPage = () => {
     if (postData?.post) {
       setFormData({
         ...postData.post,
-        date: getDateFormatted(postData.post.date),
+        date: getInitialDateFromData(postData.post.date),
       });
     } else {
       setFormData({

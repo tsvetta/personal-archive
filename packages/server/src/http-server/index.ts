@@ -18,6 +18,7 @@ import { initializeApolloServer } from './middlewares/apolloMiddleware.js';
 import loadBbToMongo from './routes/loadBbToMongo.js';
 import transformPostPhotos from './routes/transformPostsPhotos.js';
 import unpublishAllPhotos from './routes/unpublishAllPhotos.js';
+import updateNormalizedDateInPosts from './routes/updateNormalizedDateInPosts.js';
 import { handleSSR } from './routes/ssrHandler.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -64,6 +65,7 @@ export const createApp = async ({ enableStaticServer = true } = {}) => {
     .use('*', userFromCookiesMiddleware) // req.user
     .use('/transform-posts-photos', transformPostPhotos)
     .use('/unpublish-all-photos', unpublishAllPhotos)
+    .use('/update-normalized-dates-in-posts', updateNormalizedDateInPosts)
     .use('*', (req: Request, res: Response) =>
       handleSSR(req, res, templateHtml, ssrManifest, viteServer)
     );

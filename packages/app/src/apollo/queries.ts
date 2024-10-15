@@ -5,6 +5,7 @@ export const getPosts = gql`
     posts(tagId: $tagId) {
       _id
       date
+      normalizedDate
       tags {
         _id
         name

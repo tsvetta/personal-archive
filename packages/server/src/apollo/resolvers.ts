@@ -12,6 +12,8 @@ import { setPhotoPublished } from './resolvers/mutations/set-photo-published.js'
 import { ApolloContext } from './context.js';
 import { AuthorizationError } from './errors.js';
 
+import { normalizePostDate } from '@archive/common/dates/normalize-post-date.js';
+
 // Вспомогательная функция для парсинга литералов AST
 const parseLiteral = (ast: any) => {
   switch (ast.kind) {
@@ -121,7 +123,11 @@ export const resolvers = {
         throw new AuthorizationError('Unauthorized');
       }
 
-      const newPost = new Post({ ...args.data, createdAt: Date.now() });
+      const newPost = new Post({
+        ...args.data,
+        normalizedDate: normalizePostDate(args.data.date),
+        createdAt: Date.now(),
+      });
 
       await newPost.save();
 

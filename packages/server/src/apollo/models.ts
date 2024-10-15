@@ -47,17 +47,12 @@ const PhotoSchema = new Schema({
 export const Photo = mongoose.model('Photo', PhotoSchema);
 
 const PostSchema = new Schema({
-  date: {
-    type: Schema.Types.Mixed,
-  },
-  title: {
-    type: String,
-  },
+  date: Schema.Types.Mixed,
+  normalizedDate: Date,
+  title: String,
   photos: [PhotoSchema],
   tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
-  text: {
-    type: String,
-  },
+  text: String,
   accessLevel: {
     type: Number,
     default: 0,
@@ -65,9 +60,7 @@ const PostSchema = new Schema({
     min: [0, 'Access level should be between 0 and 4'],
     max: [4, 'Access level should be between 0 and 4'],
   },
-  createdAt: {
-    type: Date,
-  },
+  createdAt: Date,
 });
 
 // тут делает unpublish фоток

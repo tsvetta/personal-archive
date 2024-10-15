@@ -34,7 +34,7 @@ export const postsQuery = async (
     const filteredByRole = await Post.find(filter)
       .populate('tags')
       .populate('photos.file')
-      .sort({ date: -1 })
+      .sort({ normalizedDate: 1 })
       .exec();
 
     return filteredByRole.map((post) => post?.toObject({ virtuals: true }));

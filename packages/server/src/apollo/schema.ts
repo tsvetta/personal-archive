@@ -42,7 +42,8 @@ export const apolloSchema = `#graphql
 
     type Post {
         _id: ID!
-        date: Date
+        date: Date,
+        normalizedDate: Date,
         photos: [Photo]
         tags: [Tag]
         accessLevel: Int!
