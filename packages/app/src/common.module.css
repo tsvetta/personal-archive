@@ -44,7 +44,7 @@ legend {
 .section {
     position: relative;
     display: block;
-    margin: 0 var(--default-gap) 10px;
+    margin: var(--default-gap) 0;
     padding: 15px 18px;
     background-color: #f8f8f8;
     color: #505050;
