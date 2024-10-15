@@ -3,7 +3,7 @@ type TestFetch = (port: number) => typeof globalThis.fetch;
 export const createTestsFetch: TestFetch =
   (port: number) => async (url, body) => {
     // http://localhost:5173/graphql
-    const urlRegex = /^https?:\/\/[^\/]+\/([^\/]+)/;
+    const urlRegex = /^https?:\/\/[^/]+\/([^/]+)/;
     // graphql
     const apiSubstrUrl = url.toString().match(urlRegex) || '';
 

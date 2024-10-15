@@ -5,7 +5,7 @@ import { ApolloProvider } from '@apollo/client';
 import { renderToStringWithData } from '@apollo/client/react/ssr';
 
 import { createApolloClient } from './apollo-client';
-import { AuthProvider } from './features/auth/useAuth';
+import { AuthProvider } from './features/auth/AuthProvider';
 import App from './App';
 
 export async function render(

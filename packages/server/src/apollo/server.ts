@@ -37,8 +37,8 @@ const apolloContext = async ({
 }): Promise<ApolloContext> => {
   const cookies = req.universalCookies?.cookies || {};
 
-  let authToken = cookies.auth_token?.toString() || '';
-  let refreshToken = cookies.refresh_token?.toString() || '';
+  const authToken = cookies.auth_token?.toString() || '';
+  const refreshToken = cookies.refresh_token?.toString() || '';
 
   // No Auth
   if (!authToken || !refreshToken) {
@@ -49,7 +49,7 @@ const apolloContext = async ({
     });
   }
 
-  let userDecoded = jwt.decode(authToken) as UserDataFromToken;
+  const userDecoded = jwt.decode(authToken) as UserDataFromToken;
   let finalUser = undefined;
 
   // token valid

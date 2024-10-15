@@ -38,7 +38,7 @@ export const postsQuery = async (
       .exec();
 
     return filteredByRole.map((post) => post?.toObject({ virtuals: true }));
-  } catch (e) {
-    throw e;
+  } catch (err: any) {
+    throw new Error(`Failed to fetch posts: ${err.message}`);
   }
 };

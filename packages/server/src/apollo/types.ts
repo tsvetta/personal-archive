@@ -2,12 +2,12 @@ import { JwtPayload } from 'jsonwebtoken';
 import { Types } from 'mongoose';
 
 export type TagInput = {
-  name: String;
+  name: string;
 };
 
 export type Tag = {
-  _id: String;
-  name: String;
+  _id: string;
+  name: string;
 };
 
 export type Photo = {

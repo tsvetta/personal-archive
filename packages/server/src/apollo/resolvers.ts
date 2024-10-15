@@ -128,7 +128,7 @@ export const resolvers = {
       return newPost;
     },
 
-    updatePost: async (_: any, args: { id: String; data: PostInput }) => {
+    updatePost: async (_: any, args: { id: string; data: PostInput }) => {
       const updatedPost = await Post.findByIdAndUpdate(args.id, args.data, {
         new: true,
       }).exec();
@@ -136,7 +136,7 @@ export const resolvers = {
       return updatedPost;
     },
 
-    deletePost: async (_: any, args: { id: String }) => {
+    deletePost: async (_: any, args: { id: string }) => {
       await Post.findOneAndDelete({ _id: args.id }).exec();
 
       return Post.find({});

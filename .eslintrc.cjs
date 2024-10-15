@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  env: { browser: true, es2020: true },
+  env: { browser: true, es2020: true, node: true },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -22,6 +22,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',
     'import/no-cycle': 'error',
+    'import/no-named-as-default-member': 'off',
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },

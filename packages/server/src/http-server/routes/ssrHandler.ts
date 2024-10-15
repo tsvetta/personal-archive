@@ -40,7 +40,7 @@ export const handleSSR = async (
       ).render;
     }
 
-    // @ts-ignore
+    // @ts-expect-error userId exists
     const userId = req.user?.userId || null;
     const rendered = await renderFunction(url, ssrManifest, {
       headerCookie: req.header('Cookie'),

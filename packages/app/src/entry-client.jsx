@@ -6,7 +6,7 @@ import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 
 import { createApolloClient } from './apollo-client';
-import { AuthProvider } from './features/auth/useAuth';
+import { AuthProvider } from './features/auth/AuthProvider';
 
 import App from './App';
 import './index.css';

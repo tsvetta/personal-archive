@@ -8,6 +8,7 @@ import { connectMongoDB } from './mongo.js';
 import { UserDataFromToken } from './apollo/types.js';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     export interface Request {
       universalCookies?: UniversalCookies;

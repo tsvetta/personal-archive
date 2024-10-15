@@ -46,7 +46,7 @@ export const mockUserQuery = (t: TestContext) => {
 export const mockLoginUserMutation = (t: TestContext) => {
   t.fetchMock.mock(
     mockMatcher('mutation LoginUser'),
-    (_: string, __: any) => {
+    () => {
       return {
         status: 200,
         body: {

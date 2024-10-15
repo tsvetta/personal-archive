@@ -2,16 +2,16 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express, { Request, Response } from 'express';
-import { JwtPayload } from 'jsonwebtoken';
+// import { JwtPayload } from 'jsonwebtoken';
 import http from 'http';
 import cookiesMiddleware from 'universal-cookie-express';
 
 import { userFromCookiesMiddleware } from '@archive/app/src/features/auth/userFromCookiesMiddleware.js';
-import { UniversalCookies } from '@archive/app/src/utils/cookies.js';
+// import { UniversalCookies } from '@archive/app/src/utils/cookies.js';
 
 import { isProduction } from '@archive/common/environment.js';
 import { createApolloExpressMiddleware } from '../apollo/server.js';
-import { UserDataFromToken } from '../apollo/types.js';
+// import { UserDataFromToken } from '../apollo/types.js';
 import { createViteServer } from '../vite-server.js';
 import { initializeApolloServer } from './middlewares/apolloMiddleware.js';
 
@@ -21,15 +21,6 @@ import unpublishAllPhotos from './routes/unpublishAllPhotos.js';
 import { handleSSR } from './routes/ssrHandler.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-declare global {
-  namespace Express {
-    export interface Request {
-      universalCookies?: UniversalCookies;
-      user?: UserDataFromToken | JwtPayload | string | null | undefined;
-    }
-  }
-}
 
 // enableStaticServer is false in tests environment
 export const createApp = async ({ enableStaticServer = true } = {}) => {

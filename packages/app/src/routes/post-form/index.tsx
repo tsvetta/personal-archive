@@ -32,15 +32,14 @@ import {
   getBBCDNPhotos,
   getPosts,
 } from '@archive/app/src/apollo/queries.js';
-import {
-  AccessLevelsEnum,
-  CustomDate,
-  Photo,
-  Privacy,
-} from '@archive/server/src/apollo/types.js';
+import { Photo, Privacy } from '@archive/server/src/apollo/types.js';
 
 import FieldPhotos from './field-photos.js';
-import { ValidationState, validateForm } from './form-validation.js';
+import {
+  CreatePostFormData,
+  ValidationState,
+  validateForm,
+} from './form-validation.js';
 
 const accessOptions: SelectOption[] = [
   '',
@@ -138,15 +137,6 @@ const seasonsOptions: SelectOption[] = [
   },
 ];
 
-export type CreatePostFormData = {
-  title?: string;
-  date?: string | CustomDate;
-  photos: Photo[];
-  tags: TagData[];
-  accessLevel?: AccessLevelsEnum | '';
-  text?: string;
-};
-
 const deafultFormData: CreatePostFormData = {
   title: '',
   date: undefined,
@@ -228,23 +218,20 @@ const PostFormPage = () => {
 
   const handleInaccurateDateChange = useCallback<
     ChangeEventHandler<HTMLInputElement>
-  >(
-    (e) => {
-      const { name, value } = e.target;
+  >((e) => {
+    const { name, value } = e.target;
 
-      setFormData((prevData) => ({
-        ...prevData,
-        date:
-          typeof prevData.date === 'object'
-            ? {
-                ...prevData.date,
-                [name]: isNaN(Number(value)) ? undefined : Number(value),
-              }
-            : value,
-      }));
-    },
-    [formData.date]
-  );
+    setFormData((prevData) => ({
+      ...prevData,
+      date:
+        typeof prevData.date === 'object'
+          ? {
+              ...prevData.date,
+              [name]: isNaN(Number(value)) ? undefined : Number(value),
+            }
+          : value,
+    }));
+  }, []);
 
   const handlePhotosChange = useCallback(
     (changedId: string, type: 'src' | 'description') => (e: any) => {
@@ -383,7 +370,7 @@ const PostFormPage = () => {
         return;
       }
 
-      const { data } = await submitCreateForm({
+      await submitCreateForm({
         variables: {
           data: preparedData,
         },
@@ -403,6 +390,7 @@ const PostFormPage = () => {
       });
 
       const hasPhotos = formData.photos.length > 0;
+
       if (hasPhotos) {
         formData.photos.forEach(async (photo) => {
           const isPhotoFromGallery = Boolean(photo.fromGallery);
@@ -428,34 +416,31 @@ const PostFormPage = () => {
     }
   };
 
-  const handleGalleryPhotoClick = useCallback(
-    (photo: any) => {
-      setFormData((prevData: CreatePostFormData) => {
-        const photosWithoutLast =
-          prevData.photos.length <= 1 ? [] : prevData.photos.slice(0, -1);
-        const photoLast =
-          prevData.photos.length === 0 ? {} : prevData.photos.slice(-1)[0];
+  const handleGalleryPhotoClick = useCallback((photo: any) => {
+    setFormData((prevData: CreatePostFormData) => {
+      const photosWithoutLast =
+        prevData.photos.length <= 1 ? [] : prevData.photos.slice(0, -1);
+      const photoLast =
+        prevData.photos.length === 0 ? {} : prevData.photos.slice(-1)[0];
 
-        return {
-          ...prevData,
-          photos: [
-            ...photosWithoutLast,
-            {
-              ...photoLast,
+      return {
+        ...prevData,
+        photos: [
+          ...photosWithoutLast,
+          {
+            ...photoLast,
+            _id: photo._id,
+            file: {
               _id: photo._id,
-              file: {
-                _id: photo._id,
-                fileUrl: photo.fileUrl,
-                filePreview: photo.filePreview,
-              },
-              fromGallery: true,
+              fileUrl: photo.fileUrl,
+              filePreview: photo.filePreview,
             },
-          ],
-        };
-      });
-    },
-    [formData.photos]
-  );
+            fromGallery: true,
+          },
+        ],
+      };
+    });
+  }, []);
 
   const handleAddDate = () => {
     setFormData((prevData) => ({

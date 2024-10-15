@@ -1,15 +1,22 @@
-import { AccessLevelsEnum, Photo } from '@archive/server/src/apollo/types.js';
-import { CreatePostFormData } from './index.js';
+import {
+  AccessLevelsEnum,
+  CustomDate,
+  Photo,
+} from '@archive/server/src/apollo/types.js';
 import { TagData } from '../../components/Tags/index.js';
 import {
   FieldValidation,
   FieldValidationStateType,
 } from '../../components/Form/types.js';
+import { PhotosValidation } from './field-photos.js';
 
-export type PhotosValidation = {
-  id: string;
-  state: FieldValidationStateType;
-  errorMessage?: string;
+export type CreatePostFormData = {
+  title?: string;
+  date?: string | CustomDate;
+  photos: Photo[];
+  tags: TagData[];
+  accessLevel?: AccessLevelsEnum | '';
+  text?: string;
 };
 
 export type ValidationState = {

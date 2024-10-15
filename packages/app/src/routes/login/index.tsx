@@ -6,26 +6,17 @@ import { cx } from '../../utils/cx.js';
 
 import Input from '../../components/Input/index.js';
 import Button from '../../components/Button/index.js';
-import { FieldValidation } from '../../components/Form/types.js';
 
 import styles from './index.module.css';
 import formStyles from '../../components/Form/index.module.css';
 
 import { loginUser as loginUserQuery } from '@archive/app/src/apollo/queries.js';
-import { validateLoginForm } from './form-validation.js';
+import {
+  LoginFormData,
+  LoginFormValidationState,
+  validateLoginForm,
+} from './form-validation.js';
 import { useAuth } from '../../features/auth/useAuth.js';
-
-export type LoginFormValidationState = {
-  username?: FieldValidation;
-  password?: FieldValidation;
-  isValid?: boolean;
-  formError?: string;
-};
-
-export type LoginFormData = {
-  username: string;
-  password: string;
-};
 
 const LoginPage = () => {
   const navigate = useNavigate();

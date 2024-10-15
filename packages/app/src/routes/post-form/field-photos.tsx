@@ -7,11 +7,17 @@ import Button from '../../components/Button/index.js';
 
 import { Photo } from '@archive/server/src/apollo/types.js';
 
-import { PhotosValidation } from './form-validation.js';
+import { FieldValidationStateType } from '../../components/Form/types.js';
+import Gallery from './gallery.js';
 
 import formStyles from '../../components/Form/index.module.css';
 import styles from './index.module.css';
-import Gallery from './gallery.js';
+
+export type PhotosValidation = {
+  id: string;
+  state: FieldValidationStateType;
+  errorMessage?: string;
+};
 
 type FieldPhotosProps = {
   value: Photo[];

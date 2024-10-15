@@ -332,14 +332,14 @@ describe('Create Post Page', () => {
       );
       fireEvent.click(addPhotoButton);
 
-      let photoDescriptionInputs = await screen.findAllByPlaceholderText(
+      const photoDescriptionInputs = await screen.findAllByPlaceholderText(
         'Photo Description'
       );
       expect(photoDescriptionInputs.length).toBe(2);
 
       firstPhoto && fireEvent.click(firstPhoto);
 
-      let photoURLInputs = await screen.findAllByPlaceholderText('Photo URL');
+      const photoURLInputs = await screen.findAllByPlaceholderText('Photo URL');
       expect(photoURLInputs.length).toBe(2);
       expect(photoURLInputs[1]).toHaveValue(`http://qwe.rt/tyu_0.png`);
     });

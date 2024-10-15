@@ -1,5 +1,19 @@
-import { FieldValidationStateType } from '../../components/Form/types.js';
-import { LoginFormData, LoginFormValidationState } from './index.js';
+import {
+  FieldValidation,
+  FieldValidationStateType,
+} from '../../components/Form/types.js';
+
+export type LoginFormValidationState = {
+  username?: FieldValidation;
+  password?: FieldValidation;
+  isValid?: boolean;
+  formError?: string;
+};
+
+export type LoginFormData = {
+  username: string;
+  password: string;
+};
 
 export const validateUsername = (username?: string) => {
   if (!username) {
