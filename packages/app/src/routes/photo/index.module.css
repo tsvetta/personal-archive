@@ -1,0 +1,6 @@
+.photo {
+    width: 100%;
+    border: 15px solid white;
+    outline: black solid 20px;
+    margin-bottom: 40px;
+}

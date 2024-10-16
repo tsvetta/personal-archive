@@ -7,12 +7,16 @@ import {
 } from '@archive/app/src/apollo/queries.js';
 
 import Button from '../../components/Button/index.js';
-
-import styles from './index.module.css';
+import galleryStyles from '../../components/Gallery/index.module.css';
+import { cx } from '../../utils/cx.js';
 
 type GalleryProps = {
+  showOriginals: boolean;
   testId?: string;
-  onPhotoClick: (photo: any) => void;
+  className?: string;
+  photoWrapperClassName?: string;
+  photosWrapperClassName?: string;
+  onPhotoClick?: (photo: any) => void;
 };
 
 // TODO Toggle to published
@@ -72,30 +76,40 @@ const Gallery = (props: GalleryProps) => {
   };
 
   const handlePhotoClick = (photo: any) => () => {
-    props.onPhotoClick(photo);
+    props.onPhotoClick && props.onPhotoClick(photo);
   };
 
+  const photosWrapperStyles = cx([
+    galleryStyles.photosWrapper,
+    props.photosWrapperClassName,
+  ]);
+
+  const photoWrapperStyles = cx([
+    galleryStyles.photoWrapper,
+    props.photoWrapperClassName,
+  ]);
+
   return (
-    <div className={styles.gallery} data-testid={props.testId}>
+    <div className={props.className} data-testid={props.testId}>
       {error && <p>{error.message}</p>}
       <div
-        className={styles.photosWrapper}
+        className={photosWrapperStyles}
         data-testid='gallery-photos-wrapper'
         ref={scrollRef}
       >
         {cdnPhotos?.map((f: any) => (
-          <div className={styles.photoWrapper} key={f.fileUrl}>
+          <div className={photoWrapperStyles} key={f.fileUrl}>
             <img
-              src={f.filePreview}
-              className={styles.galleryPhoto}
+              src={props.showOriginals ? f.fileUrl : f.filePreview}
+              className={galleryStyles.galleryPhoto}
               onClick={handlePhotoClick(f)}
               title={f.fileUrl}
             />
             <button
               type='button'
-              className={styles.setPublishedButton}
+              className={galleryStyles.setPublishedButton}
               onClick={setPublished(f._id)}
-              title='Publish and remove from list'
+              title='Hide from list'
             >
               x
             </button>
@@ -103,10 +117,10 @@ const Gallery = (props: GalleryProps) => {
         ))}
       </div>
 
-      <div className={styles.buttonWrapper}>
+      <div className={galleryStyles.buttonWrapper}>
         <Button
           onClick={loadMorePhotos}
-          className={styles.loadButton}
+          className={galleryStyles.loadButton}
           testId='gallery-load-more'
         >
           Загрузить ещё
@@ -115,6 +129,10 @@ const Gallery = (props: GalleryProps) => {
       </div>
     </div>
   );
+};
+
+Gallery.defaultProps = {
+  showOriginals: false,
 };
 
 export default Gallery;

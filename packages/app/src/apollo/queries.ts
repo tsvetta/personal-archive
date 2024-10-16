@@ -135,6 +135,17 @@ export const deletePostMutation = gql`
   }
 `;
 
+export const getBBCDNPhoto = gql`
+  query BBCNDPhoto($id: ID!) {
+    cdnPhoto(id: $id) {
+      _id
+      fileUrl
+      filePreview
+      published
+    }
+  }
+`;
+
 export const getBBCDNPhotos = gql`
   query BBCNDPhotos($published: Boolean, $limit: Int, $skip: Int) {
     cdnPhotos(published: $published, limit: $limit, skip: $skip) {

@@ -98,6 +98,7 @@ const FieldPhotos = (props: FieldPhotosProps) => {
       {props.showGallery && (
         <Gallery
           testId='post-form-gallery'
+          className={styles.gallery}
           onPhotoClick={props.onGalleryPhotoClick}
         />
       )}

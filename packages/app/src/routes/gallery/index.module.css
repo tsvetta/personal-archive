@@ -1,0 +1,9 @@
+.photoWrapper {
+    width: 248px;
+    height: 165px;
+}
+
+.photosWrapper {
+    height: 100%;
+    max-height: none;
+}

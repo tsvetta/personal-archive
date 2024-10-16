@@ -1,0 +1,71 @@
+
+.photosWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+    width: 100%;
+    overflow-y: scroll;
+    max-height: 500px;
+}
+
+.photoWrapper {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+
+    &::after {
+        display: none;
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: transparent;
+        z-index: 1;
+        pointer-events: none;
+        transition: background-color 200ms ease;
+    }
+
+    &:hover::after {
+        background-color: #00000069;
+    }
+}
+
+.galleryPhoto {
+    width: 100%;
+    min-height: 100px;
+    cursor: pointer;
+}
+
+.setPublishedButton {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    padding-bottom: 2px;
+    top: 1px;
+    right: 1px;
+    background-color: #ffffffbd;
+    border: 1px solid rgba(0,0,0,0.5);
+    cursor: pointer;
+    transition: background-color 500ms ease;
+    z-index: 2;
+
+    &:hover {
+        background-color: #ff3535bd;
+    }
+}
+
+.loadButton {
+    margin: 10px 10px 10px 0;
+}
+
+.buttonWrapper {
+    display: flex;
+    align-items: center;
+}

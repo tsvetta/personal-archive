@@ -99,6 +99,7 @@ export const apolloSchema = `#graphql
         posts(filter: PostsFilter): [Post]
         user(id: ID!): User
         users: [User]
+        cdnPhoto(id: ID!): CDNPhoto
         cdnPhotos(published: Boolean, limit: Int, skip: Int): [CDNPhoto]
     }
 

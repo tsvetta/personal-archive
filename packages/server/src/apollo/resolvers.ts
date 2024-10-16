@@ -58,6 +58,11 @@ export const resolvers = {
   },
 
   Query: {
+    cdnPhoto: async (_: any, args: any) => {
+      const singlePhoto = await BBFile.findById(args.id).exec();
+
+      return singlePhoto;
+    },
     cdnPhotos: async (
       _: any,
       args: any = { published: false, limit: 50, skip: 0 }

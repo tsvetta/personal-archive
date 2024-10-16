@@ -11,6 +11,8 @@ import LoginPage from './routes/login/index.js';
 import PostFormPage from './routes/post-form/index.js';
 import TagPage from './routes/tag/index.js';
 import PostPage from './routes/post/index.js';
+import GalleryPage from './routes/gallery/index.js';
+import PhotoPage from './routes/photo/index.js';
 
 const App = () => {
   return (
@@ -27,7 +29,22 @@ const App = () => {
                 </ProtectedPage>
               }
             />
-            <Route path='/login' element={<LoginPage />} />
+            <Route
+              path='/gallery'
+              element={
+                <ProtectedPage accessLevel={4}>
+                  <GalleryPage />
+                </ProtectedPage>
+              }
+            />
+            <Route
+              path='/gallery/:id'
+              element={
+                <ProtectedPage accessLevel={4}>
+                  <PhotoPage />
+                </ProtectedPage>
+              }
+            />
             <Route
               path='/create-post'
               element={
@@ -60,6 +77,7 @@ const App = () => {
                 </ProtectedPage>
               }
             />
+            <Route path='/login' element={<LoginPage />} />
             <Route path='*' element={<div>404 Not Found</div>} />
           </Routes>
         </main>
