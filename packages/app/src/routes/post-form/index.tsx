@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 
 import { cx } from '../../utils/cx.js';
@@ -79,6 +79,7 @@ const getInitialDateFromData = (date: number | Date | CustomDate) => {
 };
 
 const PostFormPage = () => {
+  const navigate = useNavigate();
   const { id: urlId } = useParams();
   const isEditPage = Boolean(urlId);
 
@@ -274,6 +275,7 @@ const PostFormPage = () => {
               id: urlId,
               data: preparedData,
             },
+            awaitRefetchQueries: true,
             refetchQueries: [
               {
                 query: getPosts,
@@ -281,8 +283,8 @@ const PostFormPage = () => {
             ],
           });
 
-          // редирект на страницу поста?
-          // нотификация об успешном обновлении
+          navigate(`/post/${urlId}`);
+          // нотификация об успешном обновлении?
         } catch (error: any) {
           throw new Error('Edit Post: Validation fail!');
         }
@@ -290,10 +292,11 @@ const PostFormPage = () => {
         return;
       }
 
-      await submitCreateForm({
+      const { data } = await submitCreateForm({
         variables: {
           data: preparedData,
         },
+        awaitRefetchQueries: true,
         refetchQueries: [
           {
             query: getPosts,
@@ -329,8 +332,7 @@ const PostFormPage = () => {
         });
       }
 
-      setFormData(deafultFormData);
-      setFieldsValidation(validateForm(deafultFormData, true));
+      navigate(`/post/${data.addPost._id}`);
     } catch (error: any) {
       console.error('Error submitting form:', error.message);
     }
@@ -494,7 +496,6 @@ const PostFormPage = () => {
           onAddPhoto={handleAddPhoto}
           onDeletePhoto={handleDeletePhoto}
           validation={fieldsValidation.photos}
-          showGallery={!isEditPage}
           onGalleryPhotoClick={handleGalleryPhotoClick}
         />
 

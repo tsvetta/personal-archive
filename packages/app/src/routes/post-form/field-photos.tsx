@@ -107,7 +107,7 @@ const FieldPhotos = (props: FieldPhotosProps) => {
 
 FieldPhotos.defaultProps = {
   value: [{ src: undefined, description: undefined }],
-  showGallery: false,
+  showGallery: true,
 };
 
 export default FieldPhotos;

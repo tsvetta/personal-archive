@@ -198,38 +198,10 @@ describe('Create Post Page', () => {
       expect(als.className).toMatch(/success/);
     });
 
-    test('Form cleared', async () => {
-      const t = await screen.findByPlaceholderText('Заголовок поста');
-      expect(t).toHaveValue('');
-
-      const db = await screen.findByTestId('add-date-button');
-      expect(db).toBeVisible();
-
-      const di = screen.queryByTestId('date-input');
-      expect(di).toBeNull();
-
-      const pui = screen.queryByPlaceholderText('Photo URL');
-      const pdi = screen.queryByPlaceholderText('Photo Description');
-      expect(pui).toBeNull();
-      expect(pdi).toBeNull();
-
-      const ti = await screen.findByPlaceholderText('Input tags here');
-      expect(ti).toHaveValue('');
-      expect(ti.className).not.toMatch(/error/);
-      expect(ti.className).not.toMatch(/success/);
-
-      const tsl = await screen.findByTestId('tags-suggestion-list');
-      expect(tsl.className).not.toMatch(/open/);
-      const tgs = await screen.findByTestId('add-tags-suggest');
-      expect(tgs).toBeEmptyDOMElement();
-
-      const ta = await screen.findByPlaceholderText('Text');
-      expect(ta).toHaveValue('');
-
-      const als = await screen.findByTestId('access-level-select');
-      expect(als).toHaveValue('');
-      expect(als.className).not.toMatch(/error/);
-      expect(als.className).not.toMatch(/success/);
+    test('Redirect to new post page', async () => {
+      await waitFor(() => {
+        expect(window.location.pathname).contain(`/post/`);
+      });
     });
   });
 
