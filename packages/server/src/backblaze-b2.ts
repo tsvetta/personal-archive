@@ -9,8 +9,7 @@ import {
 
 export const getBBCDNPhotos = (
   maxFileCount?: number,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  startFileName?: string
+  startFileName?: string // eslint-disable-line @typescript-eslint/no-unused-vars
 ) => {
   const b2 = new B2({
     applicationKeyId: bbApplicationKeyId,

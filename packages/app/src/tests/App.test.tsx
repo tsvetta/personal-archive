@@ -88,7 +88,9 @@ describe('App', () => {
       expect(screen.getByText(/Сегодня я видел большого кота./i)).toBeVisible();
       expect(screen.getByText(/Фото кота/i)).toBeVisible();
       expect(screen.getByText(/Доступ: Никому/i)).toBeVisible();
-      expect(screen.getByText(/коты/i)).toBeVisible();
+
+      expect(screen.getAllByText(/коты/i)[0]).toBeVisible(); // main tags filter
+      expect(screen.getAllByText(/коты/i)[1]).toBeVisible(); // tag in post
     });
   });
 

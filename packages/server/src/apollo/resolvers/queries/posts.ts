@@ -16,6 +16,11 @@ type PostsFilter = {
   tags?: [string];
 };
 
+type PostsSort = {
+  normalizedDate?: SortOrder;
+  createdAt?: SortOrder;
+};
+
 type PostQueryArgs = { filter?: PostsFilter };
 
 export const postsQuery = async (
@@ -28,19 +33,27 @@ export const postsQuery = async (
   }
 
   try {
+    const sort: PostsSort = {};
     const filter: FilterQuery<FilterType> = {
       accessLevel: { $lte: user?.accessLevel },
     };
 
-    // Добавляем фильтрацию по тегам
-    if (args.filter?.tags) {
+    if (args.filter?.date) {
+      sort.normalizedDate = args.filter.date;
+    }
+
+    if (args.filter?.createdAt) {
+      sort.createdAt = args.filter.createdAt;
+    }
+
+    if (args.filter?.tags?.length) {
       filter.tags = { $in: args.filter.tags };
     }
 
     const filteredByRole = await Post.find(filter)
       .populate('tags')
       .populate('photos.file')
-      .sort({ normalizedDate: args.filter?.date || -1 })
+      .sort(sort)
       .exec();
 
     return filteredByRole.map((post) => post?.toObject({ virtuals: true }));
