@@ -1,0 +1,13 @@
+.filtersWrapper {
+    display: flex;
+    gap: 5px;
+}
+
+.filterBox {
+    display: block;
+    width: 50%;
+}
+
+.filterSelect {
+    display: block;
+}
