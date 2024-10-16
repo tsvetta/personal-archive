@@ -6,12 +6,16 @@
     "process-images": "tsx convert-to-webp-and-generate-previews.ts",
     "upload-files": "tsx s3/upload-files-to-bb.ts",
     "delete-missing-files": "tsx s3/delete-missing-files.ts",
-    "syncAndDelete": "tsx s3/sync-and-delete.ts"
+    "sync-n-delete": "tsx s3/sync-and-delete.ts",
+    "find-duplicates-n-delete": "tsx find-duplicates-and-delete.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.637.0",
     "@aws-sdk/lib-storage": "^3.637.0",
     "argon2": "^0.40.3",
+    "fs-extra": "^11.2.0",
+    "image-hash": "^5.3.2",
+    "resemblejs": "^5.0.0",
     "sharp": "^0.33.5"
   }
 }
