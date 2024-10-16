@@ -25,7 +25,9 @@ const InputTagsSuggest = (props: InputTagsSuggestProps) => {
   const [isSuggestOpened, toggleSuggest] = useState(false);
 
   const suggestedData = props.data.filter((tag) => {
-    const isInputted = tag.name.includes(input.trim());
+    const isInputted = tag.name
+      .toLowerCase()
+      .includes(input.toLowerCase().trim());
     const notInEnteredValues =
       props.value.find((vtag) => vtag._id === tag._id) === undefined;
 
